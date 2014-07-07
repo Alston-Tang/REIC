@@ -1,6 +1,6 @@
 __author__ = 'Tang'
 
-from flask import render_template, url_for
+from flask import render_template, url_for, request
 from app import app, resources
 
 
@@ -16,7 +16,7 @@ def edit():
 
 @app.route('/test')
 def test():
-    return render_template("test.html")
+    
 
 
 @app.route('/ajax/<service_name>')
