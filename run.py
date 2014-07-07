@@ -1,0 +1,4 @@
+__author__ = 'Tang'
+
+from app import app
+app.run(debug = True)

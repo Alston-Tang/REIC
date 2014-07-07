@@ -1,0 +1,19 @@
+{% extends 'public/main.html' %}
+{% block extra_css %}
+    <!-- JQuery Context Menu-->
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/jquery.contextMenu.css') }}">
+{% endblock %}
+
+{% block content %}
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{{ url_for('static', filename='js/pointerevents.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.contextMenu.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.ui.position.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/draggable-touch.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tools.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/indexEditor.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/edit.js') }}"></script>
+{% endblock %}
+

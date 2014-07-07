@@ -1,0 +1,252 @@
+{% extends 'public/show.html' %}
+{% block content %}
+<!-- Content Begin -->
+<nav id='nav-bar' class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Brand</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="#">Link</a></li>
+                <li><a href="#">Link</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">One more separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+            <form class="navbar-form navbar-left" role="search">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Search">
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Link</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Dropdown <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Separated link</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
+<div id="index-board">
+
+    <canvas class="background-board">
+    </canvas>
+
+    <section id="1" height="1" background="static/resource/img/big/1.jpg">
+        <canvas class="section-board" color="black" opacity=0.7>
+        </canvas>
+        <div left="0.5" top="0.4" right="0.8" bot="0.5" style="text-align: center">
+            <p>Of course</p>
+        </div>
+        <div left="0.4" right="0.6" top="0.2" bot="0.8">
+            <img src="static/resource/icon/reic.png">
+            <span class="animation" type="fade" trigger="first"> </span>
+        </div>
+    </section>
+
+    <section id="2" height="1.5" background="">
+        <canvas class="section-board" color="white" opacity=0.5>
+        </canvas>
+        <div left="0.4" right="0.6" top="0.1" bot="0.2" style="text-align: center">
+            <h2>Title</h2>
+        </div>
+        <div left="0" right="1" top="0" bot="1">
+            <div style="background-color: darkgrey; width: 1280px; height: 720px"></div>
+        </div>
+        <div left='0.1' top='0.1' right='0.3' bot='0.3' style="text-align: center" type="bootstrapPanel">
+            <div class="panel panel-default" style="border-color: rgba(0,0,0,1)">
+                <div class="panel-heading" style="background-color: rgba(121,230,131,0.5);border-color: black">This is a panel</div>
+                <div class="panel-body" style="background-color: rgba(255,255,255,0.2)">
+                    Panel content
+                </div>
+            </div>
+        </div>
+        <div left="0.4" right="0.8" top="0.1" bot="0.5" type="bootstrapJumbotron">
+            <div class="jumbotron" style="background-color: white">
+                <h1>Hello, world!</h1>
+                <p>This is jumbotron</p>
+                <p><a class="btn btn-primary btn-lg" role="button">Learn more</a></p>
+            </div>
+        </div>
+        <div left="0.1" top="0.4" right="0.3" bot="0.5">
+            <button type="button" class="btn btn-default">Button</button>
+        </div>
+    </section>
+
+    <section id="3" height="1" background="static/resource/img/big/3.jpg">
+        <canvas class="section-board" color="black" opacity=0.7>
+        </canvas>
+        <div left="0.0" right="1" top="0" bot="1" style="text-align: center" type="bootstrapCarousel">
+                <div class="carousel slide" id="carousel-example-captions" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carousel-example-captions" data-slide-to="0"></li>
+                        <li data-target="#carousel-example-captions" data-slide-to="1"></li>
+                        <li class="active" data-target="#carousel-example-captions" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="item">
+                            <img alt="900x500" src="static/resource/img/big/3.jpg">
+                            <div class="carousel-caption">
+                                <h3>First slide label</h3>
+                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <img alt="900x500" src="static/resource/img/big/2.jpg">
+                            <div class="carousel-caption">
+                                <h3>Second slide label</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </div>
+                        <div class="item active">
+                            <img alt="900x500" src="static/resource/img/big/1.jpg">
+                            <div class="carousel-caption">
+                                <h3>Third slide label</h3>
+                                <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="left carousel-control" href="#carousel-example-captions" data-slide="prev">
+                        <i class="fa fa-angle-left icon-prev"></i>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-example-captions" data-slide="next">
+                        <i class="fa fa-angle-right icon-next"></i>
+                    </a>
+                </div>
+        </div>
+    </section>
+
+    <section id="4" height="1" background="">
+        <canvas class="section-board" color="black" opacity=1>
+        </canvas>
+        <div left="0.1" top="0.05" right="0.9" bot="1">
+            <!--test -->
+            <!-- Least Gallery -->
+            <section id="least">
+
+                <!-- Least Gallery: Fullscreen Preview -->
+                <div class="least-preview"></div>
+
+                <!-- Least Gallery: Thumbnails -->
+                <ul class="least-gallery">
+                    <!-- 1 -->
+                    <li>
+                        <a href="static/resource/img/big/01.jpg" title="Skateboard" data-caption="<strong>Lorem ipsum dolor</strong> sit amet, consetetur sadipscing" >
+                            <img src="static/resource/img/thumbnails/01.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 2 -->
+                    <li>
+                        <a href="static/resource/img/big/02.jpg" title="Train Rails">
+                            <img src="static/resource/img/thumbnails/02.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 3 -->
+                    <li>
+                        <a href="static/resource/img/big/03.jpg" title="Apple">
+                            <img src="static/resource/img/thumbnails/03.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 4 -->
+                    <li>
+                        <a href="static/resource/img/big/04.jpg" title="Road Trip">
+                            <img src="static/resource/img/thumbnails/04.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 5 -->
+                    <li>
+                        <a href="static/resource/img/big/05.jpg" title="Desert">
+                            <img src="static/resource/img/thumbnails/05.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 6 -->
+                    <li>
+                        <a href="static/resource/img/big/06.jpg" title="Tree">
+                            <img src="static/resource/img/thumbnails/06.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 7 -->
+                    <li>
+                        <a href="static/resource/img/big/07.jpg" title="MacBook">
+                            <img src="static/resource/img/thumbnails/07.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 8 -->
+                    <li>
+                        <a href="static/resource/img/big/08.jpg" title="Clock">
+                            <img src="static/resource/img/thumbnails/08.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 9 -->
+                    <li>
+                        <a href="static/resource/img/big/09.jpg" title="iPhone">
+                            <img src="static/resource/img/thumbnails/09.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 10 -->
+                    <li>
+                        <a href="static/resource/img/big/10.jpg" title="Test">
+                            <img src="static/resource/img/thumbnails/10.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+                </ul>
+            </section>
+            <!-- Least Gallery end -->
+        </div>
+    </section>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body" style="padding: 0">
+                <img style="width: 100%; height: 100%">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Content End -->
+{% endblock %}
+
