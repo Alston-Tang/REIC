@@ -31,7 +31,16 @@ class GetHandler:
             self.directory=upload_directory
             self.full_dir =upload_full_dir
 
-            ##print self.full_dir
+        if 'restrict' in opt:
+            if 'allow' in opt['restrict']:
+                self.restrict='allow'
+                self.restrict_list=opt['restrict']['allow']
+            elif 'deny' in opt['restrict']:
+                self.restrict='deny'
+                slef.restrict_list=opt['restrict']['deny']
+            else:
+                self.restrict=False
+
 
         # Check End
         self.files = []
@@ -45,10 +54,19 @@ class GetHandler:
             self.files.append(inf)
 
     def error_json(self,file,error_inf):
-        files={}
-        files['name']=file
-        files['error']=error_inf
+        files=[{'name':file,'error':error_inf}]
         return json.dumps({'files':files})
+
+    def validate_restrict(self,file_storage):
+        if not self.restrict:
+            return True
+        find=False
+        for type in self.restrict_list:
+            if file_storage.mimetype.find(type)>=0:
+                find=True
+                break
+
+        return (find and self.restrict=='allow') or (not find and self.restrict=='deny')
 
     def handle_thumbnail(self,inf):
         """
@@ -85,6 +103,8 @@ class GetHandler:
         return json.dumps({'files':self.files}).replace('\\\\','\\')
     def post(self,file_storage):
         file=file_storage.filename
+        if not self.validate_restrict(file_storage):
+            return self.error_json(file,"Not valid type")
         if os.path.isfile(self.full_dir+'/'+file):
             return self.error_json(file,"File name already exists")
         else:
@@ -114,6 +134,6 @@ class GetHandler:
 
 
 
-upload_test=GetHandler()
+upload_test=GetHandler(restrict={'allow':['jpeg','pdf']})
 	 
     
