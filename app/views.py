@@ -1,12 +1,21 @@
 __author__ = 'Tang'
 
 from flask import render_template, url_for, request
-from app import app, file
-
+from app import app, file, model
 
 @app.route('/')
 def index():
-    return render_template("index.html")
+    pages = model.Page().get_all_content()
+    content = ''
+    nav_bar={}
+    for page in pages:
+        nav_bar[page['title']]=[]
+        for section in page['section_detail']:
+            nav_bar[page['title']].append(section['title'])
+            if page['title'] == 'index':
+                content += section['content']
+
+    return render_template("index.html", content=content, title='index', nav_bar=nav_bar)
 
 
 @app.route('/edit')
