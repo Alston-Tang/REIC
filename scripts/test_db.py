@@ -1,12 +1,13 @@
-{% extends 'public/show.html' %}
-{% block content %}
-<!-- Content Begin -->
+__author__ = 'tang'
 
-<div id="index-board">
 
-    <canvas class="background-board">
-    </canvas>
+import pymongo
+from app.model import Section, Page
 
+def fill_selection():
+    t = Section()
+    content = []
+    content.append('''
     <section id="1" height="1" background="static/resource/img/big/1.jpg">
         <canvas class="section-board" color="black" opacity=0.7>
         </canvas>
@@ -18,7 +19,8 @@
             <span class="animation" type="fade" trigger="first"> </span>
         </div>
     </section>
-
+    ''')
+    content.append('''
     <section id="2" height="1.5" background="">
         <canvas class="section-board" color="white" opacity=0.5>
         </canvas>
@@ -44,7 +46,8 @@
             <button type="button" class="btn btn-default">Button</button>
         </div>
     </section>
-
+    ''')
+    content.append('''
     <section id="3" height="1" background="static/resource/img/big/3.jpg">
         <canvas class="section-board" color="black" opacity=0.7>
         </canvas>
@@ -87,7 +90,9 @@
                 </div>
         </div>
     </section>
+    ''')
 
+    content.append('''
     <section id="4" height="1" background="">
         <canvas class="section-board" color="black" opacity=1>
         </canvas>
@@ -175,22 +180,16 @@
             <!-- Least Gallery end -->
         </div>
     </section>
-</div>
+    ''')
 
+    for s in content:
+        t.insert(content=s)
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
-            </div>
-            <div class="modal-body" style="padding: 0">
-                <img style="width: 100%; height: 100%">
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Content End -->
-{% endblock %}
-
+def fill_demo_page():
+    p=Page()
+    s=Section()
+    docs=s.get_all()
+    section=[]
+    for doc in docs:
+        section.append(doc['_id'])
+    p.insert(section=section)

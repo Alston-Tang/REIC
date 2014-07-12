@@ -19,7 +19,7 @@ def upload():
     return app.send_static_file('html/file_upload.html')
 
 
-@app.route('/ajax/file_upload',methods=['GET','POST'])
+@app.route('/ajax/file_upload',methods=['GET', 'POST'])
 def main_upload():
     if request.method == 'GET':
         return file.upload_test.get()
@@ -27,7 +27,7 @@ def main_upload():
         upload_file = request.files.get('files[]')
         return file.upload_test.post(upload_file)
 
-@app.route('/ajax/file_upload/<file_name>',methods=['DELETE'])
+@app.route('/ajax/file_upload/<file_name>', methods=['DELETE'])
 def main_delete(file_name):
     if not request.method == 'DELETE':
         print "Strange thing is happening"
