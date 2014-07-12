@@ -22,6 +22,8 @@
     {% endblock %}
 {% endblock %}
 {% block body %}
+    {% block navbar %}
+    {% endblock %}
     {% block content %}
     {% endblock %}
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
