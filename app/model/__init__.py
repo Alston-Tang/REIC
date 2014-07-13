@@ -30,7 +30,6 @@ class BaseModel:
                 if not key in data:
                     data[key] = 'undefined'
                 json_set[key] = data[key]
-
         try:
             collection.insert(json_set)
         except Exception:
@@ -57,4 +56,5 @@ class BaseModel:
 
 from page import Page
 from section import Section
+from user import User
 
