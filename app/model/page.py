@@ -18,14 +18,15 @@ class Page(BaseModel):
 
         from app.helper.require import require, default
         #Check exists
-        require(['creator'], opt)
+        if not require(['creator'], opt):
+            return False
         default({'title': 'Untitled', 'section': []}, opt)
         #Update time
         opt['create_time'] = time()
         opt['modified_time'] = time()
         #Insert
-        require=['creator', 'section', 'create_time', 'modified_time', 'title']
-        BaseModel.insert(self, self.collection, require, opt)
+        require = ['creator', 'section', 'create_time', 'modified_time', 'title']
+        return BaseModel.insert(self, self.collection, require, opt)
 
     def get_all(self):
         return BaseModel.get(self, self.collection, {})
@@ -41,7 +42,6 @@ class Page(BaseModel):
             page['section_detail'] = []
             for section in page['section']:
                 section_result = section_model.get(_id=section)[0]
-                print section_result
                 page['section_detail'].append(section_result)
 
         return pages

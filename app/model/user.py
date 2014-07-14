@@ -14,10 +14,27 @@ class User(BaseModel):
             opt = opt['data']
 
         from app.helper.require import require, default
-        require(['username', 'password','email'],opt)
+        if not require(['username', 'password','email'], opt):
+            return False
         default({'tel': False, 'dept': False, 'sid': False, 'year': False, 'extra': []}, opt)
         opt['activity'] = []
         opt['inf'] = []
         opt['create_time']=time()
         require = ['username', 'password', 'email', 'create_time', 'tel', 'dept', 'sid', 'year', 'extra', 'activity', 'inf']
-        BaseModel.insert(self,self.collection,require,opt)
+        return BaseModel.insert(self,self.collection, require, opt)
+
+
+    def valid(self, **opt):
+
+        from app.helper.require import require
+        from app.helper import sha256_pass
+
+        if not require(['email','password'], opt):
+            return False
+        opt['password'] = sha256_pass.encode(opt['password'])
+        user = BaseModel.get(self, self.collection, opt)
+        if not user:
+            return False
+        else:
+            return user[0]['username']
+

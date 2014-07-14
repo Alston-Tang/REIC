@@ -16,14 +16,15 @@ ___
         opt['creator'] = 'tang'
 
         from app.helper.require import require, default
-        require(['creator'], opt)
+        if not require(['creator'], opt):
+            return False
         default({'content': "", 'title': "Untitled"}, opt)
 
         opt['create_time'] = time()
         opt['modified_time'] = time()
 
         require = ['creator', 'content', 'create_time', 'modified_time', 'title']
-        BaseModel.insert(self, self.collection, require, opt)
+        return BaseModel.insert(self, self.collection, require, opt)
 
     def get_all(self):
         return BaseModel.get(self, self.collection, {})

@@ -47,7 +47,7 @@ class BaseModel:
         """
         rt = []
         if not require:
-            cursor=collection.find()
+            cursor = collection.find()
         else:
             cursor = collection.find(require)
         for doc in cursor:
