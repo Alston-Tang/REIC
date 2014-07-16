@@ -54,7 +54,7 @@ class BaseModel:
             rt.append(doc)
         return rt
 
-from page import Page
-from section import Section
-from user import User
+from section import section
+from page import page
+from user import user
 

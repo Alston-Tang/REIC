@@ -2,6 +2,7 @@ __author__ = 'tang'
 
 from time import time
 from . import BaseModel
+from section import section
 
 
 class Page(BaseModel):
@@ -35,27 +36,26 @@ class Page(BaseModel):
         return BaseModel.get(self, self.collection, require)
 
     def get_all_content(self):
-        from . import Section
-        section_model = Section()
         pages = self.get_all()
-        for page in pages:
-            page['section_detail'] = []
-            for section in page['section']:
-                section_result = section_model.get(_id=section)[0]
-                page['section_detail'].append(section_result)
+        for page_ite in pages:
+            page_ite['section_detail'] = []
+            for section_ite in page_ite['section']:
+                section_result = section.get(_id=section_ite)[0]
+                page_ite['section_detail'].append(section_result)
 
         return pages
 
     def get_content(self, **opt):
-        from . import Section
-        section_model = Section()
         pages = BaseModel.get(self, self.collection, opt)
-        for page in pages:
-            page['section_detail'] = []
-            for section in page['section']:
-                section_result = section_model.get(_id=section)[0]
-                page['section_detail'].append(section_result)
+        for page_ite in pages:
+            page_ite['section_detail'] = []
+            for section_ite in page_ite['section']:
+                section_result = section.get(_id=section_ite)[0]
+                page_ite['section_detail'].append(section_result)
 
         return pages
+
+#Global Model Instance
+page = Page()
 
 

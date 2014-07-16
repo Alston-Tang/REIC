@@ -7,11 +7,12 @@ from . import BaseModel
 class User(BaseModel):
     def __init__(self):
         BaseModel.__init__(self)
-        self.collection=self.db.users
+        self.collection = self.db.users
 
     def insert(self, **opt):
-        if opt['data']:
-            opt = opt['data']
+        if opt['data_']:
+            for item in opt['data_']:
+                opt[item] = opt['data_'][item]
 
         from app.helper.require import require, default
         if not require(['username', 'password','email'], opt):
@@ -23,6 +24,8 @@ class User(BaseModel):
         require = ['username', 'password', 'email', 'create_time', 'tel', 'dept', 'sid', 'year', 'extra', 'activity', 'inf']
         return BaseModel.insert(self,self.collection, require, opt)
 
+    def get(self, **require):
+        return BaseModel.get(self, self.collection, require)
 
     def valid(self, **opt):
 
@@ -32,9 +35,11 @@ class User(BaseModel):
         if not require(['email','password'], opt):
             return False
         opt['password'] = sha256_pass.encode(opt['password'])
-        user = BaseModel.get(self, self.collection, opt)
+        cur_user = BaseModel.get(self, self.collection, opt)
         if not user:
             return False
         else:
-            return user[0]['username']
+            return cur_user[0]
 
+#Global Model Instance
+user = User()

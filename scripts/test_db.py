@@ -193,3 +193,4 @@ def fill_demo_page():
     for doc in docs:
         section.append(doc['_id'])
     p.insert(section=section)
+

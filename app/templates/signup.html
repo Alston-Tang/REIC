@@ -2,20 +2,26 @@
 {% import 'macro/form.html' as forms %}
 {% block content %}
 <div id="index-board">
-
     <canvas class="background-board">
     </canvas>
-    <section height="1" background="static/resource/img/big/1.jpg">
+    <section height="1" >
         <canvas class="section-board" color="white" opacity=1>
         </canvas>
         <div left="0.38" right="0.61" top="0.14" bot="0.25">
             <img src="static/resource/icon/reic_new.png">
         </div>
         <div left="0.4" right="0.6" top="0.3" bot="0.8">
-            <form class="form-horizontal" role="form" action="signin" method="post">
+            <form class="form-horizontal" role="form" action="signup" method="post">
                 {{ form.csrf_token }}
-                {{ forms.render_field(form.email,with_label='Username') }}
-                {{ forms.render_field(form.password,with_label='Password') }}
+                {{ forms.render_field(form.email, with_label='Username') }}
+                {{ forms.render_field(form.password, with_label='Password') }}
+                {{ forms.render_field(form.password_confirm, with_label='Password confirm') }}
+                {{ forms.render_field(form.username, with_label='User name') }}
+                {{ forms.render_field(form.tel, with_label='Telephone') }}
+                {{ forms.render_field(form.sid, with_label='SID') }}
+                {{ forms.render_field(form.dept, with_label='Department') }}
+                {{ forms.render_field(form.year, with_label='Year') }}
+
                 {% if error %}
                  <div class="alert alert-danger" role="alert">
                      <a href="#" class="alert-link">{{ error }}</a>

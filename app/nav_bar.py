@@ -5,9 +5,9 @@ import model
 
 def nav_bar_structure():
     structure = {}
-    pages = model.Page().get_all_content()
-    for page in pages:
-        structure[page['title']]=[]
-        for section in page['section_detail']:
-            structure[page['title']].append(section['title'])
+    pages = model.page.get_all_content()
+    for page_ite in pages:
+        structure[page_ite['title']]=[]
+        for section in page_ite['section_detail']:
+            structure[page_ite['title']].append(section['title'])
     return structure
