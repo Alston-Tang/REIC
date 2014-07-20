@@ -81,3 +81,10 @@ def signup():
             return redirect(url_for('index'))
         else:
             return render_template('signup.html', form=form)
+
+#Below is for test
+@app.route('/test')
+def test():
+    from app.helper.form import SignUp
+    form = SignUp(request.form)
+    return render_template('test.html',form=form)

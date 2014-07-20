@@ -3,18 +3,18 @@
  */
 var list;
 
-var IndexBoard=function(root,opt){
+var IndexBoard=function(dom,opt){
     list=this;
     this.navOff=0;
     if(opt)
     {
         if (opt.navOff) this.navOff=opt.navOff;
     }
-    this.root=root;
+    this.dom=dom;
     this.con=[];
     this.curBackground=null;
     this.sec=[];
-    this.backgroundDom=$(this.root).children('.background-board')[0];
+    this.backgroundDom=$(this.dom).children('.background-board')[0];
     this.backgroundCtx=this.backgroundDom.getContext('2d');
     this.lastTop=this.topY();
     this.lastBot=this.botY();
@@ -50,23 +50,22 @@ IndexBoard.prototype.botY=function(){
 IndexBoard.prototype.init=function(){
     this.setSize();
     this.getCon();
-    this.initCon();
     mainLoop();
 };
 
 IndexBoard.prototype.getCon= function () {
     var cur=this;
-    $(this.root).children('section').each(function(){
+    $(this.dom).children('section').each(function(){
         cur.con.push(new section(this,cur));
     })
 };
 
 IndexBoard.prototype.setSize=function(){
-    $(this.root).css({
+    $(this.dom).css({
         'width':window.screen.availWidth,
         'margin-top':this.navOff
     });
-    $(this.root).children('.background-board').css({
+    $(this.dom).children('.background-board').css({
         'width':window.screen.availWidth,
         'height':window.screen.availHeight
     }).attr({
@@ -131,31 +130,12 @@ IndexBoard.prototype.traverse=function(f){
     }
 };
 
-IndexBoard.prototype.initCon=function(){
-    this.traverse(function(){
-        this.init();
-    })
-};
-
-IndexBoard.prototype.edit=function(){
-    this.traverse(function(){
-        this.display();
-    })
-};
-
 IndexBoard.prototype.inArea=function(top,bot){
     if(top<=this.lastTop && bot>this.lastTop) return true;
     if(bot>=this.lastBot && top>this.lastBot) return true;
     if(top>=this.lastTop && bot<=this.lastBot) return true;
     return false;
-
     //Need fix
-};
-
-IndexBoard.prototype.reInit=function(){
-    for(var i=0; i<this.con.length; i++){
-        this.con[i].reInit();
-    }
 };
 
 //Section
@@ -166,31 +146,30 @@ var section=function(dom,parent){
     this.canDom=$(this.dom).children('.section-board')[0];
 
     this.setSize();
-    this.top=this.dom.offsetTop;
-    this.bot=this.dom.offsetHeight+this.dom.offsetTop;
-
-    this.backgroundImg=this.getBackground();
-    this.setCanColor();
+    this.backgroundImg=this.setBackground();
 
     this.con=[];
     this.getCon();
+
+    this.correctHeight();
+    this.setCan();
 };
 
 section.prototype={
-    setCanColor:function(){
-        var cur=this.canDom;
-        cur.width=cur.parentNode.offsetWidth;
-        cur.height=cur.parentNode.offsetHeight;
-        $(cur).css({'width':cur.width,'height':cur.height});
-        var color=$(cur).attr('color');
-        var opacity=$(cur).attr('opacity');
-        var ctx=cur.getContext('2d');
+    setCan:function(){
+        var canvas=this.canDom;
+        canvas.width=this.parent.globalWidth;
+        canvas.height=this.actBot-this.top;
+        $(canvas).css({'width':canvas.width,'height':canvas.height});
+        var color=$(canvas).attr('color');
+        var opacity=$(canvas).attr('opacity');
+        var ctx=canvas.getContext('2d');
         ctx.globalAlpha=opacity;
         ctx.fillStyle=color;
-        ctx.fillRect(0,0,cur.width,cur.height);
+        ctx.fillRect(0,0,canvas.width,canvas.height);
     },
 
-    getBackground:function(){
+    setBackground:function(){
         var backStr=$(this.dom).attr('background');
         if(!backStr)
         {
@@ -201,15 +180,6 @@ section.prototype={
         return img;
     },
 
-    getCalPos:function(co){
-        var rtVal={};
-        rtVal.left=co.left*this.parent.globalWidth;
-        rtVal.right=co.right*this.parent.globalWidth;
-        rtVal.top=this.top+co.top*(this.bot-this.top);
-        rtVal.bot=this.top+co.bot*(this.bot-this.top);
-        return rtVal;
-    },
-
     getCon:function(){
         var cur=this;
         $(this.dom).children('div').each(function(){
@@ -218,21 +188,28 @@ section.prototype={
     },
     setSize:function(){
         var height=$(this.dom).attr('height');
-        $(this.dom).css('height',height*this.parent.globalHeight-this.parent.navOff);
+        $(this.dom).css('height',height*this.parent.globalHeight);
+        this.top=this.dom.offsetTop;
+        this.bot=this.dom.offsetHeight+this.dom.offsetTop;
+    },
+    correctHeight:function(){
+        var maxBot=this.bot;
+        for (var i=0; i<this.con.length; i++){
+            maxBot=this.con[i].top+this.con[i].actHeight>maxBot?this.con[i].top+this.con[i].actHeight:maxBot;
+        }
+        this.actBot=parseInt(maxBot);
+        $(this.dom).css('height',this.actBot-this.top);
     },
     divControl:function(){
         for(var i=0; i<this.con.length; i++){
-            if(this.parent.inArea(this.con[i].absPos.top,this.con[i].absPos.bot)){
+            if(this.parent.inArea(this.con[i].top,this.con[i].top+this.con[i].actHeight)){
                 for(var j=0; j<this.con[i].animation.length; j++){
-                    if(this.con[i].animation[j].shouldPlay()) this.con[i].animation[j].con.play();
+                    if(this.con[i].animation[j].shouldPlay()) {
+                        this.con[i].animation[j].play();
+                    }
                 }
                 this.con[i].first=false;
             }
-        }
-    },
-    reInit:function(){
-        for(var i=0; i<this.con.length; i++){
-            this.con[i].reInit();
         }
     }
 };
@@ -244,163 +221,187 @@ var div=function(dom,parent){
     this.dom=dom;
     this.parent=parent;
     this.type=$(this.dom).attr('type');
-    this.absPos=this.parent.getCalPos({
-        left:$(this.dom).attr('left'),
-        right:$(this.dom).attr('right'),
-        top:$(this.dom).attr('top'),
-        bot:$(this.dom).attr('bot')
-    });
-    this.height=this.absPos.bot-this.absPos.top;
-    this.width=this.absPos.right-this.absPos.left;
-    this.layer=$(this.dom).attr('layer');
-
     this.animation=[];
-    $(this.dom).children('.animation').each(function(){
-        cur.animation.push(new animation(this,cur));
-    });
+    this.left=null;
+    this.width=null;
+    this.top=null;
+    this.height=null;
+    this.layer=$(this.dom).css('z-index')?$(this.dom).css('z-index'):null;
+    this.setLeft();
+    this.setWidth();
+    this.setTop();
+    this.setHeight();
+    this.setLayer();
+    this.setAnimation();
     this.first=true;
 };
 
 div.prototype={
-    display:function(){
-        var cur=this;
-        this.setPos();
-        cur.autoFit();
+    setLeft:function(ext){
+        var width=this.parent.parent.globalWidth;
+        this.left=ext!=undefined?ext:$(this.dom).attr('left')*width;
+        $(this.dom).css({'left':this.left})
     },
-    autoFit:function(){
-        if(existAutoFit[this.type]) existAutoFit[this.type](this);
-        else
-            $(this.dom).children('img,video,iframe').first().css({
-            'height':this.height,
-            'width':this.width
-        });
+    setWidth:function(ext){
+        var width=this.parent.parent.globalWidth;
+        this.width=ext!=undefined?ext:($(this.dom).attr('right')-$(this.dom).attr('left'))*width;
+        $(this.dom).css({'width':this.width})
     },
-    setPos:function(left,top,width,height,layer){
-        if(!left || !top || !width || !height || !layer)
-        {
-            left=this.absPos.left;
-            top=this.absPos.top;
-            width=this.width;
-            height=this.height;
-            layer=this.layer;
-        }
-        $(this.dom).css({
-            'left':left.toString()+'px',
-            'width':width.toString()+'px',
-            'top':top.toString()+'px',
-            'height':height.toString+'px',
-            'z-index':layer
-        });
+    setTop:function(ext){
+        var height=this.parent.bot-this.parent.top;
+        this.top=ext!=undefined?ext:height*$(this.dom).attr('top')+this.parent.top;
+        $(this.dom).css({'top':this.top})
     },
-    init:function(){
-        var cur=this;
-        this.display();
-        for(var i=0; i<this.animation.length; i++)
-        {
-            this.animation[i].con.init();
-        }
+    setHeight:function(ext){
+        var height=this.parent.bot-this.parent.top;
+        this.height=ext!=undefined?ext:($(this.dom).attr('bot')-$(this.dom).attr('top'))*height;
+        this.correctSize();
+        this.actHeight=this.dom.offsetHeight;
     },
-    reInit:function(){
-        this.first=true;
-        this.display();
-        for(var i=0; i<this.animation.length; i++)
-        {
-            this.animation[i].con.init();
-        }
-    },
-    reHandleAnimation:function(){
-        var cur=this;
-        this.animation=[];
-        $(this.dom).children('.animation').each(function(){
-            cur.animation.push(new animation(this,cur));
-        });
-    },
-    reHandlePos:function(){
-        this.absPos=this.parent.getCalPos({
-            left:$(this.dom).attr('left'),
-            right:$(this.dom).attr('right'),
-            top:$(this.dom).attr('top'),
-            bot:$(this.dom).attr('bot')
-        });
-        this.height=this.absPos.bot-this.absPos.top;
-        this.width=this.absPos.right-this.absPos.left;
+    setLayer:function(){
         this.layer=$(this.dom).attr('layer');
-        this.display();
+        $(this.dom).css({'z-index':this.layer});
     },
-    reNew:function(){
+    setAnimation:function(){
         var cur=this;
-        this.type=$(this.dom).attr('type');
-        this.reHandlePos();
-        this.animation=[];
         $(this.dom).children('.animation').each(function(){
             cur.animation.push(new animation(this,cur));
         });
-        this.first=true;
+
     },
-    removeAnimation:function(aniObj){
-        var find=-1;
-        for(var i=0; i<this.animation.length; i++) {
-            if (this.animation[i] === aniObj) {
-                find = i;
-                break;
-            }
+    correctSize:function(){
+        switch (this.type){
+            case undefined:
+                return;
+            case 'img':
+            case 'video':
+            case 'iframe':
+                $(this.dom).children('img,video,iframe').first().css({
+                    'height': this.height,
+                    'width': this.width
+                });
+                return;
+
+            case 'text':
+                var left= 1,right=1000, mid=parseInt((left+right)/2);
+                var $dom=$(this.dom).children();
+                while(left<right){
+                    $dom.css('font-size',mid);
+                    if(this.dom.offsetHeight>this.height) right=mid-1;
+                    else left=mid+1;
+                    mid=parseInt((left+right)/2);
+                }
+                if(this.dom.offsetHeight>this.height) left--;
+                $dom.css('font-size',left);
+                return;
+
+            case 'bootstrapCarousel':
+                $(this.dom).find('.carousel-inner img').css({
+                    'width':this.width,
+                    'height':this.height
+                });
+                return;
         }
-        if(find<0) return false;
-        for(i=find+1; i<this.animation.length; i++){
-            this.animation[i-1]=this.animation[i];
-        }
-        this.animation.pop();
-        return true;
     }
 };
 
 //animations
 var aniCollections={};
-var noInit=function(){
-    alert("No initial function defined!");
-};
-var noPlay=function(){
-    alert("No play function defined!");
-};
-var baseAnimation=function(targetDiv,parent,type){
-    this.parent=parent;
-    this.targetDiv=targetDiv;
-    this.init=aniCollections[type].init;
-    this.play=aniCollections[type].play;
-};
-
 aniCollections.fade={
     init:function(){
-        $(this.targetDiv.dom).css('display','none');
+        $(this.parent.dom).css('display','none');
     },
     play:function(){
-        this.init(this.targetDiv.dom);
-        $(this.targetDiv.dom).fadeIn(3000);
+        this.init();
+        $(this.parent.dom).fadeIn(this.speed);
     }
 };
+aniCollections.move={
+    init:function(){
+        var oriLeft=$(this.dom).attr('oriLeft')*list.globalWidth;
+        var oriTop=this.parent.parent.top+$(this.dom).attr('oriTop')*(this.parent.parent.bot-this.parent.parent.top);
+        if (oriLeft){
+            this.parent.setLeft(oriLeft);
+        }
+        if (oriTop){
+            this.parent.setTop(oriTop);
+        }
+    },
+    play:function(){
+        var cur=this;
+        this.init();
+        var dstLeft=parseInt($(this.dom).attr('dstLeft'))*list.globalWidth;
+        var dstTop=this.parent.parent.top+parseInt($(this.dom).attr('dstTop'))*(this.parent.parent.bot-this.parent.parent.top);
+        if (dstLeft==undefined || dstTop==undefined) throw "Undefined destination";
+        $(this.parent.dom).animate({
+                'left':dstLeft,
+                'top':dstTop
+
+            },{
+                'speed':this.speed,
+                'complete':function(){
+                    cur.parent.setLeft(dstLeft);
+                    cur.parent.setTop(dstTop);
+                }
+            }
+        );
+    }
+};
+
+aniCollections.resize={
+    init:function(){
+        var oriHeight=$(this.dom).attr('oriHeight')*list.globalWidth;
+        var oriWidth=$(this.dom).attr('oriWidth')*(this.parent.parent.bot-this.parent.parent.top);
+        if (oriWidth){
+            this.parent.setWidth(oriWidth);
+        }
+        if (oriHeight){
+            this.parent.setHeight(oriHeight);
+        }
+    },
+    play:function(){
+        var cur=this;
+        this.init();
+        var dstHeight=$(this.dom).attr('dstHeight')*list.globalWidth;
+        var dstWidth=$(this.dom).attr('dstWidth')*(this.parent.parent.bot-this.parent.parent.top);
+        if (dstWidth==undefined || dstHeight==undefined) throw "Undefined destination";
+        $(this.parent.dom).animate({
+                'width':dstWidth,
+                'height':dstHeight
+            },{
+                'speed':this.speed,
+                'step':function(){
+                    cur.parent.setWidth(parseInt($(cur.parent.dom).css('width')));
+                    cur.parent.setHeight(parseInt($(cur.parent.dom).css('height')));
+                },
+                'complete':function(){
+                    cur.parent.setWidth(dstWidth);
+                    cur.parent.setHeight(dstHeight);
+                }
+            }
+        )
+
+
+    }
+};
+
 var animation=function(dom,parent){
     this.dom=dom;
     this.parent=parent;
     this.type=$(this.dom).attr('type');
     this.trigger=$(this.dom).attr('trigger');
-    this.con=new baseAnimation(this.parent,this,this.type);
+    this.speed=$(this.dom).attr('speed')?parseInt($(this.dom).attr('speed')):1000;
+    if (!aniCollections[this.type]){
+        throw "Undefined animation type: "+this.type;
+    }
+    this.init=function(){aniCollections[this.type].init.call(this)};
+    this.play=function(){aniCollections[this.type].play.call(this)};
 };
 animation.prototype={
     shouldPlay:function(){
         return(
             (this.parent.first && this.trigger=='first')
             );
-    },
-    reNew:function(){
-        if(!this.dom){
-            this.removeThis();
-        }
-        this.type=$(this.dom).attr('type');
-        this.trigger=$(this.dom).attr('trigger');
-        this.con=new baseAnimation(this.parent,this,this.type);
-    },
-    removeThis:function(){
-        this.parent.removeAnimation(this);
     }
 };
 //tools
@@ -410,16 +411,6 @@ var secComp=function(sec1,sec2){
     return true;
 };
 
-//autoFit function
-
-var existAutoFit={
-    bootstrapCarousel:function(div){
-        $(div.dom).find('.carousel-inner img').css({
-            'width':div.width,
-            'height':div.height
-        });
-    }
-};
 
 //main loop
 var mainLoop=function(){

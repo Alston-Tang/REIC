@@ -9,7 +9,7 @@ var initial=function(){
     root=document.getElementById('index-board');
 
     var opt={
-        navOff:thmTools.absPos(document.getElementById('nav-bar')).top
+        navOff:document.getElementById('nav-bar').offsetHeight
     };
     b=new IndexBoard(root,opt);
 };

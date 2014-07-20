@@ -1,1 +1,173 @@
-{% extends 'public/editor.html' %}
+{% extends 'public/show.html' %}
+{% import 'macro/form.html' as forms %}
+{% block content %}
+<div id="index-board">
+
+    <canvas class="background-board">
+    </canvas>
+    <section id="1" height="1" background="static/resource/img/big/1.jpg">
+        <canvas class="section-board" color="black" opacity=0.7>
+        </canvas>
+        <div left="0.5" top="0.4" right="0.8" bot="0.5" style="text-align: center">
+            <p>Of course</p>
+        </div>
+        <div left="0.4" right="0.6" top="0.2" bot="0.8" type="img">
+            <img src="static/resource/icon/reic.png">
+            <span class="animation" type="fade" trigger="first" speed="3000"> </span>
+            <span class="animation" type="move" trigger="first" dstLeft="0" dstTop="0" speed="500"></span>
+            <span class="animation" type="resize" trigger="first" dstWidth="0.15" dstHeight="0.1" speed="10000"></span>
+        </div>
+    </section>
+    <section id="2" height="0.5" background="">
+        <canvas class="section-board" color="white" opacity=0.5>
+        </canvas>
+        <div type="text" left="0.4" right="0.6" top="0.8" bot="1.0">
+            <h1>This</h1>
+        </div>
+    </section>
+    <section id="3" height="1" background="static/resource/img/big/3.jpg">
+        <canvas class="section-board" color="black" opacity=0.7>
+        </canvas>
+        <div left="0.0" right="1" top="0" bot="1" style="text-align: center" type="bootstrapCarousel">
+                <div class="carousel slide" id="carousel-example-captions" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        <li data-target="#carousel-example-captions" data-slide-to="0"></li>
+                        <li data-target="#carousel-example-captions" data-slide-to="1"></li>
+                        <li class="active" data-target="#carousel-example-captions" data-slide-to="2"></li>
+                    </ol>
+                    <div class="carousel-inner">
+                        <div class="item">
+                            <img alt="900x500" src="static/resource/img/big/3.jpg">
+                            <div class="carousel-caption">
+                                <h3>First slide label</h3>
+                                <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                            </div>
+                        </div>
+                        <div class="item">
+                            <img alt="900x500" src="static/resource/img/big/2.jpg">
+                            <div class="carousel-caption">
+                                <h3>Second slide label</h3>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            </div>
+                        </div>
+                        <div class="item active">
+                            <img alt="900x500" src="static/resource/img/big/1.jpg">
+                            <div class="carousel-caption">
+                                <h3>Third slide label</h3>
+                                <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <a class="left carousel-control" href="#carousel-example-captions" data-slide="prev">
+                        <i class="fa fa-angle-left icon-prev"></i>
+                    </a>
+                    <a class="right carousel-control" href="#carousel-example-captions" data-slide="next">
+                        <i class="fa fa-angle-right icon-next"></i>
+                    </a>
+                </div>
+        </div>
+    </section>
+    <section id="4" height="1" background="">
+        <canvas class="section-board" color="black" opacity=1>
+        </canvas>
+        <div left="0.1" top="0.05" right="0.9" bot="1">
+            <!--test -->
+            <!-- Least Gallery -->
+            <section id="least">
+
+                <!-- Least Gallery: Fullscreen Preview -->
+                <div class="least-preview"></div>
+
+                <!-- Least Gallery: Thumbnails -->
+                <ul class="least-gallery">
+                    <!-- 1 -->
+                    <li>
+                        <a href="static/resource/img/big/01.jpg" title="Skateboard" data-caption="<strong>Lorem ipsum dolor</strong> sit amet, consetetur sadipscing" >
+                            <img src="static/resource/img/thumbnails/01.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 2 -->
+                    <li>
+                        <a href="static/resource/img/big/02.jpg" title="Train Rails">
+                            <img src="static/resource/img/thumbnails/02.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 3 -->
+                    <li>
+                        <a href="static/resource/img/big/03.jpg" title="Apple">
+                            <img src="static/resource/img/thumbnails/03.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 4 -->
+                    <li>
+                        <a href="static/resource/img/big/04.jpg" title="Road Trip">
+                            <img src="static/resource/img/thumbnails/04.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 5 -->
+                    <li>
+                        <a href="static/resource/img/big/05.jpg" title="Desert">
+                            <img src="static/resource/img/thumbnails/05.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 6 -->
+                    <li>
+                        <a href="static/resource/img/big/06.jpg" title="Tree">
+                            <img src="static/resource/img/thumbnails/06.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 7 -->
+                    <li>
+                        <a href="static/resource/img/big/07.jpg" title="MacBook">
+                            <img src="static/resource/img/thumbnails/07.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 8 -->
+                    <li>
+                        <a href="static/resource/img/big/08.jpg" title="Clock">
+                            <img src="static/resource/img/thumbnails/08.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 9 -->
+                    <li>
+                        <a href="static/resource/img/big/09.jpg" title="iPhone">
+                            <img src="static/resource/img/thumbnails/09.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+
+                    <!-- 10 -->
+                    <li>
+                        <a href="static/resource/img/big/10.jpg" title="Test">
+                            <img src="static/resource/img/thumbnails/10.jpg" alt="Alt Image Text" />
+                        </a>
+                    </li>
+                </ul>
+            </section>
+            <!-- Least Gallery end -->
+        </div>
+    </section>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body" style="padding: 0">
+                <img style="width: 100%; height: 100%">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

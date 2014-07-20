@@ -1,0 +1,51 @@
+Section:
+    CSS:
+        height                                                                                 (setSize[heigth(dom)])
+    DomAttr:
+        height                                                                                 (defined by user)
+        background
+        children dom:
+            canvas.section-board                                                               (pre defined)
+                attr:
+                    width                                                                      (setCan[indexboard->globalWidth])
+                    height                                                                     (setCan[top&bot])
+                css:
+                    width                                                                      (setCan[indexboard->globalWidth])
+                    height                                                                     (setCan[top&bot])
+            
+    Attr:
+        dom: dom element in html                                                               (creator)
+        parent: instance of Class indexboard                                                   (creator)
+        canDom: dom element of canvas, which draw background for section                       (creator)
+        top: offset length from top of section to top of indexborad in px                      (setSize)
+        bot: offset length from bottom of section to top of indexboard in px                   (setSize)
+        backgroundImg: dom element of img, created on running, used by indexboard              (setBackground[background(dom)])
+    Function:
+        creator   [setSize,setBackground,setCan,getCon]
+        setSize: set actual size of section
+        setBackground: set background image used by indexboard
+        setCan: set section background
+        getCon: create children div objects
+
+
+Div:
+    CSS:
+    DomAttr:
+        type:                                                                                  (defined by user)
+        left:                                                                                  (defined by user)
+        right:                                                                                 (defined by user)
+
+    Attr:
+        dom: dom element in html                                                               (creator)
+        parent: instance os Class section                                                      (creator)
+        type: type of this div, can be null if not a basic div                                 (creator[type(dom)])
+        width:
+            left: absolute left position of div in px                                          (setWidth[left(dom)])
+            right: absolute right position of div in px                                        (setWidth[right(dom)])
+    Function:
+        setLeft: set left and change css
+        setWidth: set width and change css
+        setTop: set top and change css
+        setHeight: set height and change css
+
+        disWidth: set left and width css according to left and right

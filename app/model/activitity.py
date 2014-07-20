@@ -1,21 +1,16 @@
 __author__ = 'tang'
-
-from time import time
 from . import BaseModel
+from time import time
 
 
-class User(BaseModel):
-    def __init__(self):
-        BaseModel.__init__(self)
-        self.collection = self.db.users
-
+class Activity(BaseModel):
     def insert(self, **opt):
         if opt['data_']:
             for item in opt['data_']:
                 opt[item] = opt['data_'][item]
 
         from app.helper.require import require, default
-        if not require(['username', 'password','email'], opt):
+        if not require(['creator'], opt):
             return False
         default({'tel': False, 'dept': False, 'sid': False, 'year': False, 'extra': []}, opt)
         opt['activity'] = []
@@ -40,6 +35,3 @@ class User(BaseModel):
             return False
         else:
             return cur_user[0]
-
-#Global Model Instance
-user = User()
