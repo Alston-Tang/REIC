@@ -2,10 +2,11 @@ __author__ = 'tang'
 
 
 import pymongo
-from app.model import Section, Page
+from app.model import section, page
+
 
 def fill_selection():
-    t = Section()
+    t = section
     content = []
     content.append('''
     <section id="1" height="1" background="static/resource/img/big/1.jpg">
@@ -14,9 +15,11 @@ def fill_selection():
         <div left="0.5" top="0.4" right="0.8" bot="0.5" style="text-align: center">
             <p>Of course</p>
         </div>
-        <div left="0.4" right="0.6" top="0.2" bot="0.8">
+        <div type="img" left="0.4" right="0.6" top="0.2" bot="0.8">
             <img src="static/resource/icon/reic.png">
-            <span class="animation" type="fade" trigger="first"> </span>
+            <span class="animation" type="fade" trigger="first" speed="3000"> </span>
+            <span class="animation" type="move" trigger="first" dstLeft="0" dstTop="0" speed="500"></span>
+            <span class="animation" type="resize" trigger="first" dstWidth="0.15" dstHeight="0.1" speed="10000"></span>
         </div>
     </section>
     ''')
@@ -185,12 +188,13 @@ def fill_selection():
     for s in content:
         t.insert(content=s)
 
-def fill_demo_page():
-    p=Page()
-    s=Section()
-    docs=s.get_all()
-    section=[]
-    for doc in docs:
-        section.append(doc['_id'])
-    p.insert(section=section)
 
+def fill_demo_page():
+    docs = section.get_all()
+    s = []
+    for doc in docs:
+        s.append(doc['_id'])
+    page.insert(section=s, title='index')
+
+fill_selection()
+fill_demo_page()

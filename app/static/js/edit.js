@@ -13,7 +13,8 @@ var initial=function(){
     root=document.getElementById('index-board');
 
     var opt={
-        navOff:thmTools.absPos(document.getElementById('nav-bar')).top
+        navOff:document.getElementById('nav-bar').offsetHeight,
+        disableAnimation:true
     };
     b=new IndexBoard(root,opt);
 
@@ -34,8 +35,6 @@ var initial=function(){
                         indexEditor.disModal('animation',this[0]);
                         break;
                 }
-                //var m = "clicked: " + key + " on " + $(this).html();
-                //window.console && console.log(m) || alert(m);
             },
             items: {
                 "edit": {name: "Edit"},

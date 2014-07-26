@@ -22,8 +22,19 @@ indexEditor.preProcess=function(){
             dom:cur.dom,
             size:cur.parent.dom
         });
-        $(this.dom).attr('touch-action','none').on('thmdragend',function(){
-            this.indexEdit.reCalPos();
+        $(this.dom)
+            .attr('touch-action','none')
+            .on('thmdragend',function(){
+            var sectionWidth=parseFloat(this.indexEdit.parent.parent.globalWidth);
+            var sectionHeight=parseFloat(this.indexEdit.parent.bot)-parseFloat(this.indexEdit.parent.top);
+            var sectionTop=parseFloat(this.indexEdit.parent.top);
+            var left=parseFloat(this.offsetLeft)/sectionWidth;
+            var width=parseFloat(this.offsetWidth)/sectionWidth;
+            var top=(parseFloat(this.offsetTop)-sectionTop)/sectionHeight;
+            var height=parseFloat(this.offsetHeight)/sectionHeight;
+
+            this.indexEdit.resetWidthLeft(left,left+width);
+            this.indexEdit.resetHeightTop(top,top+height);
         });
     });
 };
@@ -36,20 +47,20 @@ indexEditor.modal.size={
         layer:'text'
     },
     setValue:function(dom){
-        $('#edit-panel').find('.width').val(parseFloat($(dom).attr('right'))-parseFloat($(dom).attr('left')));
-        $('#edit-panel').find('.height').val(parseFloat($(dom).attr('bot'))-parseFloat($(dom).attr('top')));
-        $('#edit-panel').find('.layer').val($(dom).css('z-index'));
+        var $panelDom=$('#edit-panel');
+        $panelDom.find('.width').val(parseFloat($(dom).attr('right'))-parseFloat($(dom).attr('left')));
+        $panelDom.find('.height').val(parseFloat($(dom).attr('bot'))-parseFloat($(dom).attr('top')));
+        $panelDom.find('.layer').val($(dom).css('z-index'));
     },
     callback:function(){
         $('#edit-modal').modal('hide');
-        $(this.point).attr({
-            'right':parseFloat($(this.point).attr('left'))+parseFloat($('#edit-panel').find('.width').val()),
-            'bot':parseFloat($(this.point).attr('top'))+parseFloat($('#edit-panel').find('.height').val()),
-            'layer':$('#edit-panel').find('.layer').val()
-        }).css(
-            {'z-index':$('#edit-panel').find('.layer').val()}
-        );
-        this.point.indexEdit.reHandlePos();
+        var curDom=this.point;
+        var curLeft=parseFloat($(this.point).attr('left'));
+        var curTop=parseFloat($(this.point).attr('top'));
+        var $panelDom=$('#edit-panel');
+        curDom.indexEdit.resetLayer(parseInt($panelDom.find('.layer').val()));
+        curDom.indexEdit.resetWidthLeft(curLeft,curLeft+parseFloat($panelDom.find('.width').val()));
+        curDom.indexEdit.resetHeightTop(curTop,curTop+parseFloat($panelDom.find('.height').val()));
         this.point.drag.reHandlePos();
     }
 };
@@ -174,14 +185,20 @@ section.prototype.getCalPosReverse=function(absPos){
     rtVal.bot=(absPos.bot-this.top)/(this.bot-this.top);
     return rtVal;
 };
-div.prototype.reCalPos=function(){
-    var aPos=thmTools.relPos(this.dom);
-    var rPos=this.parent.getCalPosReverse(aPos);
-    $(this.dom).attr({
-        left:rPos.left,
-        right:rPos.right,
-        top:rPos.top,
-        bot:rPos.bot
-    });
-    this.reHandlePos();
+div.prototype.resetWidthLeft=function(left,right){
+    if (left==undefined || right==undefined) return;
+    $(this.dom).attr({'left':left,'right':right});
+    this.setLeft();
+    this.setWidth();
+};
+div.prototype.resetHeightTop=function(top,bot){
+    if (top==undefined || bot==undefined) return;
+    $(this.dom).attr({'top':top,'bot':bot});
+    this.setTop();
+    this.setHeight();
+};
+div.prototype.resetLayer=function(layer){
+    if (layer==undefined) return;
+    $(this.dom).attr({'layer':layer});
+    this.setLayer();
 };

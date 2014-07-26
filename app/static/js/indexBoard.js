@@ -8,7 +8,9 @@ var IndexBoard=function(dom,opt){
     this.navOff=0;
     if(opt)
     {
-        if (opt.navOff) this.navOff=opt.navOff;
+        if ('navOff' in opt) this.navOff=opt.navOff;
+        if ('disableAnimation' in opt) this.disableAnimation=true
+        
     }
     this.dom=dom;
     this.con=[];
@@ -426,6 +428,8 @@ var mainLoop=function(){
         list.sec=curSec;
         list.setBackground();
     }
-    for(var i=curSec[0]; i<=curSec[curSec.length-1]; i++)
-    list.con[i].divControl();
+    if (!list.disableAnimation){
+        for (var i = curSec[0]; i <= curSec[curSec.length - 1]; i++)
+            list.con[i].divControl();
+    }
 };
