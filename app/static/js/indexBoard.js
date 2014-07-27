@@ -266,6 +266,7 @@ div.prototype={
     },
     setAnimation:function(){
         var cur=this;
+        cur.animation=[];
         $(this.dom).children('.animation').each(function(){
             cur.animation.push(new animation(this,cur));
         });

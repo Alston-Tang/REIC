@@ -2,15 +2,90 @@
 {% block extra_css %}
     <!-- JQuery Context Menu-->
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/jquery.contextMenu.css') }}">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/font-awesome/css/font-awesome.min.css') }}">
 {% endblock %}
 
 {% block content %}
 {% endblock %}
 
 {% block extra_js %}
+    {% raw %}
+    <script type="text/blueimp-tmpl" id="size-panel">
+        <label>width
+            <input class="form-control width" value={%#o.width%}>
+        </label>
+        <label>height
+            <input class="form-control height" value={%#o.height%}>
+        </label>
+        <label>layer
+            <input class="form-control layer" value={%#o.layer%}>
+        </label>
+    </script>
+    <script type="text/blueimp-tmpl" id="advanced-panel">
+        <label>innerHTML
+            <textarea rows='30' cols='50' class="form-control innerHTML">{%=o.html%}</textarea>
+        </label>
+    </script>
+    <script type="text/blueimp-tmpl" id="animation-panel">
+        {% for (var i=0; i<o.animation.length; i++) { %}
+          {% var cur=o.animation[i]; %}
+          <label>type
+              <select class="form-control type">
+                  <option value="fade" {%if (cur.type=='fade'){ %} selected {% } %}>fade in</option>
+                  <option value="move" {%if (cur.type=='move'){ %} selected {% } %}>move</option>
+                  <option value="resize" {%if (cur.type=='resize'){ %} selected {% } %}>resize</option>
+              </select>
+          </label>
+          <label>trigger
+              <select class="form-control trigger">
+                  <option value="first" {%if (cur.trigger=='first'){ %} selected {% } %}>first time</option>
+              </select>
+          </label>
+          <label>speed
+              <input class="form-control speed" value="{%#cur.speed%}">
+          </label>
+          {% if (cur.type=='move'){ %}
+            <label>origin top
+                <input class="form-control oriTop" value="{%#cur.oriTop%}">
+            </label>
+            <label>origin left
+                <input class="form-control oriLeft" value="{%#cur.oriLeft%}">
+            </label>
+            <label>destination top
+                <input class="form-control dstTop" value="{%#cur.dstTop%}">
+            </label>
+            <label>destination left
+                <input class="form-control dstLeft" value="{%#cur.dstLeft%}">
+            </label>
+          {% } %}
+          {% if (cur.type=='resize'){ %}
+            <label>origin width
+                <input class="form-control oriWidth" value="{%#cur.oriWidth%}">
+            </label>
+            <label>origin height
+                <input class="form-control oriHeight" value="{%#cur.oriHeight%}">
+            </label>
+            <label>destination width
+                <input class="form-control dstWidth" value="{%#cur.dstWidth%}">
+            </label>
+            <label>destination height
+                <input class="form-control dstHeight" value="{%#cur.dstHeight%}">
+            </label>
+          {% } %}
+          <i class="fa fa-minus" style="color:red" title="remove this animation"></i>
+          <br><hr>
+        {% } %}
+        <i class="fa fa-plus" style="color:green; margin-left:50px;"></i>
+    </script>
+    <script type="text/blueimp-tmpl">
+
+    </script>
+    {% endraw %}
     <script src="{{ url_for('static', filename='js/pointerevents.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery.contextMenu.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery.ui.position.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/tmpl.min.js')}}"></script>
     <script src="{{ url_for('static', filename='js/draggable-touch.js') }}"></script>
     <script src="{{ url_for('static', filename='js/tools.js') }}"></script>
     <script src="{{ url_for('static', filename='js/indexEditor.js') }}"></script>
