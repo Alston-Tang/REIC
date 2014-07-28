@@ -39,5 +39,19 @@ var thmTools= {
         str=str.replace(/&lt;/g,'<');
         str=str.replace(/&gt;/g,'>');
         return str;
+    },
+    inRange:function(min,max,list){
+        for(var i=0; i<list.length; i++){
+            if(!isNaN(list[i]) && (list[i]>max || list[i]<min)){
+                return i;
+            }
+        }
+        return 'valid';
+    },
+    isNumber:function(list){
+        for(var i=0; i<list.length; i++){
+            if (isNaN(list[i])) {return false;}
+        }
+        return true;
     }
 };

@@ -140,27 +140,71 @@ indexEditor.modal.animation={
         });
     },
     callback:function(){
+        var animations=[];
         var panel=document.getElementById('edit-modal');
         $(panel).find('.animation').each(function(){
-            switch ($(this).find('.type').val()){
+            var attr={};
+            attr.type=$(this).find('.type').val();
+            attr.trigger=$(this).find('.trigger').val();
+            attr.speed=parseInt($(this).find('.speed').val());
+            if (!attr.speed || attr.speed<=0){
+                alert("speed should be a positive integer");
+                return;
+            }
+            switch (attr.type){
                 case 'fade':
                     break;
                 case 'move':
-                    var oriLeft=parseFloat($(this).find('.oriLeft').val());
-                    var oriTop=parseFloat($(this).find('.oriTop').val());
-                    var dstLeft=parseFloat($(this).find('.dstLeft').val());
-                    var dstTop=parseFloat($(this).find('.dstTop').val());
+                    attr.oriLeft=parseFloat($(this).find('.oriLeft').val());
+                    attr.oriTop=parseFloat($(this).find('.oriTop').val());
+                    attr.dstLeft=parseFloat($(this).find('.dstLeft').val());
+                    attr.dstTop=parseFloat($(this).find('.dstTop').val());
+                    if(!thmTools.isNumber([attr.dstLeft,attr.dstTop])){
+                        alert("dstLeft and dstTop can not be empty");
+                        return;
+                    }
+                    if(thmTools.inRange(0.0,1.0,[attr.oriLeft,attr.oriTop,attr.dstLeft,attr.dstTop])!='valid'){
+                        alert(("left and top should be float number between 0.0 and 1.0"));
+                        return;
+                    }
                     break;
                 case 'resize':
-                    var oriWidth=parseFloat($(this).find('.oriWidth').val());
-                    var oriHeight=parseFloat($(this).find('.oriHeight').val());
-                    var dstWidth=parseFloat($(this).find('.dstWidth').val());
-                    var dstHeight=parseFloat($(this).find('.dstHeight').val());
+                    attr.oriWidth=parseFloat($(this).find('.oriWidth').val());
+                    attr.oriHeight=parseFloat($(this).find('.oriHeight').val());
+                    attr.dstWidth=parseFloat($(this).find('.dstWidth').val());
+                    attr.dstHeight=parseFloat($(this).find('.dstHeight').val());
+                    if(!thmTools.isNumber([attr.dstWidth,attr.dstHeight])){
+                        alert("dstHeight and dstWidth can not be empty");
+                        return;
+                    }
+                    if(thmTools.inRange(0.0,1.0,[attr.oriWidth,attr.oriHeight,attr.dstHeight,attr.dstWidth])!='valid'){
+                        alert(("width and height should be float number between 0.0 and 1.0"));
+                        return;
+                    }
                     break;
             }
+            animations.push(attr);
         });
-        /*
         $('#edit-modal').modal('hide');
+        var cur=this;
+        $(this.point).find('.animation').each(function(){
+            $(this).remove();
+        });
+        for (var i=0; i<animations.length; i++){
+            var animation=document.createElement('span');
+            $(animation).attr('class','animation');
+            var element;
+            for (element in animations[i]){
+                //noinspection JSUnfilteredForInLoop
+                if(!isNaN(animations[i][element]) || animations[i][element]) {
+                    $(animation).attr(element, animations[i][element]);
+                }
+            }
+            cur.point.appendChild(animation);
+        }
+        this.point.indexEdit.resetAnimation();
+        /*
+
         if($(this.point).find('.animation').length==0){
             if($('#edit-panel').find('.type').val()!='none'){
                 var aniDom=document.createElement('span');
@@ -236,4 +280,7 @@ div.prototype.resetLayer=function(layer){
     if (layer==undefined) return;
     $(this.dom).attr({'layer':layer});
     this.setLayer();
+};
+div.prototype.resetAnimation=function(){
+    this.setAnimation();
 };
