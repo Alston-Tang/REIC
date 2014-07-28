@@ -42,15 +42,16 @@ indexEditor.modal={};
 indexEditor.modal.size={
     title:'Size',
     con:{
-        width:'text',
-        height:'text',
-        layer:'text'
+        id:'size-panel',
+        data: function(dom){
+            var rv={};
+            rv.width=parseFloat($(dom).attr('right'))-parseFloat($(dom).attr('left'));
+            rv.height=parseFloat($(dom).attr('bot'))-parseFloat($(dom).attr('top'));
+            rv.layer=$(dom).css('z-index');
+            return rv;
+        }
     },
     setValue:function(dom){
-        var $panelDom=$('#edit-panel');
-        $panelDom.find('.width').val(parseFloat($(dom).attr('right'))-parseFloat($(dom).attr('left')));
-        $panelDom.find('.height').val(parseFloat($(dom).attr('bot'))-parseFloat($(dom).attr('top')));
-        $panelDom.find('.layer').val($(dom).css('z-index'));
     },
     callback:function(){
         $('#edit-modal').modal('hide');
@@ -67,10 +68,14 @@ indexEditor.modal.size={
 indexEditor.modal.advanced={
     title:'Advanced',
     con:{
-        innerHTML:'textarea'
+        id:'advanced-panel',
+        data: function(dom){
+            var rv={};
+            rv.html=$(dom).html();
+            return rv;
+        }
     },
     setValue:function(dom){
-        $('#edit-panel').find('.innerHTML').html(dom.innerHTML);
     },
     callback:function(){
         $('#edit-modal').modal('hide');
@@ -83,18 +88,37 @@ indexEditor.modal.advanced={
 indexEditor.modal.animation={
     title:'Animation',
     con:{
-        type:{
-            type:'select',
-            select:['none','fade']
-        },
-        trigger:{
-            type:'select',
-            select:['first']
+        id:'animation-panel',
+        data:function(dom){
+            var rv={};
+            rv.animation=[];
+            $(dom).children('.animation').each(function(){
+                var curAn={};
+                curAn.type=$(this).attr('type');
+                curAn.trigger=$(this).attr('trigger');
+                curAn.speed=$(this).attr('speed');
+                switch (curAn.type){
+                    case 'fade':
+                        break;
+                    case 'move':
+                        curAn.oriTop=$(this).attr('oriTop');
+                        curAn.oriLeft=$(this).attr('oriLeft');
+                        curAn.dstTop=$(this).attr('dstTop');
+                        curAn.dstLeft=$(this).attr('dstLeft');
+                        break;
+                    case 'resize':
+                        curAn.oriWidth=$(this).attr('oriWidth');
+                        curAn.oriHeight=$(this).attr('oriHeight');
+                        curAn.dstWidth=$(this).attr('dstWidth');
+                        curAn.dstHeight=$(this).attr('dstHeight');
+                        break;
+                }
+                rv.animation.push(curAn);
+            });
+            return rv;
         }
     },
     setValue:function(dom){
-        $('#edit-panel').find('.type').val($(dom).children('.animation').attr('type'));
-        $('#edit-panel').find('.select').val($(dom).children('.animation').attr('trigger'));
     },
     callback:function(){
         $('#edit-modal').modal('hide');
@@ -124,49 +148,20 @@ indexEditor.modal.animation={
 };
 
 indexEditor.disModal=function(type,dom){
+    var m=indexEditor.modal[type];
     if(indexEditor.modal[type]){
         this.deleteModalContent();
-        this.createModalContent(indexEditor.modal[type],dom);
+        this.createModalContent(m,dom);
+        if (m.setValue) m.setValue(dom);
         $('#edit-modal').modal('show');
     }
 };
 
 indexEditor.createModalContent=function(m,dom){
     var root=document.getElementById('edit-panel');
-    for(var name in m.con){
-        var newDom=document.createElement('label');
-        newDom.innerHTML=name;
-        var newItem;
-        switch (m.con[name]) {
-            case 'text':
-                newItem = document.createElement('input');
-                break;
-            case 'textarea':
-                newItem = document.createElement('textarea');
-                $(newItem).attr({'rows':30,'cols':50});
-                break;
-            default :
-                if(typeof(m.con[name])=='object'){
-                    switch (m.con[name].type){
-                        case 'select':
-                            var selObj=m.con[name];
-                            newItem=document.createElement('select');
-                            for(var i=0; i< selObj.select.length; i++){
-                                var listName=indexEditor.mapName[selObj.select[i]]?indexEditor.mapName[selObj.select[i]]:selObj.select[i];
-                                newItem.innerHTML+="<option value="+selObj.select[i]+">"+listName+"</option>";
-                            }
-                            break;
-                        default :
-                            break;
-                    }
-                }
-        }
-        $(newItem).addClass('form-control '+name);
-        newDom.appendChild(newItem);
-        root.appendChild(newDom);
-    }
+    var data= m.con.data? m.con.data(dom):{};
+    $(root).html(tmpl(m.con.id,data));
     $('#edit-panel-title').html(m.title);
-    m.setValue(dom);
     var button=document.getElementById('edit-panel-save');
     button.point=dom;
     button.onclick=m.callback;
