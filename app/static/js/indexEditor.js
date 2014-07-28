@@ -119,8 +119,47 @@ indexEditor.modal.animation={
         }
     },
     setValue:function(dom){
+        $('.fa-minus').css({'cursor':'pointer'}).click(function(){
+            $(this.parentNode).remove();
+        });
+        $('.fa-plus').css({'cursor':'pointer'}).click(function(){
+            var newDiv=document.createElement('div');
+            $(newDiv).addClass('animation').html(tmpl("animation-new-panel")).
+                find('button').click(function(){
+                    var type=$(newDiv).find('select').val();
+                    var html="";
+                    html+=tmpl("commonPanel",{'type':type});
+                    html+=tmpl(type+"Panel",{});
+                    html+="<hr>";
+                    $(newDiv).html(html);
+                    $('.fa-minus').css({'cursor':'pointer'}).click(function(){
+                        $(this.parentNode).remove();
+                    });
+                });
+            this.parentNode.insertBefore(newDiv,this);
+        });
     },
     callback:function(){
+        var panel=document.getElementById('edit-modal');
+        $(panel).find('.animation').each(function(){
+            switch ($(this).find('.type').val()){
+                case 'fade':
+                    break;
+                case 'move':
+                    var oriLeft=parseFloat($(this).find('.oriLeft').val());
+                    var oriTop=parseFloat($(this).find('.oriTop').val());
+                    var dstLeft=parseFloat($(this).find('.dstLeft').val());
+                    var dstTop=parseFloat($(this).find('.dstTop').val());
+                    break;
+                case 'resize':
+                    var oriWidth=parseFloat($(this).find('.oriWidth').val());
+                    var oriHeight=parseFloat($(this).find('.oriHeight').val());
+                    var dstWidth=parseFloat($(this).find('.dstWidth').val());
+                    var dstHeight=parseFloat($(this).find('.dstHeight').val());
+                    break;
+            }
+        });
+        /*
         $('#edit-modal').modal('hide');
         if($(this.point).find('.animation').length==0){
             if($('#edit-panel').find('.type').val()!='none'){
@@ -144,6 +183,7 @@ indexEditor.modal.animation={
             }
         }
         this.point.indexEdit.reHandleAnimation();
+        */
     }
 };
 

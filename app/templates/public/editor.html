@@ -29,9 +29,10 @@
     </script>
     <script type="text/blueimp-tmpl" id="animation-panel">
         {% for (var i=0; i<o.animation.length; i++) { %}
+        <div class='animation'>
           {% var cur=o.animation[i]; %}
           <label>type
-              <select class="form-control type">
+              <select class="form-control type" disabled>
                   <option value="fade" {%if (cur.type=='fade'){ %} selected {% } %}>fade in</option>
                   <option value="move" {%if (cur.type=='move'){ %} selected {% } %}>move</option>
                   <option value="resize" {%if (cur.type=='resize'){ %} selected {% } %}>resize</option>
@@ -73,13 +74,77 @@
                 <input class="form-control dstHeight" value="{%#cur.dstHeight%}">
             </label>
           {% } %}
-          <i class="fa fa-minus" style="color:red" title="remove this animation"></i>
-          <br><hr>
+          <br>
+          <i class="fa fa-minus fa-2x" style="color:red; margin:10px 50px;" title="remove this animation"></i>
+          <br><hr style="margin:0">
+        </div>
         {% } %}
-        <i class="fa fa-plus" style="color:green; margin-left:50px;"></i>
+        <i class="fa fa-plus fa-2x" style="color:green; margin:50px; title="add a new animation"></i>
     </script>
-    <script type="text/blueimp-tmpl">
-
+    <script type="text/blueimp-tmpl" id="animation-new-panel">
+        <label>type
+            <select class="form-control type">
+                <option value="fade">fade in</option>
+                <option value="move">move</option>
+                <option value="resize">resize</option>
+            </select>
+            <br>
+            <button type="button" class="btn btn-success">Add</button>
+            <hr>
+        </label>
+    </script>
+    <script type="text/blueimp-tmpl" id="commonPanel">
+        <label>type
+            <select class="form-control type" disabled>
+                <option value="fade" {%if (o.type=='fade'){ %} selected {% } %}>fade in</option>
+                <option value="move" {%if (o.type=='move'){ %} selected {% } %}>move</option>
+                <option value="resize" {%if (o.type=='resize'){ %} selected {% } %}>resize</option>
+            </select>
+        </label>
+        <label>trigger
+            <select class="form-control trigger">
+                <option value="first">first time</option>
+            </select>
+        </label>
+        <label>speed
+            <input class="form-control speed">
+        </label>
+    </script>
+    <script type="text/blueimp-tmpl" id="fadePanel">
+         <i class="fa fa-minus fa-2x" style="color:red; margin:10px 50px;" title="remove this animation"></i>
+    </script>
+    <script type="text/blueimp-tmpl" id="movePanel">
+        <label>origin top
+                <input class="form-control oriTop">
+            </label>
+            <label>origin left
+                <input class="form-control oriLeft">
+            </label>
+            <label>destination top
+                <input class="form-control dstTop">
+            </label>
+            <label>destination left
+                <input class="form-control dstLeft">
+        </label>
+        <br>
+        <i class="fa fa-minus fa-2x" style="color:red; margin:10px 50px;" title="remove this animation"></i>
+    </script>
+    <script type="text/blueimp-tmpl" id="resizePanel">
+        <label>origin width
+                <input class="form-control oriWidth">
+            </label>
+            <label>origin height
+                <input class="form-control oriHeight">
+            </label>
+            <label>destination width
+                <input class="form-control dstWidth">
+            </label>
+            <label>destination height
+                <input class="form-control dstHeight">
+            </label>
+        </label>
+        <br>
+        <i class="fa fa-minus fa-2x" style="color:red; margin:10px 50px;" title="remove this animation"></i>
     </script>
     {% endraw %}
     <script src="{{ url_for('static', filename='js/pointerevents.min.js') }}"></script>
