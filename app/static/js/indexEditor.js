@@ -85,6 +85,17 @@ indexEditor.modal.advanced={
     }
 };
 
+indexEditor.modal.delete={
+    title:'Delete',
+    con:{
+        id:'delete-panel'
+    },
+    callback:function(){
+        $('#edit-modal').modal('hide');
+        $(this.point).remove();
+    }
+};
+
 indexEditor.modal.animation={
     title:'Animation',
     con:{
@@ -203,31 +214,6 @@ indexEditor.modal.animation={
             cur.point.appendChild(animation);
         }
         this.point.indexEdit.resetAnimation();
-        /*
-
-        if($(this.point).find('.animation').length==0){
-            if($('#edit-panel').find('.type').val()!='none'){
-                var aniDom=document.createElement('span');
-                $(aniDom).addClass('animation').attr({
-                    type:$('#edit-panel').find('.type').val(),
-                    trigger:$('#edit-panel').find('.trigger').val()
-                });
-                this.point.appendChild(aniDom);
-            }
-        }
-        else{
-            if($('#edit-panel').find('.type').val()=='none'){
-                $(this.point).find('.animation').remove();
-            }
-            else{
-                $(this.point).find('.animation').attr({
-                    type:$('#edit-panel').find('.type').val(),
-                    trigger:$('#edit-panel').find('.trigger').val()
-                });
-            }
-        }
-        this.point.indexEdit.reHandleAnimation();
-        */
     }
 };
 

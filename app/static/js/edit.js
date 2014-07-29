@@ -25,7 +25,7 @@ var initial=function(){
             zIndex:100,
             callback: function(key, options) {
                 switch (key){
-                    case 'edit':
+                    case 'size':
                         indexEditor.disModal('size',this[0]);
                         break;
                     case 'advanced':
@@ -34,10 +34,13 @@ var initial=function(){
                     case 'animation':
                         indexEditor.disModal('animation',this[0]);
                         break;
+                    case 'delete':
+                        indexEditor.disModal('delete',this[0]);
+                        break;
                 }
             },
             items: {
-                "edit": {name: "Edit"},
+                "size": {name: "Size"},
                 "animation": {name: "Animation"},
                 "copy": {name: "Copy"},
                 "paste": {name: "Paste"},
