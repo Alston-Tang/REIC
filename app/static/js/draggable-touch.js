@@ -13,6 +13,7 @@ var drag=function(opt){
     this.top= p.top;
     this.bot= p.top+this.dom.offsetHeight;
     this.boundary={};
+    this.boundarySize=opt.size;
     this.initBoundary(opt.size);
     //Set status
     this.cssLeft=this.dom.offsetLeft;
@@ -161,7 +162,8 @@ drag.prototype={
         return {x:ix,y:iy};
     },
     reHandlePos:function(){
-        p=thmTools.absPos(this.dom);
+        this.initBoundary(this.boundarySize);
+        var p=thmTools.absPos(this.dom);
         this.left= p.left;
         this.right= p.left+this.dom.offsetWidth;
         this.top= p.top;

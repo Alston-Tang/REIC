@@ -93,6 +93,7 @@ indexEditor.modal.delete={
     callback:function(){
         $('#edit-modal').modal('hide');
         $(this.point).remove();
+        this.point.indexEdit.removeSelf();
     }
 };
 
@@ -250,6 +251,30 @@ section.prototype.getCalPosReverse=function(absPos){
     rtVal.bot=(absPos.bot-this.top)/(this.bot-this.top);
     return rtVal;
 };
+section.prototype.reGetSize=function(){
+    this.top=this.dom.offsetTop;
+    this.bot=this.dom.offsetHeight+this.dom.offsetTop;
+};
+section.prototype.reCorrectHeight=function(){
+    var _actBot=this.actBot;
+    this.correctHeight();
+    var pos;
+    if(_actBot!=this.actBot){
+        for(var i=0; i<this.parent.con.length; i++){
+            if(this.parent.con[i]==this){
+                pos=i;
+                break;
+            }
+        }
+        for(i=pos+1; i<this.parent.con.length; i++){
+            this.parent.con[i].reGetSize();
+            for(var j=0; j<this.parent.con[i].con.length; j++){
+                this.parent.con[i].con[j].setTop();
+                this.parent.con[i].con[j].dom.drag.reHandlePos();
+            }
+        }
+    }
+};
 div.prototype.resetWidthLeft=function(left,right){
     if (left==undefined || right==undefined) return;
     $(this.dom).attr({'left':left,'right':right});
@@ -269,4 +294,13 @@ div.prototype.resetLayer=function(layer){
 };
 div.prototype.resetAnimation=function(){
     this.setAnimation();
+};
+div.prototype.removeSelf=function(){
+    for(var i=0; i<this.parent.con.length; i++){
+        if(this.parent.con[i]==this){
+            this.parent.con.splice(i,1);
+            break;
+        }
+    }
+    this.parent.reCorrectHeight();
 };
