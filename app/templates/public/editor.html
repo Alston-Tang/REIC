@@ -24,7 +24,7 @@
     </script>
     <script type="text/blueimp-tmpl" id="advanced-panel">
         <label>innerHTML
-            <textarea rows='30' cols='50' class="form-control innerHTML">{%=o.html%}</textarea>
+            <textarea rows='30' style="width:{%#o.panelWidth-20%}px" class="form-control innerHTML">{%=o.html%}</textarea>
         </label>
     </script>
     <script type="text/blueimp-tmpl" id="delete-panel">
@@ -148,6 +148,31 @@
         </label>
         <br>
         <i class="fa fa-minus fa-2x" style="color:red; margin:10px 50px;" title="remove this animation"></i>
+    </script>
+    <script type="text/blueimp-tmpl" id="textContent">
+        <div class="row">
+            <div class="col-md-12">
+                <label>Content
+                    <textarea class="form-control content" style='width:{%#o.panelWidth-20 %}px' rows=10></textarea>
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+            <label> Text color
+                <input onblur="$('#jcoawijejr').css('color',$(this).val())" class="form-control textColor">
+            </label>
+            <label> Text size
+                <input onblur="$('#jcoawijejr').css('font-size',$(this).val())" class="form-control textSize">
+            </label>
+            <p id="jcoawijejr" class='demo' style="margin-left:20px;width:50px;height:50px">Demo</p>
+            </div>
+            <div class="col-md-6">
+            <label>Style
+                <textarea class="form-control textStyle" onblur="$('#jcoawijejr').attr('style',$(this).val())"></textarea>
+            </label>
+            </div>
+        </div>
     </script>
     {% endraw %}
     <script src="{{ url_for('static', filename='js/pointerevents.min.js') }}"></script>

@@ -201,6 +201,8 @@ section.prototype={
         }
         this.actBot=parseInt(maxBot);
         $(this.dom).css('height',this.actBot-this.top);
+        //When section size changed, Change canvas size and redraw canvas content manually
+        this.setCan();
     },
     divControl:function(){
         for(var i=0; i<this.con.length; i++){

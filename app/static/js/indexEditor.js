@@ -37,6 +37,11 @@ indexEditor.preProcess=function(){
             this.indexEdit.resetHeightTop(top,top+height);
         });
     });
+    //Test the width of editor paenl
+    var $panel=$('#edit-modal');
+    $panel.css({'visibility':'hidden','display':'inline'});
+    indexEditor.panelWidth=$('#edit-panel')[0].offsetWidth;
+    $panel.css({'visibility':'visible','display':'none'});
 };
 indexEditor.modal={};
 indexEditor.modal.size={
@@ -72,6 +77,7 @@ indexEditor.modal.advanced={
         data: function(dom){
             var rv={};
             rv.html=$(dom).html();
+            rv.panelWidth=indexEditor.panelWidth;
             return rv;
         }
     },
@@ -82,6 +88,22 @@ indexEditor.modal.advanced={
         this.point.innerHTML=thmTools.textToHtml($('#edit-panel').find('.innerHTML').html());
         this.point.indexEdit.reNew();
         this.point.drag.reHandlePos();
+    }
+};
+
+indexEditor.modal.content={
+    title:'Content',
+    con:{
+        //No id specified for different content uses different panel. Load this in setValue
+    },
+    setValue:function(dom){
+        var type=dom.indexEdit.type;
+        indexEditor.content.disEditModal(type,dom);
+    },
+    callback:function(){
+        var dom=this.point;
+        var type=dom.indexEdit.type;
+        indexEditor.content.saveHandle(type,dom);
     }
 };
 
@@ -231,8 +253,13 @@ indexEditor.disModal=function(type,dom){
 indexEditor.createModalContent=function(m,dom){
     var root=document.getElementById('edit-panel');
     var data= m.con.data? m.con.data(dom):{};
-    $(root).html(tmpl(m.con.id,data));
-    $('#edit-panel-title').html(m.title);
+    // Define con.id. Get that element by this id and render template inside this element to modal panel
+    if(m.con && m.con.id) {
+        $(root).html(tmpl(m.con.id, data));
+    }
+    if(m.title){
+        $('#edit-panel-title').html(m.title);
+    }
     var button=document.getElementById('edit-panel-save');
     button.point=dom;
     button.onclick=m.callback;
@@ -240,6 +267,45 @@ indexEditor.createModalContent=function(m,dom){
 indexEditor.deleteModalContent=function(){
     var root=document.getElementById('edit-panel');
     root.innerHTML="";
+};
+
+//Content Control
+indexEditor.content={};
+indexEditor.content.disEditModal=function(type,dom){
+    var data={};
+    data.panelWidth=indexEditor.panelWidth;
+    var tmplId=type+'Content';
+    var panel=$('#edit-panel')[0];
+    switch (type){
+        case 'text':
+            var $textNode=$(dom).children().first();
+            data.content=$textNode.html();
+            data.style=$textNode.attr('style');
+            data.color=$textNode.css('color');
+            data.size=$textNode.css('font-size');
+
+            $(panel).html(tmpl(tmplId,data));
+
+            $(panel).find('.content').val(data.content);
+            $(panel).find('.textColor').val(data.color);
+            $(panel).find('.textSize').val(data.size);
+            $(panel).find('.textStyle').val(data.style);
+            $(panel).find('.demo').css({'color':data.color,'font-size':data.size}).attr('attr',data.style);
+            break;
+    }
+};
+
+indexEditor.content.saveHandle=function(type,dom){
+    var panel=document.getElementById('edit-panel');
+    switch (type){
+        case 'text':
+            var $textNode=$(dom).children().first();
+            $textNode.html($(panel).find('.content').val())
+                     .attr('style',$(panel).find('.textStyle').val())
+                     .css({'color':$(panel).find('.textColor').val(),'font-size':$(panel).find('.textSize').val()});
+            break;
+    }
+    $('#edit-modal').modal('hide');
 };
 
 //Extend Index Board

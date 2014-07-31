@@ -37,13 +37,15 @@ var initial=function(){
                     case 'delete':
                         indexEditor.disModal('delete',this[0]);
                         break;
+                    case 'content':
+                        indexEditor.disModal('content',this[0]);
+                        break;
                 }
             },
             items: {
                 "size": {name: "Size"},
                 "animation": {name: "Animation"},
-                "copy": {name: "Copy"},
-                "paste": {name: "Paste"},
+                "content": {name: "Content"},
                 "delete": {name: "Delete"},
                 "sep1": "---------",
                 "advanced": {name: "Advanced"}

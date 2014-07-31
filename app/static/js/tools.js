@@ -33,6 +33,12 @@ var thmTools= {
         }
         return rt;
     },
+    getTextStyle:function(dom){
+        var rv={};
+        rv.textColor=$(dom).css('color');
+        rv.textSize=$(dom).css('font-size');
+        return rv;
+    },
     textToHtml:function(str){
         str=str.replace(/&quot;/g,'"');
         str=str.replace(/&amp;/g,'&');
