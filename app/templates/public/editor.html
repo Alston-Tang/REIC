@@ -149,7 +149,7 @@
         <br>
         <i class="fa fa-minus fa-2x" style="color:red; margin:10px 50px;" title="remove this animation"></i>
     </script>
-    <script type="text/blueimp-tmpl" id="textContent">
+    <script type="text/blueimp-tmpl" id="textSub">
         <div class="row">
             <div class="col-md-12">
                 <label>Content
@@ -173,6 +173,38 @@
             </label>
             </div>
         </div>
+    </script>
+    <script type="text/blueimp-tmpl" id="imageSub">
+
+    </script>
+
+    <script type="text/blueimp-tmpl" id="textContent">
+    <div class="row">
+        <div class="col-md-12">
+            <p style="{%#o.style%}" class='content'>{%=o.content%}</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button class='btn edit'>Edit</button>
+        </div>
+    </div>
+    </script>
+    <script type="text/blueimp-tmpl" id="imgContent">
+    <div class="row">
+        <div class="col-md-3">
+        </div>
+        <div class="col-md-6">
+            <img class="image img-responsive" src='{%#o.imgSrc%}'></img>
+        </div>
+        <div class="col-md-3">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button class="btn edit">Edit</button>
+        </div>
+    </div>
     </script>
     {% endraw %}
     <script src="{{ url_for('static', filename='js/pointerevents.min.js') }}"></script>

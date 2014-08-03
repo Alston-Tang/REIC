@@ -271,6 +271,50 @@ indexEditor.deleteModalContent=function(){
 
 //Content Control
 indexEditor.content={};
+indexEditor.content.subModal=function(type,dom,opt){
+    var $panel=$('#sub-panel');
+    var data={};
+    opt=opt?opt:{};
+    switch (type){
+        case 'text':
+            var $textNode=$(dom);
+            data.panelWidth=indexEditor.panelWidth;
+            data.content=$textNode.html();
+            data.style=$textNode.attr('style');
+            data.color=$textNode.css('color');
+            data.size=$textNode.css('font-size');
+
+            $($panel).html(tmpl('textSub',data));
+
+            $panel.find('.content').val(data.content);
+            $panel.find('.textColor').val(data.color);
+            $panel.find('.textSize').val(data.size);
+            $panel.find('.textStyle').val(data.style);
+            $panel.find('.demo').css({'color':data.color,'font-size':data.size}).attr('attr',data.style);
+
+            if (opt.disabled) {
+
+                for (var item in opt.disabled){
+                    if ($panel.find('.'+item).length>0){
+                        $panel.find('.'+item).attr('disabled','');
+                    }
+                }
+            }
+
+            $('#sub-panel-save')[0].onclick=function(){
+                $('#sub-content-modal').modal('hide');
+                $textNode.html($panel.find('.content').val())
+                         .attr('style',$panel.find('.textStyle').val())
+                         .css({'color':$panel.find('.textColor').val(),'font-size':$panel.find('.textSize').val()});
+            };
+
+            $('#sub-content-modal').modal('show');
+            break;
+
+        case 'image':
+            break;
+    }
+};
 indexEditor.content.disEditModal=function(type,dom){
     var data={};
     data.panelWidth=indexEditor.panelWidth;
@@ -281,16 +325,22 @@ indexEditor.content.disEditModal=function(type,dom){
             var $textNode=$(dom).children().first();
             data.content=$textNode.html();
             data.style=$textNode.attr('style');
-            data.color=$textNode.css('color');
-            data.size=$textNode.css('font-size');
-
+            //Render template
             $(panel).html(tmpl(tmplId,data));
-
-            $(panel).find('.content').val(data.content);
-            $(panel).find('.textColor').val(data.color);
-            $(panel).find('.textSize').val(data.size);
-            $(panel).find('.textStyle').val(data.style);
-            $(panel).find('.demo').css({'color':data.color,'font-size':data.size}).attr('attr',data.style);
+            //Set edit handler
+            $(panel).find('.edit')[0].onclick=function(){
+                indexEditor.content.subModal('text',$(panel).find('.content')[0],{'disabled':{'textSize':true}});
+            };
+            break;
+        case 'img':
+            var $imgNode=$(dom).children().first();
+            data.imgSrc=$imgNode.attr('src');
+            //Render template
+            $(panel).html(tmpl(tmplId,data));
+            //Set edit handler
+            $(panel).find('.edit')[0].onclick=function(){
+                indexEditor.content.subModal('img',$(panel).find('.image'),undefined);
+            };
             break;
     }
 };
@@ -300,9 +350,8 @@ indexEditor.content.saveHandle=function(type,dom){
     switch (type){
         case 'text':
             var $textNode=$(dom).children().first();
-            $textNode.html($(panel).find('.content').val())
-                     .attr('style',$(panel).find('.textStyle').val())
-                     .css({'color':$(panel).find('.textColor').val(),'font-size':$(panel).find('.textSize').val()});
+            $textNode.html($(panel).find('.content').html())
+                     .attr('style',$(panel).find('.content').attr('style'));
             break;
     }
     $('#edit-modal').modal('hide');

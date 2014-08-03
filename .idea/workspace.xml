@@ -7,12 +7,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8127267a-2452-4ea5-8633-02b86e5366ae" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/edit.html" afterPath="$PROJECT_DIR$/app/templates/edit.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/js/edit.js" afterPath="$PROJECT_DIR$/app/static/js/edit.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/public/editor.html" afterPath="$PROJECT_DIR$/app/templates/public/editor.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/js/indexBoard.js" afterPath="$PROJECT_DIR$/app/static/js/indexBoard.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/js/indexEditor.js" afterPath="$PROJECT_DIR$/app/static/js/indexEditor.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/templates/public/main.html" afterPath="$PROJECT_DIR$/app/templates/public/main.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/static/js/tools.js" afterPath="$PROJECT_DIR$/app/static/js/tools.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="reic.iws" />
@@ -26,7 +22,7 @@
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/reic$test_db.coverage" NAME="test_db Coverage Results" MODIFIED="1406356504122" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/scripts" />
-    <SUITE FILE_PATH="coverage/reic$run.coverage" NAME="run Coverage Results" MODIFIED="1406819091501" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/reic$run.coverage" NAME="run Coverage Results" MODIFIED="1406999546873" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -43,7 +39,7 @@
       <file leaf-file-name="edit.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/static/js/edit.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.037037" vertical-offset="248" max-vertical-offset="1239">
+            <state vertical-scroll-proportion="0.0" vertical-offset="588" max-vertical-offset="1281">
               <caret line="28" column="44" selection-start-line="28" selection-start-column="36" selection-end-line="28" selection-end-column="44" />
               <folding />
             </state>
@@ -53,18 +49,18 @@
       <file leaf-file-name="tools.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/static/js/tools.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="804" max-vertical-offset="1428">
+            <state vertical-scroll-proportion="0.0" vertical-offset="798" max-vertical-offset="1428">
               <caret line="38" column="26" selection-start-line="38" selection-start-column="26" selection-end-line="38" selection-end-column="26" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="indexEditor.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="indexEditor.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/static/js/indexEditor.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.888889" vertical-offset="6081" max-vertical-offset="7875">
-              <caret line="303" column="69" selection-start-line="303" selection-start-column="69" selection-end-line="303" selection-end-column="69" />
+            <state vertical-scroll-proportion="0.91358024" vertical-offset="6696" max-vertical-offset="8904">
+              <caret line="342" column="14" selection-start-line="342" selection-start-column="14" selection-end-line="342" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -73,18 +69,18 @@
       <file leaf-file-name="draggable-touch.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/static/js/draggable-touch.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2900" max-vertical-offset="3822">
+            <state vertical-scroll-proportion="0.0" vertical-offset="3336" max-vertical-offset="3822">
               <caret line="164" column="45" selection-start-line="164" selection-start-column="45" selection-end-line="164" selection-end-column="45" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="editor.html" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="editor.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/templates/public/editor.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.8518519" vertical-offset="3129" max-vertical-offset="4053">
-              <caret line="172" column="20" selection-start-line="172" selection-start-column="20" selection-end-line="172" selection-end-column="20" />
+            <state vertical-scroll-proportion="-0.7" vertical-offset="3864" max-vertical-offset="4725">
+              <caret line="185" column="10" selection-start-line="185" selection-start-column="10" selection-end-line="185" selection-end-column="10" />
               <folding />
             </state>
           </provider>
@@ -93,12 +89,9 @@
       <file leaf-file-name="edit.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/templates/edit.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.266666" vertical-offset="5131" max-vertical-offset="5733">
-              <caret line="259" column="32" selection-start-line="259" selection-start-column="32" selection-end-line="259" selection-end-column="32" />
-              <folding>
-                <element signature="n#style#0;n#div#0;n#section#0;n#div#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
-              </folding>
+            <state vertical-scroll-proportion="-16.8" vertical-offset="903" max-vertical-offset="6006">
+              <caret line="67" column="14" selection-start-line="67" selection-start-column="14" selection-end-line="67" selection-end-column="14" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -106,7 +99,7 @@
       <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/templates/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-14.0" vertical-offset="0" max-vertical-offset="714">
+            <state vertical-scroll-proportion="0.0" vertical-offset="258" max-vertical-offset="714">
               <caret line="20" column="55" selection-start-line="20" selection-start-column="55" selection-end-line="20" selection-end-column="55" />
               <folding />
             </state>
@@ -126,7 +119,7 @@
       <file leaf-file-name="indexBoard.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/static/js/indexBoard.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-11.037037" vertical-offset="6338" max-vertical-offset="9303">
+            <state vertical-scroll-proportion="0.0" vertical-offset="6338" max-vertical-offset="9303">
               <caret line="316" column="35" selection-start-line="316" selection-start-column="32" selection-end-line="316" selection-end-column="35" />
               <folding />
             </state>
@@ -157,8 +150,8 @@
         <option value="$PROJECT_DIR$/app/templates/public/main.html" />
         <option value="$PROJECT_DIR$/app/static/js/tools.js" />
         <option value="$PROJECT_DIR$/app/templates/edit.html" />
-        <option value="$PROJECT_DIR$/app/static/js/indexEditor.js" />
         <option value="$PROJECT_DIR$/app/templates/public/editor.html" />
+        <option value="$PROJECT_DIR$/app/static/js/indexEditor.js" />
       </list>
     </option>
   </component>
@@ -193,6 +186,7 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -355,7 +349,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -369,6 +362,7 @@
     <property name="options.splitter.details.proportions" value="0.2" />
     <property name="options.searchVisible" value="true" />
     <property name="SearchEverywhereHistoryKey" value="tool&#9;FILE&#9;file:///Users/tanghaomo/web/REIC/app/static/js/tools.js" />
+    <property name="FullScreen" value="false" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -593,7 +587,11 @@
       <created>1406696040619</created>
       <updated>1406696040619</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Content editor --text">
+      <created>1406827592736</created>
+      <updated>1406827592736</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -609,7 +607,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31401476" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.459431" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -638,11 +636,12 @@
     </option>
     <MESSAGE value="Delete editor -- some issues unsolved" />
     <MESSAGE value="Delete editor" />
-    <option name="LAST_COMMIT_MESSAGE" value="Delete editor" />
+    <MESSAGE value="Content editor --text" />
+    <option name="LAST_COMMIT_MESSAGE" value="Content editor --text" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <option name="time" value="4" />
+      <option name="time" value="5" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -964,7 +963,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/static/js/edit.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.037037" vertical-offset="248" max-vertical-offset="1239">
+        <state vertical-scroll-proportion="0.0" vertical-offset="588" max-vertical-offset="1281">
           <caret line="28" column="44" selection-start-line="28" selection-start-column="36" selection-end-line="28" selection-end-column="44" />
           <folding />
         </state>
@@ -974,7 +973,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-2.8" vertical-offset="0" max-vertical-offset="861">
           <caret line="4" column="40" selection-start-line="4" selection-start-column="40" selection-end-line="4" selection-end-column="40" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -982,7 +980,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="926">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -998,14 +995,29 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="1155">
           <caret line="0" column="2" selection-start-line="0" selection-start-column="2" selection-end-line="0" selection-end-column="2" />
-          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/static/js/indexBoard.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-11.037037" vertical-offset="6338" max-vertical-offset="9303">
+        <state vertical-scroll-proportion="0.0" vertical-offset="6338" max-vertical-offset="9303">
           <caret line="316" column="35" selection-start-line="316" selection-start-column="32" selection-end-line="316" selection-end-column="35" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/templates/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="258" max-vertical-offset="714">
+          <caret line="20" column="55" selection-start-line="20" selection-start-column="55" selection-end-line="20" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/templates/edit.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-16.8" vertical-offset="903" max-vertical-offset="6006">
+          <caret line="67" column="14" selection-start-line="67" selection-start-column="14" selection-end-line="67" selection-end-column="14" />
           <folding />
         </state>
       </provider>
@@ -1018,37 +1030,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/static/js/indexEditor.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.888889" vertical-offset="6081" max-vertical-offset="7875">
-          <caret line="303" column="69" selection-start-line="303" selection-start-column="69" selection-end-line="303" selection-end-column="69" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/templates/index.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-14.0" vertical-offset="0" max-vertical-offset="714">
-          <caret line="20" column="55" selection-start-line="20" selection-start-column="55" selection-end-line="20" selection-end-column="55" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/templates/edit.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.266666" vertical-offset="5131" max-vertical-offset="5733">
-          <caret line="259" column="32" selection-start-line="259" selection-start-column="32" selection-end-line="259" selection-end-column="32" />
-          <folding>
-            <element signature="n#style#0;n#div#0;n#section#0;n#div#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#div#0;n#div#2;n#!!top" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/templates/public/editor.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.8518519" vertical-offset="3129" max-vertical-offset="4053">
-          <caret line="172" column="20" selection-start-line="172" selection-start-column="20" selection-end-line="172" selection-end-column="20" />
+        <state vertical-scroll-proportion="-0.7" vertical-offset="3864" max-vertical-offset="4725">
+          <caret line="185" column="10" selection-start-line="185" selection-start-column="10" selection-end-line="185" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/static/js/indexEditor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.91358024" vertical-offset="6696" max-vertical-offset="8904">
+          <caret line="342" column="14" selection-start-line="342" selection-start-column="14" selection-end-line="342" selection-end-column="14" />
           <folding />
         </state>
       </provider>
