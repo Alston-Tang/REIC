@@ -25,6 +25,7 @@ def upload():
 @app.route('/ajax/file_upload', methods=['GET', 'POST'])
 def main_upload():
     if request.method == 'GET':
+        type = request.args.get('type')
         return file.upload_test.get()
     elif request.method == 'POST':
         upload_file = request.files.get('files[]')
@@ -85,6 +86,4 @@ def signup():
 #Below is for test
 @app.route('/test')
 def test():
-    from app.helper.form import SignUp
-    form = SignUp(request.form)
-    return render_template('test.html',form=form)
+    return render_template('upload.html')

@@ -312,6 +312,7 @@ indexEditor.content.subModal=function(type,dom,opt){
             break;
 
         case 'image':
+            $.get()
             break;
     }
 };
