@@ -18,7 +18,6 @@ def get_file_inf(name, directory, full_dir):
     inf['type'] = magic.from_file(full_path, mime=True)
     inf['size'] = os.stat(full_path).st_size
     inf['url'] = (directory + '/' + name).replace('/', '\\/')
-    inf['thumbnailUrl'] = (directory + '/thumbnail/' + name).replace('/', '\\/')
     inf['deleteUrl'] = delete_directory + inf['name']
     inf['deleteType'] = 'DELETE'
     return inf
@@ -39,10 +38,9 @@ class GetHandler:
                 self.restrict_list = opt['restrict']['allow']
             elif 'deny' in opt['restrict']:
                 self.restrict = 'deny'
-                slef.restrict_list = opt['restrict']['deny']
-            else:
-                self.restrict = False
-
+                self.restrict_list = opt['restrict']['deny']
+        else:
+            self.restrict = False
 
         # Check End
         self.files = []
@@ -52,7 +50,7 @@ class GetHandler:
                 ##print file+' not a file'
                 continue
             inf = get_file_inf(file, self.directory, self.full_dir)
-            self.handle_thumbnail(inf)
+            self.handle_thumbnail(inf, file, self.directory)
             self.files.append(inf)
 
     def error_json(self, file, error_inf):
@@ -70,7 +68,7 @@ class GetHandler:
 
         return (find and self.restrict == 'allow') or (not find and self.restrict == 'deny')
 
-    def handle_thumbnail(self, inf):
+    def handle_thumbnail(self, inf, name, directory):
         """
         If file is a image and not exists a thumbnail, create a thumbnail at folder ./thumbnail
         :param inf: information of the file created by function "get_file_inf"
@@ -83,6 +81,7 @@ class GetHandler:
             if not os.path.isfile(self.full_dir + '/thumbnail/' + inf['name']):
                 helper.image_process.thumbnail(self.full_dir + '/' + inf['name'],
                                                output=self.full_dir + '/thumbnail/' + inf['name'])
+            inf['thumbnailUrl'] = (directory + '/thumbnail/' + name).replace('/', '\\/')
 
     def delete_thumbnail(self, file):
         if os.path.isfile(self.full_dir + '/thumbnail/' + file):
@@ -105,6 +104,13 @@ class GetHandler:
     def get(self):
         return json.dumps({'files': self.files}).replace('\\\\', '\\')
 
+    def get_pic(self):
+        files_list = []
+        for a_file in self.files:
+            if a_file['type'].find('image') >= 0:
+                files_list.append(a_file)
+        return json.dumps({'files': files_list}).replace('\\\\', '\\')
+
     def post(self, file_storage):
         file = file_storage.filename
         if not self.validate_restrict(file_storage):
@@ -114,7 +120,7 @@ class GetHandler:
         else:
             file_storage.save(self.full_dir + '/' + file)
             inf = get_file_inf(file, self.directory, self.full_dir)
-            self.handle_thumbnail(inf)
+            self.handle_thumbnail(inf, file_storage.filename, self.directory)
             self.files.append(inf)
             return json.dumps({'files': [inf]}).replace('\\\\', '\\')
 

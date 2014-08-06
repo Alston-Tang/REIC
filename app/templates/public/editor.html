@@ -174,8 +174,47 @@
             </div>
         </div>
     </script>
+    <script type="text/blueimp-tmpl" id="imageSubInit">
+    <div id='imageSubContainer'>
+    </div>
+    </script>
     <script type="text/blueimp-tmpl" id="imageSub">
-
+    {% var num=Math.floor(o.total/4); %}
+    {% for (var i=0; i<num; i++){ %}
+      <div class="row">
+          <div class="col-md-3">
+              <a href='#' src-date={%#o.data[4*i][1]%} class='thumbnail'>
+                  <img src="{%#o.data[4*i][0]%}"></img>
+              </a>
+          </div>
+          <div class="col-md-3">
+              <a href='#' src-date={%#o.data[4*i+1][1]%} class='thumbnail'>
+                  <img src="{%#o.data[4*i+1][0]%}"></img>
+              </a>
+          </div>
+          <div class="col-md-3">
+              <a href='#' src-date={%#o.data[4*i+2][1]%} class='thumbnail'>
+                  <img src="{%#o.data[4*i+2][0]%}"></img>
+              </a>
+          </div>
+          <div class="col-md-3">
+              <a href='#' src-date={%#o.data[4*i+3][1]%} class='thumbnail'>
+                  <img src="{%#o.data[4*i+3][0]%}"></img>
+              </a>
+          </div>
+      </div>
+    {% } %}
+    {% if (o.total%4>0) { %}
+      <div class="row">
+        {% for(var j=4*num; j<o.total; j++) { %}
+          <div class="col-md-3">
+              <a href="#" src-date={%#o.data[j][1]%} class='thumbnail'>
+                  <img src="{%#o.data[j][0]%}"></img>
+              </a>
+          </div>
+        {% } %}
+      </div>
+    {% } %}
     </script>
 
     <script type="text/blueimp-tmpl" id="textContent">

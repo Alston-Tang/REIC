@@ -273,6 +273,7 @@ indexEditor.deleteModalContent=function(){
 indexEditor.content={};
 indexEditor.content.subModal=function(type,dom,opt){
     var $panel=$('#sub-panel');
+    var $modal=$('#sub-content-modal');
     var data={};
     opt=opt?opt:{};
     switch (type){
@@ -308,11 +309,34 @@ indexEditor.content.subModal=function(type,dom,opt){
                          .css({'color':$panel.find('.textColor').val(),'font-size':$panel.find('.textSize').val()});
             };
 
-            $('#sub-content-modal').modal('show');
+            $modal.modal('show');
             break;
 
-        case 'image':
-            $.get()
+        case 'img':
+            $panel.html(tmpl('imageSubInit',data));
+            $modal.modal('show');
+            $.get('/ajax/upload/pic',function(data){
+                var last=null;
+                data=JSON.parse(data);
+                var picList=[];
+                for (var i=0; i<data.files.length; i++){
+                    picList.push([data.files[i].thumbnailUrl,data.files[i].url]);
+                }
+                $panel.html(tmpl('imageSub',{'total':data.files.length,'data':picList}));
+                $panel.find('.thumbnail').click(function(){
+                    if(last!=null) {
+                        $(last).removeAttr('style');
+                    }
+                    $(this).css({'border-width':'2px','border-color':'#428bca'});
+                    last=this;
+                });
+                $('#sub-panel-save').click(function(){
+                    if (last){
+                        $modal.modal('hide');
+                        $(dom).attr('src',$(last).attr('src-date'));
+                    }
+                });
+            });
             break;
     }
 };
@@ -353,6 +377,10 @@ indexEditor.content.saveHandle=function(type,dom){
             var $textNode=$(dom).children().first();
             $textNode.html($(panel).find('.content').html())
                      .attr('style',$(panel).find('.content').attr('style'));
+            break;
+        case 'img':
+            var $imgNode=$(dom).children().first();
+            $imgNode.attr('src',$(panel).find('.image').attr('src'));
             break;
     }
     $('#edit-modal').modal('hide');

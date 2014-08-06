@@ -16,10 +16,12 @@ def index():
 def edit():
     return render_template('edit.html')
 
+
 # file upload static page
 @app.route('/upload')
 def upload():
     return app.send_static_file('html/file_upload.html')
+
 
 # file upload ajax handle get & post
 @app.route('/ajax/file_upload', methods=['GET', 'POST'])
@@ -30,6 +32,13 @@ def main_upload():
     elif request.method == 'POST':
         upload_file = request.files.get('files[]')
         return file.upload_test.post(upload_file)
+
+
+@app.route('/ajax/upload/pic',methods=['GET'])
+def public_pic():
+    return file.upload_test.get_pic()
+
+
 # file upload ajax handle delete
 @app.route('/ajax/file_upload/<file_name>', methods=['DELETE'])
 def main_delete(file_name):
@@ -37,8 +46,9 @@ def main_delete(file_name):
         print "Strange thing is happening"
     return file.upload_test.delete(file_name)
 
+
 #log in handler
-@app.route('/signin',methods=['GET','POST'])
+@app.route('/signIn', methods=['GET','POST'])
 def sign_in():
     from app.helper.form import SignIn
     form = SignIn()
@@ -52,12 +62,15 @@ def sign_in():
             return redirect(url_for('index'))
         else:
             return render_template("signin.html", title='Sign In', nav_bar=app.nav_bar, form=form, error="Invalid Username or Password")
+
+
 #log out handler
-@app.route('/signout', methods=['GET', 'POST'])
+@app.route('/signOut', methods=['GET', 'POST'])
 def sign_out():
     session.pop('username', None)
     session.pop('user_id', None)
     return redirect(url_for('index'))
+
 
 @app.route('/setting')
 def setting():
@@ -69,8 +82,9 @@ def setting():
     else:
         return render_template("signin.html", title='Sign In', nav_bar=app.nav_bar, error="Invalid username of password")
 
+
 #signup handler
-@app.route('/signup', methods=['GET', 'POST'])
+@app.route('/signUp', methods=['GET', 'POST'])
 def signup():
     from app.helper.form import SignUp
     form = SignUp(request.form)
@@ -82,6 +96,7 @@ def signup():
             return redirect(url_for('index'))
         else:
             return render_template('signup.html', form=form)
+
 
 #Below is for test
 @app.route('/test')
