@@ -333,7 +333,10 @@ indexEditor.content.subModal=function(type,dom,opt){
                 $('#sub-panel-save').click(function(){
                     if (last){
                         $modal.modal('hide');
-                        $(dom).attr('src',$(last).attr('src-date'));
+                        if(opt.thumbnail) {
+                            $(dom).attr({'src':$(last).children('img').attr('src'),'src-data':$(last).attr('src-data')})
+                        }
+                        else $(dom).attr('src',$(last).attr('src-data'));
                     }
                 });
             });
@@ -364,8 +367,41 @@ indexEditor.content.disEditModal=function(type,dom){
             $(panel).html(tmpl(tmplId,data));
             //Set edit handler
             $(panel).find('.edit')[0].onclick=function(){
-                indexEditor.content.subModal('img',$(panel).find('.image'),undefined);
+                indexEditor.content.subModal('img',$(panel).find('.image')[0],undefined);
             };
+            break;
+        case 'picture-wall':
+            //Get existing pictures
+            data.img=[];
+            var $gallery=$(dom).find('.least-gallery');
+            $gallery.find('li>a').each(function(){
+                var pic={title:$(this).attr('title'),src:$(this).attr('href'),thumbnail:$(this).children('img').attr('src')};
+                data.img.push(pic);
+            });
+            //Render template
+            $(panel).html(tmpl(tmplId,data));
+            //Set remove handler
+            $(panel).find('.remove').click(function(){
+                $(this.parentNode.parentNode).remove();
+            });
+            //Set edit handler
+            $(panel).find('.edit').click(function(){
+                indexEditor.content.subModal('img',$(this.parentNode.parentNode).find('img')[0],{thumbnail:true});
+            });
+            //Set add handler
+            $(panel).find('.add').click(function(){
+                var newItem=document.createElement('div');
+                $(newItem).html(tmpl(type+'Item'));
+                $(newItem).find('.remove').click(function(){
+                    var item=this.parent.parent;
+                    $(item).remove();
+                });
+                $(newItem).find('.edit').click(function(){
+                    indexEditor.content.subModal('img',$(this.parentNode.parentNode).find('img')[0],{thumbnail:true});
+                });
+                $(newItem).attr({'class':'row content','style':'margin:5px'});
+                document.getElementById('main-area-for').appendChild(newItem);
+            });
             break;
     }
 };
@@ -381,6 +417,20 @@ indexEditor.content.saveHandle=function(type,dom){
         case 'img':
             var $imgNode=$(dom).children().first();
             $imgNode.attr('src',$(panel).find('.image').attr('src'));
+            break;
+        case 'picture-wall':
+            //Get changed list
+            var imgList=[];
+            $(panel).find('.content').each(function(){
+                var img={};
+                var $imgDom=$(this).find('img');
+                img.thumbnail=$imgDom.attr('src');
+                img.src=$imgDom.attr('src-data');
+                img.title=$(this).find('input').val();
+                imgList.push(img);
+            });
+            $(dom).html(tmpl(type+"Create",imgList));
+            $(dom).find('.least-gallery').least({'scrollToGallery': false,'HiDPI': false,'random': false});
             break;
     }
     $('#edit-modal').modal('hide');

@@ -26,7 +26,7 @@ var IndexBoard=function(dom,opt){
     this.init();
     window.onscroll=mainLoop;
     //Plug-in setting
-    $('.least-gallery').least({'scrollToGallery': false});
+    $('.least-gallery').least({'scrollToGallery': false,'HiDPI': false,'random': false});
 };
 
 IndexBoard.prototype.scrPos=function(){
@@ -79,7 +79,7 @@ IndexBoard.prototype.setSize=function(){
 IndexBoard.prototype.getSec=function(top,bot) {
     var rtVal = [];
     for (var i = 0; i < this.con.length; i++) {
-        if (this.con[i].top <= top && this.con[i].bot > top) {
+        if (this.con[i].top <= top && this.con[i].actBot > top) {
             while(true){
                 rtVal.push(i);
                 i++;

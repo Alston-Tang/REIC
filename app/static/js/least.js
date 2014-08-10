@@ -21,7 +21,7 @@
 				/*var */
 				var close = $('<figure class="close"></figure>'),
 					img = $('<img src="' + path + '"/>'),
-					thumb = $('li a')
+					thumb = $('li a');
 
 				/* Load img */
 				img.load(
@@ -35,7 +35,7 @@
 						object						
 							.prepend(img)
 							.append(close)
-							.slideDown('slow')
+							.slideDown('slow');
 							thumb.removeClass('load');
 					}
 				);
@@ -89,7 +89,7 @@
                 $(this).find('li a').click(
                     function(e) {
                         e.preventDefault();
-                        $('#myModal .modal-body img').attr('src', $(this).children('img').attr('src'));
+                        $('#myModal .modal-body img').attr('src', $(this).attr('href'));
                         $('#myModal').modal();
                     });
             }
