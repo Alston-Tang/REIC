@@ -3,7 +3,7 @@
  */
 
 if(!IndexBoard){
-    console.log('Include indexBoard.js before that.');
+    throw 'Include indexBoard.js before that.';
 }
 
 var indexEditor={};
@@ -85,8 +85,8 @@ indexEditor.modal.advanced={
     },
     callback:function(){
         $('#edit-modal').modal('hide');
-        this.point.innerHTML=thmTools.textToHtml($('#edit-panel').find('.innerHTML').html());
-        this.point.indexEdit.reNew();
+        $(this.point).attr({'type':"custom"}).html(thmTools.textToHtml($('#edit-panel').find('.innerHTML').val()));
+        this.point.indexEdit.resetAll();
         this.point.drag.reHandlePos();
     }
 };
@@ -104,6 +104,7 @@ indexEditor.modal.content={
         var dom=this.point;
         var type=dom.indexEdit.type;
         indexEditor.content.saveHandle(type,dom);
+        dom.indexEdit.resetAll();
     }
 };
 
@@ -418,7 +419,27 @@ indexEditor.content.disEditModal=function(type,dom){
             });
             // Render tmpl
             $(panel).html(tmpl(tmplId,data));
-
+            // Set remove handler
+            $(panel).find('.remove').click(function(){
+                $(this.parentNode.parentNode.parentNode).remove();
+            });
+            // Set edit handler
+            $(panel).find('.edit').click(function(){
+                indexEditor.content.subModal('img',$(this.parentNode.parentNode).find('img')[0]);
+            });
+            // Set add handler
+            //<div class="inf-group" style="margin:5px">
+            $(panel).find('.add').click(function(){
+                var item=document.createElement('div');
+                $(item).attr({'class':'inf-group','style':'margin:5px'}).html(tmpl(type+'Item'));
+                $(item).find('.remove').click(function(){
+                    $(this.parentNode.parentNode.parentNode).remove();
+                });
+                $(item).find('.edit').click(function(){
+                    indexEditor.content.subModal('img',$(this.parentNode.parentNode).find('img')[0]);
+                });
+                document.getElementById('carousel_for').appendChild(item);
+            });
             break;
     }
 };
@@ -446,9 +467,26 @@ indexEditor.content.saveHandle=function(type,dom){
                 img.title=$(this).find('input').val();
                 imgList.push(img);
             });
+            //Render to page
             $(dom).html(tmpl(type+"Create",imgList));
+            //Initial
             $(dom).find('.least-gallery').least({'scrollToGallery': false,'HiDPI': false,'random': false});
             break;
+        case 'bootstrapCarousel':
+            //Get changed list
+            var data={};
+            data.img=[];
+            data.id=thmTools.genRandomStr(6);
+            $(panel).find('.inf-group').each(function(){
+                var img={};
+                img.src=$(this).find('.img-responsive').attr('src');
+                img.title=$(this).find('input').val();
+                img.desc=$(this).find('textarea').val();
+                data.img.push(img);
+            });
+            //Render to page
+            $(dom).html(tmpl(type+"Create",data));
+            $(dom).find('.carousel').carousel();
     }
     $('#edit-modal').modal('hide');
 };
@@ -486,6 +524,10 @@ section.prototype.reCorrectHeight=function(){
         }
     }
 };
+section.prototype.addNewDiv=function(dom,parent){
+    this.con.push(new div(dom,parent));
+    this.reCorrectHeight();
+};
 div.prototype.resetWidthLeft=function(left,right){
     if (left==undefined || right==undefined) return;
     $(this.dom).attr({'left':left,'right':right});
@@ -505,6 +547,12 @@ div.prototype.resetLayer=function(layer){
 };
 div.prototype.resetAnimation=function(){
     this.setAnimation();
+};
+div.prototype.resetAll=function(){
+    var dom=this.dom;
+    var parent=this.parent;
+    this.removeSelf();
+    parent.addNewDiv(dom,parent);
 };
 div.prototype.removeSelf=function(){
     for(var i=0; i<this.parent.con.length; i++){
