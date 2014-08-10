@@ -145,6 +145,7 @@ IndexBoard.prototype.inArea=function(top,bot){
 var section=function(dom,parent){
     this.dom=dom;
     this.parent=parent;
+    //noinspection JSValidateTypes
     this.canDom=$(this.dom).children('.section-board')[0];
 
     this.setSize();

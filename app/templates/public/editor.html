@@ -298,6 +298,29 @@
         </ul>
     </section>
     </script>
+    <script type="text/blueimp-tmpl" id="bootstrapCarouselContent">
+    {% for (var i=0; i<o.img.length; i++) { %}
+    <div class="inf-group" style="margin:5px">
+    <div class="row">
+        <div class="col-md-3">
+            <img class="img-responsive" src="{%#o.img[i].src%}"></img>
+        </div>
+        <div class="col-md-4">
+            <input class="form-control" value="{%=o.img[i].title%}"></input>
+        </div>
+        <div class="col-md-5">
+            <button class="btn btn-primary edit">Edit</button>
+            <button class="btn btn-danger remove" style="margin-left:20px">Remove</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <textarea class="form-control" rows="3">{%=o.img[i].desc%}</textarea>
+        </div>
+    </div>
+    </div>
+    {% } %}
+    </script>
     {% endraw %}
     <script src="{{ url_for('static', filename='js/pointerevents.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery.contextMenu.js') }}"></script>

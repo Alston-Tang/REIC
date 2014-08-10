@@ -403,6 +403,23 @@ indexEditor.content.disEditModal=function(type,dom){
                 document.getElementById('main-area-for').appendChild(newItem);
             });
             break;
+        case 'bootstrapCarousel':
+            //Get existing picture
+            var $container=$(dom).find('.carousel');
+            data.id=$container.attr('id');
+            data.img=[];
+            $container.find('.item').each(function(){
+                var image={};
+                image.src=$(this).children('img').attr('src');
+                var $caption=$(this).children('.carousel-caption');
+                image.title=$caption.children('h3').html();
+                image.desc=$caption.children('p').html();
+                data.img.push(image);
+            });
+            // Render tmpl
+            $(panel).html(tmpl(tmplId,data));
+
+            break;
     }
 };
 
