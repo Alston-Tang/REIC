@@ -68,5 +68,17 @@ var thmTools= {
         for( var i=0; i < num; i++ )
             text += possible.charAt(Math.floor(Math.random() * possible.length));
         return text;
+    },
+    bootstrapButtonDetect:function(dom){
+        if(!$(dom).hasClass('btn')){
+            return "Not a boostrap button";
+        }
+        var types=['btn-default','btn-primary','btn-success','btn-info','btn-warning','btn-danger','btn-link'];
+        for (var i=0; i<types.length; i++){
+            if ($(dom).hasClass(types[i])){
+                return types[i];
+            }
+        }
+        return 'No type';
     }
 };

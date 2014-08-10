@@ -376,6 +376,44 @@
         </a>
     </div>
     </script>
+    <script type="text/blueimp-tmpl" id="bootstrapJumbotronContent">
+    <div style="margin:5px">
+    <div class="row">
+        <div class="col-md-6">
+            <label>Title</label>
+            <input class="form-control" value="{%=o.title%}"></input>
+        </div>
+        <div class="col-md-3">
+            <label>Background Color</label>
+            <div style="width:30px; height:30px; border-radius:15px; background-color:{%#o.color%}" class="color"></div>
+        </div>
+        <div class="col-md-3">
+            <label>Text Color</label>
+            <div style="width:30px; height:30px; border-radius:15px; background-color:{%#o.textColor%}" class="color"></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <label>Content</label>
+            <textarea class="content form-control" style="width:100%" rows="3">{%=o.content%}</textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <label>Button link</label>
+            <input class="form-control" value="{%#o.link%}"></input>
+        </div>
+        <div class="col-md-4">
+            <label>Button type</label>
+            <select class="form-control">
+                {% for (var i=0; i<o.btnTypes.length; i++) { %}
+                    <option value="{%#o.btnTypes[i]%}" {% if(o.button==o.btnTypes[i]) { %}selected{% } %}>{%=o.btnTypes[i]%}</option>
+                {% } %}
+            </select>
+        </div>
+    </div>
+    </div>
+    </script>
     {% endraw %}
     <script src="{{ url_for('static', filename='js/pointerevents.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery.contextMenu.js') }}"></script>

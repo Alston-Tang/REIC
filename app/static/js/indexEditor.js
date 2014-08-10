@@ -441,6 +441,18 @@ indexEditor.content.disEditModal=function(type,dom){
                 document.getElementById('carousel_for').appendChild(item);
             });
             break;
+        case 'bootstrapJumbotron':
+            // Get existing style
+            data.btnTypes=['btn-default','btn-primary','btn-success','btn-info','btn-warning','btn-danger','btn-link'];
+            data.title=$(dom).find('.title').html();
+            data.content=$(dom).find('.content').html();
+            data.button=thmTools.bootstrapButtonDetect($(dom).find('.btn')[0]);
+            data.link=$(dom).find('.btn').attr('href');
+            data.color=$(dom).find('.jumbotron').css('background-color');
+            data.textColor=$(dom).find('.title').css('color');
+            // Render panel template
+            $(panel).html(tmpl(tmplId,data));
+            break;
     }
 };
 
@@ -486,7 +498,7 @@ indexEditor.content.saveHandle=function(type,dom){
             });
             //Render to page
             $(dom).html(tmpl(type+"Create",data));
-            $(dom).find('.carousel').carousel();
+            break;
     }
     $('#edit-modal').modal('hide');
 };
