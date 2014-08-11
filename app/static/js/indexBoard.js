@@ -69,10 +69,11 @@ IndexBoard.prototype.setSize=function(){
     });
     $(this.dom).children('.background-board').css({
         'width':window.screen.availWidth,
-        'height':window.screen.availHeight
+        'height':window.screen.availHeight-this.navOff,
+        'top':this.navOff
     }).attr({
         width:window.screen.availWidth,
-        height:window.screen.availHeight
+        height:window.screen.availHeight-this.navOff
     })
 };
 
