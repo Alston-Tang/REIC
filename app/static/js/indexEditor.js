@@ -500,6 +500,17 @@ indexEditor.content.saveHandle=function(type,dom){
             //Render to page
             $(dom).html(tmpl(type+"Create",data));
             break;
+        case 'bootstrapJumbotron':
+            //Get changed list
+            var textColor='#'+$(panel).find('.textColor').val();
+            var color='#'+$(panel).find('.color').val();
+
+            $(dom).find('.title').html($(panel).find('.title').val()).css('color',textColor);
+            $(dom).find('.content').html($(panel).find('.content').val()).css('color',textColor);
+            $(dom).find('.jumbotron').css('background-color',color);
+            $(dom).find('.btn').attr({'class':'btn btn-lg '+$(panel).find('.button').val(),
+                                      'href':$(panel).find('.link').val()});
+            break;
     }
     $('#edit-modal').modal('hide');
 };

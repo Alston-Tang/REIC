@@ -383,15 +383,15 @@
     <div class="row">
         <div class="col-md-6">
             <label>Title</label>
-            <input class="form-control" value="{%=o.title%}"></input>
+            <input class="form-control title" value="{%=o.title%}"></input>
         </div>
         <div class="col-md-3">
             <label>Background Color</label>
-            <input class="form-control pick-a-color" type="text" value="{%#o.color%}"></input>
+            <input class="form-control pick-a-color color" type="text" value="{%#o.color%}"></input>
         </div>
         <div class="col-md-3">
             <label>Text Color</label>
-            <input class="form-control pick-a-color" type="text" value="{%#o.textColor%}"></input>
+            <input class="form-control pick-a-color textColor" type="text" value="{%#o.textColor%}"></input>
         </div>
     </div>
     <div class="row">
@@ -403,11 +403,11 @@
     <div class="row">
         <div class="col-md-8">
             <label>Button link</label>
-            <input class="form-control" value="{%#o.link%}"></input>
+            <input class="form-control link" value="{%#o.link%}"></input>
         </div>
         <div class="col-md-4">
             <label>Button type</label>
-            <select class="form-control">
+            <select class="form-control button">
                 {% for (var i=0; i<o.btnTypes.length; i++) { %}
                     <option value="{%#o.btnTypes[i]%}" {% if(o.button==o.btnTypes[i]) { %}selected{% } %}>{%=o.btnTypes[i]%}</option>
                 {% } %}
