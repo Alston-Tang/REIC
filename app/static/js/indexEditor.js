@@ -13,18 +13,21 @@ indexEditor.mapName={
     'first':'first time'
 };
 
-indexEditor.preProcess=function(){
-    b.traverse(function(){
-        var cur=this;
-        this.dom.indexEdit=this;
-        $(this.dom).addClass('div-context');
-        this.dom.drag=new drag({
-            dom:cur.dom,
-            size:cur.parent.dom
-        });
-        $(this.dom)
-            .attr('touch-action','none')
-            .on('thmdragend',function(){
+indexEditor.setDrag=function(){
+    var cur=this;
+    this.dom.indexEdit=this;
+    $(this.dom).addClass('div-context');
+    this.dom.drag=new drag({
+        dom:cur.dom,
+        size:cur.parent.dom
+    });
+    //Set nav bar button
+    $('.editor-nav').click(function(){
+        indexEditor.content.add($(this).attr('add'));
+    });
+    $(this.dom)
+        .attr('touch-action','none')
+        .on('thmdragend',function(){
             var sectionWidth=parseFloat(this.indexEdit.parent.parent.globalWidth);
             var sectionHeight=parseFloat(this.indexEdit.parent.bot)-parseFloat(this.indexEdit.parent.top);
             var sectionTop=parseFloat(this.indexEdit.parent.top);
@@ -36,7 +39,11 @@ indexEditor.preProcess=function(){
             this.indexEdit.resetWidthLeft(left,left+width);
             this.indexEdit.resetHeightTop(top,top+height);
         });
-    });
+};
+indexEditor.preProcess=function(){
+    indexEditor.section= b.con[0];
+    indexEditor.sectionDom= b.con[0].dom;
+    b.traverse(indexEditor.setDrag);
     //Test the width of editor paenl
     var $panel=$('#edit-modal');
     $panel.css({'visibility':'hidden','display':'inline'});
@@ -515,6 +522,22 @@ indexEditor.content.saveHandle=function(type,dom){
     $('#edit-modal').modal('hide');
 };
 
+indexEditor.content.add=function(type){
+    var divDom=document.createElement('div');
+    switch (type){
+        case 'text':
+            $(divDom).attr({'left':0,'top':0,'right':0.4,'bot':0.2,'type':'text'})
+                     .html('<p>some text here</p>');
+            break;
+    }
+    $(divDom).attr('touch-action','none').addClass('div-context');
+    indexEditor.sectionDom.appendChild(divDom);
+    indexEditor.section.addNewDiv(divDom,indexEditor.section);
+    indexEditor.setDrag.call(divDom.indexEdit);
+
+
+};
+
 //Extend Index Board
 section.prototype.getCalPosReverse=function(absPos){
     var rtVal={};
@@ -549,7 +572,9 @@ section.prototype.reCorrectHeight=function(){
     }
 };
 section.prototype.addNewDiv=function(dom,parent){
-    this.con.push(new div(dom,parent));
+    var thisDiv=new div(dom,parent);
+    dom.indexEdit=thisDiv;
+    this.con.push(thisDiv);
     this.reCorrectHeight();
 };
 div.prototype.resetWidthLeft=function(left,right){
