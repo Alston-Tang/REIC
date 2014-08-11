@@ -21,10 +21,6 @@ indexEditor.setDrag=function(){
         dom:cur.dom,
         size:cur.parent.dom
     });
-    //Set nav bar button
-    $('.editor-nav').click(function(){
-        indexEditor.content.add($(this).attr('add'));
-    });
     $(this.dom)
         .attr('touch-action','none')
         .on('thmdragend',function(){
@@ -44,6 +40,10 @@ indexEditor.preProcess=function(){
     indexEditor.section= b.con[0];
     indexEditor.sectionDom= b.con[0].dom;
     b.traverse(indexEditor.setDrag);
+    //Set nav bar button
+    $('.editor-nav').click(function(){
+        indexEditor.content.add($(this).attr('add'));
+    });
     //Test the width of editor paenl
     var $panel=$('#edit-modal');
     $panel.css({'visibility':'hidden','display':'inline'});
@@ -489,8 +489,6 @@ indexEditor.content.saveHandle=function(type,dom){
             });
             //Render to page
             $(dom).html(tmpl(type+"Create",imgList));
-            //Initial
-            $(dom).find('.least-gallery').least({'scrollToGallery': false,'HiDPI': false,'random': false});
             break;
         case 'bootstrapCarousel':
             //Get changed list
@@ -524,18 +522,26 @@ indexEditor.content.saveHandle=function(type,dom){
 
 indexEditor.content.add=function(type){
     var divDom=document.createElement('div');
+    var no_pic='/static/resource/icon/no-pic.jpg';
     switch (type){
         case 'text':
-            $(divDom).attr({'left':0,'top':0,'right':0.4,'bot':0.2,'type':'text'})
+            $(divDom).attr({'left':0,'top':0,'right':0.4,'bot':0.2,layer:20,'type':type})
                      .html('<p>some text here</p>');
             break;
+        case 'img':
+            $(divDom).attr({'left':0,'top':0,'right':0.2,'bot':0.3,layer:20,'type':type})
+                     .html("<img src="+no_pic+")></img>");
+            break;
+        case 'picture-wall':
+            var data=[{'title':'title','src':no_pic,'thumbnail':no_pic}];
+            $(divDom).attr({'left':0,'top':0,'right':1,'bot':0.2,'type':type})
+                     .html(tmpl(type+'Create',data));
+            break
     }
     $(divDom).attr('touch-action','none').addClass('div-context');
     indexEditor.sectionDom.appendChild(divDom);
     indexEditor.section.addNewDiv(divDom,indexEditor.section);
     indexEditor.setDrag.call(divDom.indexEdit);
-
-
 };
 
 //Extend Index Board

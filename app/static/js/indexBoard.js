@@ -289,6 +289,10 @@ div.prototype={
                 });
                 return;
 
+            case 'picture-wall':
+                $(this.dom).find('.least-gallery').least({'scrollToGallery': false,'HiDPI': false,'random': false});
+                break;
+
             case 'text':
                 var left= 1,right=1000, mid=parseInt((left+right)/2);
                 var $dom=$(this.dom).children();
