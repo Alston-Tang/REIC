@@ -247,7 +247,7 @@ indexEditor.disModal=function(type,dom){
         this.deleteModalContent();
         this.createModalContent(m,dom);
         if (m.setValue) m.setValue(dom);
-        $('#edit-modal').modal('show');
+        $('#edit-modal').modal({'backdrop':'static'});
     }
 };
 
@@ -452,6 +452,7 @@ indexEditor.content.disEditModal=function(type,dom){
             data.textColor=$(dom).find('.title').css('color');
             // Render panel template
             $(panel).html(tmpl(tmplId,data));
+            $(panel).find('.pick-a-color').pickAColor({'showHexInput':false});
             break;
     }
 };

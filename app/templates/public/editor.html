@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/jquery.contextMenu.css') }}">
     <!-- FontAwesome -->
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/font-awesome/css/font-awesome.min.css') }}">
+    <!-- Pick a color -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/pick-a-color-1.2.3.min.css') }}">
 {% endblock %}
 
 {% block content %}
@@ -385,11 +387,11 @@
         </div>
         <div class="col-md-3">
             <label>Background Color</label>
-            <div style="width:30px; height:30px; border-radius:15px; background-color:{%#o.color%}" class="color"></div>
+            <input class="form-control pick-a-color" type="text" value="{%#o.color%}"></input>
         </div>
         <div class="col-md-3">
             <label>Text Color</label>
-            <div style="width:30px; height:30px; border-radius:15px; background-color:{%#o.textColor%}" class="color"></div>
+            <input class="form-control pick-a-color" type="text" value="{%#o.textColor%}"></input>
         </div>
     </div>
     <div class="row">
@@ -415,6 +417,8 @@
     </div>
     </script>
     {% endraw %}
+    <script src="{{ url_for('static', filename='js/tinycolor-0.9.15.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/pick-a-color-1.2.3.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/pointerevents.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery.contextMenu.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery.ui.position.js') }}"></script>
