@@ -384,23 +384,21 @@
     </div>
     </script>
     <script type="text/blueimp-tmpl" id="bootstrapCarouselItem">
-    <div class="inf-group" style="margin:5px">
-        <div class="row">
-            <div class="col-md-3">
-                <img class="img-responsive" src=""></img>
-            </div>
-            <div class="col-md-4">
-                <input class="form-control" value=""></input>
-            </div>
-            <div class="col-md-5">
-                <button class="btn btn-primary edit">Edit</button>
-                <button class="btn btn-danger remove" style="margin-left:20px">Remove</button>
-            </div>
+    <div class="row">
+        <div class="col-md-3">
+            <img class="img-responsive" src=""></img>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <textarea class="form-control" rows="3"></textarea>
-            </div>
+        <div class="col-md-4">
+            <input class="form-control" value=""></input>
+        </div>
+        <div class="col-md-5">
+            <button class="btn btn-primary edit">Edit</button>
+            <button class="btn btn-danger remove" style="margin-left:20px">Remove</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <textarea class="form-control" rows="3"></textarea>
         </div>
     </div>
     </script>
@@ -453,11 +451,15 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-6">
             <label>Button link</label>
             <input class="form-control link" value="{%#o.link%}"></input>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-3">
+            <label>Button text</label>
+            <input class="form-control btnText" value="{%#o.btnText%}"></input>
+        </div>
+        <div class="col-md-3">
             <label>Button type</label>
             <select class="form-control button">
                 {% for (var i=0; i<o.btnTypes.length; i++) { %}
@@ -466,6 +468,13 @@
             </select>
         </div>
     </div>
+    </div>
+    </script>
+    <script type="text/blueimp-tmpl" id="bootstrapJumbotronCreate">
+    <div class="jumbotron" style="background-color: {%#o.color%}">
+        <h1 class="title" style="color:{%#o.textColor%}">{%=o.title%}</h1>
+        <p class="content" style="color:{%#o.textColor%}">{%=o.content%}</p>
+        <p><a class="btn {%#o.btnType%} btn-lg" role="button">{%=o.btnText%}</a></p>
     </div>
     </script>
     {% endraw %}

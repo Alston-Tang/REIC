@@ -457,6 +457,7 @@ indexEditor.content.disEditModal=function(type,dom){
             data.link=$(dom).find('.btn').attr('href');
             data.color=$(dom).find('.jumbotron').css('background-color');
             data.textColor=$(dom).find('.title').css('color');
+            data.btnText=$(dom).find('.btn').html();
             // Render panel template
             $(panel).html(tmpl(tmplId,data));
             $(panel).find('.pick-a-color').pickAColor({'showHexInput':false});
@@ -514,7 +515,8 @@ indexEditor.content.saveHandle=function(type,dom){
             $(dom).find('.content').html($(panel).find('.content').val()).css('color',textColor);
             $(dom).find('.jumbotron').css('background-color',color);
             $(dom).find('.btn').attr({'class':'btn btn-lg '+$(panel).find('.button').val(),
-                                      'href':$(panel).find('.link').val()});
+                                      'href':$(panel).find('.link').val()})
+                               .html($(panel).find('.btnText').val());
             break;
     }
     $('#edit-modal').modal('hide');
@@ -523,6 +525,7 @@ indexEditor.content.saveHandle=function(type,dom){
 indexEditor.content.add=function(type){
     var divDom=document.createElement('div');
     var no_pic='/static/resource/icon/no-pic.jpg';
+    var data=undefined;
     switch (type){
         case 'text':
             $(divDom).attr({'left':0,'top':0,'right':0.4,'bot':0.2,layer:20,'type':type})
@@ -533,10 +536,20 @@ indexEditor.content.add=function(type){
                      .html("<img src="+no_pic+")></img>");
             break;
         case 'picture-wall':
-            var data=[{'title':'title','src':no_pic,'thumbnail':no_pic}];
+            data=[{'title':'title','src':no_pic,'thumbnail':no_pic}];
             $(divDom).attr({'left':0,'top':0,'right':1,'bot':0.2,'type':type})
                      .html(tmpl(type+'Create',data));
-            break
+            break;
+        case 'bootstrapCarousel':
+            data={img:[{'src':no_pic,'title':'title','desc':'description'}]};
+            $(divDom).attr({'left':0,'top':0,'right':1,'bot':0.5,'type':type})
+                     .html(tmpl(type+'Create',data));
+            break;
+        case 'bootstrapJumbotron':
+            data={'title':'title','color':'#FFFFFF','textColor':'#000000','content':'content here','btnType':'btn-primary','btnText':'button','link':""};
+            $(divDom).attr({'left':0,'top':0,'right':0.4,'bot':0.4,'type':type})
+                     .html(tmpl(type+'Create',data));
+            break;
     }
     $(divDom).attr('touch-action','none').addClass('div-context');
     indexEditor.sectionDom.appendChild(divDom);
