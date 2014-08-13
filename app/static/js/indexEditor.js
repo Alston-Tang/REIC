@@ -44,6 +44,10 @@ indexEditor.preProcess=function(){
     $('.editor-nav').click(function(){
         indexEditor.content.add($(this).attr('add'));
     });
+    $('.setting-section').click(function(){
+        var sectionDom= b.con[0].dom;
+        indexEditor.disModal('sectionSetting',sectionDom);
+    });
     //Test the width of editor paenl
     var $panel=$('#edit-modal');
     $panel.css({'visibility':'hidden','display':'inline'});
@@ -245,6 +249,25 @@ indexEditor.modal.animation={
             cur.point.appendChild(animation);
         }
         this.point.indexEdit.resetAnimation();
+    }
+};
+
+indexEditor.modal.sectionSetting={
+    title:'Section setting',
+    con:{
+        'id':'sectionSetting',
+        data:function(dom){
+            var rv={};
+            rv.height=$(dom).attr('height');
+            rv.boardBackground=$(dom).attr('background');
+            var sectionBoard=$(dom).children('.section-board');
+            rv.background=$(sectionBoard).attr('color');
+            rv.backgroundOpacity=$(sectionBoard).attr('opacity');
+            return rv;
+        }
+    },
+    callback:function(){
+
     }
 };
 
@@ -556,6 +579,7 @@ indexEditor.content.add=function(type){
     indexEditor.section.addNewDiv(divDom,indexEditor.section);
     indexEditor.setDrag.call(divDom.indexEdit);
 };
+
 
 //Extend Index Board
 section.prototype.getCalPosReverse=function(absPos){

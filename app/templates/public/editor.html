@@ -477,6 +477,36 @@
         <p><a class="btn {%#o.btnType%} btn-lg" role="button">{%=o.btnText%}</a></p>
     </div>
     </script>
+    <!-- Section setting -->
+    <script type="text/blueimp-tmpl" id="sectionSetting">
+    <div class="row">
+        <div class="col-md-4">
+            <img class="img-responsive" src={%#o.boardBackground%}></img>
+        </div>
+        <div class="col-md-4">
+            <button class="btn btn-primary">Edit</button>
+            <button class="btn btn-warning">Set to null</button>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-4">
+            <label>Height
+                <input value="{%#o.height%}" type="text" class="form-control"></input>
+            </label>
+        </div>
+        <div class="col-md-4">
+            <label>Color
+                <input value="{%#o.background%}" class="form-control pick-a-color" type="text"></input>
+            </label>
+        </div>
+        <div class="col-md-4">
+            <label>Opacity
+                <input value="{%#o.backgroundOpacity%}" class="form-control" type="text"></input>
+            </label>
+        </div>
+    </div>
+    </script>
     {% endraw %}
     <script src="{{ url_for('static', filename='js/tinycolor-0.9.15.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/pick-a-color-1.2.3.min.js') }}"></script>
