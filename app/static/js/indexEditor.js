@@ -39,7 +39,12 @@ indexEditor.setDrag=function(){
 indexEditor.preProcess=function(){
     indexEditor.section= b.con[0];
     indexEditor.sectionDom= b.con[0].dom;
+    //Set dragable-touch,bind div to dom
     b.traverse(indexEditor.setDrag);
+    //bind section to dom
+    for(var i=0; i< b.con.length; i++){
+        b.con[i].dom.indexEdit= b.con[i];
+    }
     //Set nav bar button
     $('.editor-nav').click(function(){
         indexEditor.content.add($(this).attr('add'));
@@ -266,8 +271,30 @@ indexEditor.modal.sectionSetting={
             return rv;
         }
     },
+    setValue:function(dom){
+        var panel=document.getElementById('edit-panel');
+        //Set edit handler
+        $(panel).find('.edit').click(function(){
+            indexEditor.content.subModal('img',$(panel).find('.background')[0]);
+        });
+        //Set null handler
+        $(panel).find('.null').click(function(){
+            $(panel).find('.background').attr('src',"");
+        });
+        //Set color picker
+        $(panel).find('.pick-a-color').pickAColor({'showHexInput':false});
+    },
     callback:function(){
-
+        var panel=document.getElementById('edit-panel');
+        //Get value in panel
+        var color=$(panel).find('.pick-a-color').val();
+        var opacity=parseFloat($(panel).find('.opacity').val());
+        var background=$(panel).find('.background').attr('src');
+        var height=parseFloat($(panel).find('.height').val());
+        this.point.indexEdit.resetCan(color,opacity);
+        this.point.indexEdit.resetBackground(background);
+        this.point.indexEdit.resetSize(height);
+        $('#edit-modal').modal('hide');
     }
 };
 
@@ -590,6 +617,27 @@ section.prototype.getCalPosReverse=function(absPos){
     rtVal.bot=(absPos.bot-this.top)/(this.bot-this.top);
     return rtVal;
 };
+
+section.prototype.resetSize=function(size){
+    if(size==undefined) return;
+    $(this.dom).attr('height',size);
+    this.setSize();
+    this.reCorrectHeight();
+};
+
+section.prototype.resetBackground=function(background){
+    if (background==undefined) return;
+    $(this.dom).attr('background',background);
+    this.backgroundImg=this.setBackground();
+    this.parent.setBackground(true);
+};
+
+section.prototype.resetCan=function(color,opacity){
+    if(color==undefined || opacity==undefined) return;
+    $(this.canDom).attr({'color':color,'opacity':opacity});
+    this.setCan();
+};
+
 section.prototype.reGetSize=function(){
     this.top=this.dom.offsetTop;
     this.bot=this.dom.offsetHeight+this.dom.offsetTop;

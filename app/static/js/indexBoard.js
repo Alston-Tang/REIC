@@ -90,8 +90,8 @@ IndexBoard.prototype.getSec=function(top,bot) {
     }
 };
 
-IndexBoard.prototype.setBackground=function(){
-    if(this.curBackground==null || this.sec[0]>this.curBackground || this.sec[this.sec.length-1]<this.curBackground)
+IndexBoard.prototype.setBackground=function(force){
+    if(this.curBackground==null || this.sec[0]>this.curBackground || this.sec[this.sec.length-1]<this.curBackground || force==true)
     {
         var img;
         var ctx=this.backgroundCtx;
