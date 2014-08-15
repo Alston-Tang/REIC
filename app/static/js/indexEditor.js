@@ -53,12 +53,52 @@ indexEditor.preProcess=function(){
         var sectionDom= b.con[0].dom;
         indexEditor.disModal('sectionSetting',sectionDom);
     });
+    $('#btn-save').click(function(){
+        indexEditor.save.request();
+    });
     //Test the width of editor paenl
     var $panel=$('#edit-modal');
     $panel.css({'visibility':'hidden','display':'inline'});
     indexEditor.panelWidth=$('#edit-panel')[0].offsetWidth;
     $panel.css({'visibility':'visible','display':'none'});
 };
+indexEditor.save={};
+indexEditor.save.request=function(){
+    //Get section information
+    var hiddenInf=document.getElementById('sectionInf');
+    var createTime=$(hiddenInf).find('.create_time').val();
+    var id=$(hiddenInf).find('.id').val();
+    var currentTime=new Date().getTime()/1000;
+    var selection=thmTools.domToString(b.con[0].dom);
+    var title= $(b.con[0].dom).attr('section-title');
+    $.ajax('/editor',{
+        type:'POST',
+        success:indexEditor.save.success,
+        error:indexEditor.save.error,
+        data:{
+            create_time:createTime,
+            id:id,
+            modified_time:currentTime,
+            title:title,
+            content:selection
+        }
+    });
+};
+indexEditor.save.success=function(data){
+    data=JSON.parse(data);
+    if(data.success){
+        var hidderInf=document.getElementById('sectionInf');
+        $(hidderInf).find('.id').val(data.id);
+        alert('success');
+    }
+    else{
+        alert(data.error);
+    }
+};
+indexEditor.save.error=function(data){
+    alert('error');
+};
+
 indexEditor.modal={};
 indexEditor.modal.size={
     title:'Size',
@@ -268,6 +308,7 @@ indexEditor.modal.sectionSetting={
             var sectionBoard=$(dom).children('.section-board');
             rv.background=$(sectionBoard).attr('color');
             rv.backgroundOpacity=$(sectionBoard).attr('opacity');
+            rv.title=$(dom).attr('section-title');
             return rv;
         }
     },
@@ -287,10 +328,11 @@ indexEditor.modal.sectionSetting={
     callback:function(){
         var panel=document.getElementById('edit-panel');
         //Get value in panel
-        var color=$(panel).find('.pick-a-color').val();
+        var color='#'+$(panel).find('.pick-a-color').val();
         var opacity=parseFloat($(panel).find('.opacity').val());
         var background=$(panel).find('.background').attr('src');
         var height=parseFloat($(panel).find('.height').val());
+        $(this.point).attr('section-title',$(panel).find('.title').val());
         this.point.indexEdit.resetCan(color,opacity);
         this.point.indexEdit.resetBackground(background);
         this.point.indexEdit.resetSize(height);

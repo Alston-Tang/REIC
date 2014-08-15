@@ -6,7 +6,9 @@
 
     <canvas class="background-board">
     </canvas>
-    {{ content|safe }}
+    {% for section in content['section_detail'] %}
+        {{ section['content']|safe }}
+    {% endfor %}
 </div>
 
 

@@ -196,5 +196,17 @@ def fill_demo_page():
         s.append(doc['_id'])
     page.insert(section=s, title='index')
 
-fill_selection()
-fill_demo_page()
+
+def edit_section():
+    content = '''
+    <section id="1" height="1" background="static/resource/img/big/1.jpg">
+        <canvas class="section-board" color="black" opacity=0.7>
+        </canvas>
+        <div top="0.2" left="0.4" right="0.6" bot="0.4" type="text">
+            <p>Hello world</p>
+        </div>
+    </section>
+    '''
+    section.insert(content=content, title='Section test 1')
+
+fake='53ec6e711d41c8593eb4cb01'

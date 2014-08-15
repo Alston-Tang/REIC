@@ -32,5 +32,8 @@ ___
     def get(self, **require):
         return BaseModel.get(self, self.collection, require)
 
+    def get_one(self, **require):
+        return BaseModel.get_one(self, self.collection, require)
+
 #Global Model Instance
 section = Section()

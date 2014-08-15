@@ -168,6 +168,8 @@ section.prototype={
         var color=$(canvas).attr('color');
         var opacity=$(canvas).attr('opacity');
         var ctx=canvas.getContext('2d');
+        //Clear canvas
+        ctx.clearRect(0,0,canvas.width,canvas.height);
         ctx.globalAlpha=opacity;
         ctx.fillStyle=color;
         ctx.fillRect(0,0,canvas.width,canvas.height);

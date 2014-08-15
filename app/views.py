@@ -2,14 +2,13 @@ __author__ = 'Tang'
 
 from flask import render_template, url_for, request, redirect, session
 from app import app, file, model
+from time import time
+import json
+
 
 @app.route('/')
 def index():
-    page = model.page.get_content(title='index')[0]
-    content = ''
-    for section in page['section_detail']:
-        content += section['content']
-    return render_template("index.html", content=content, title='index', nav_bar=app.nav_bar)
+    return render_page('index')
 
 
 @app.route('/edit')
@@ -34,7 +33,7 @@ def main_upload():
         return file.upload_test.post(upload_file)
 
 
-@app.route('/ajax/upload/pic',methods=['GET'])
+@app.route('/ajax/upload/pic', methods=['GET'])
 def public_pic():
     return file.upload_test.get_pic()
 
@@ -102,3 +101,52 @@ def signup():
 @app.route('/test')
 def test():
     return render_template('upload.html')
+
+
+@app.route('/editor', methods=['GET', 'POST'])
+def editor():
+    if request.method == 'GET':
+        section_id = request.args.get('sec', '')
+        section = model.section.get_one(_id=section_id)
+        if section:
+            return render_template('edit.html', section=section['content'], create_time=section['create_time'],
+                                   id=section_id)
+        else:
+            return render_template('edit.html', create=True, create_time=time(), id="")
+    if request.method == 'POST':
+        #Get upload information
+        section_id = request.form.get('id', "")
+        title = request.form.get('title', "")
+        create_time = request.form.get('create_time', time())
+        modified_time = request.form.get('modified_time', time())
+        content = request.form.get('content', "")
+        #Check
+        if content == "":
+            return json.dumps({'error': 'Empty content'})
+        if title == "":
+            return json.dumps({'error': 'Empty title'})
+        #Check end
+        if section_id == "":
+            new_id = model.section.insert(title=title, create_time=create_time, modified_time=modified_time,
+                                          content=content, creator='tang')
+            if new_id:
+                return json.dumps({'success': True, 'id': str(new_id)})
+            else:
+                return json.dumps({'error': 'Insert failed at db'})
+        else:
+            pass
+
+
+#no rule matched, then treat it as a page
+@app.route('/<page_title>')
+def render_page(page_title):
+    require_page = model.page.get_a_content(title=page_title)
+    if require_page:
+        return render_template('index.html', title=page_title, content=require_page, nav_bar=app.nav_bar)
+    else:
+        return page_not_found("")
+
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('error/404.html'),404

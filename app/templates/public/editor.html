@@ -39,7 +39,7 @@
         </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-      <li><a>Save</a></li>
+      <li><a id="btn-save" style="cursor: pointer">Save</a></li>
       {% if 'username' in session %}
         <li>Welcome</li>
         <li class="dropdown">
@@ -481,11 +481,21 @@
     <script type="text/blueimp-tmpl" id="sectionSetting">
     <div class="row">
         <div class="col-md-4">
+            <label>Background
             <img class="img-responsive background" src={%#o.boardBackground%}></img>
+            </label>
         </div>
         <div class="col-md-4">
             <button class="btn btn-primary edit">Edit</button>
             <button class="btn btn-warning null">Set to null</button>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-md-4">
+            <label>Title
+                <input class="form-control title" value={%#o.title%}></input>
+            </label>
         </div>
     </div>
     <hr>

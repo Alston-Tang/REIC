@@ -1,6 +1,8 @@
 __author__ = 'tang'
-import pymongo
 import sys
+from bson.objectid import ObjectId
+import pymongo
+
 
 client = pymongo.MongoClient()
 db = client.reic
@@ -11,6 +13,14 @@ class BaseModel:
     """
     def __init__(self):
         self.db = db
+
+    @staticmethod
+    def object_id_validation(object_id):
+        if not isinstance(object_id, ObjectId):
+            if ObjectId.is_valid(object_id):
+                object_id = ObjectId(object_id)
+
+        return object_id
 
     def insert(self, collection, require, data):
         """
@@ -31,13 +41,11 @@ class BaseModel:
                     data[key] = 'undefined'
                 json_set[key] = data[key]
         try:
-            collection.insert(json_set)
+            return collection.insert(json_set)
         except Exception:
             print "Insert failed!"
             print(sys.exc_info()[0])
             return False
-
-        return True
 
     def get(self, collection, require):
         """
@@ -49,10 +57,28 @@ class BaseModel:
         if not require:
             cursor = collection.find()
         else:
+            #If an valid object id string given, convert to object id class
+            if '_id' in require:
+                require['_id'] = BaseModel.object_id_validation(require['_id'])
             cursor = collection.find(require)
+
         for doc in cursor:
             rt.append(doc)
         return rt
+
+    def get_one(self, collection, require):
+        """
+        :param collection: collection to be inserted
+        :param require: required document pattern in database, if empty all documents will be returned
+        :return: return a documents self
+        """
+        if not require:
+            cursor = collection.find_one()
+        else:
+            if '_id' in require:
+                require['_id'] = BaseModel.object_id_validation(require['_id'])
+            cursor = collection.find_one(require)
+        return cursor
 
 from section import section
 from page import page

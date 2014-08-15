@@ -55,6 +55,18 @@ class Page(BaseModel):
 
         return pages
 
+    def get_a_content(self,**opt):
+        rt_page = BaseModel.get_one(self, self.collection, opt)
+        #If not find
+        if rt_page is None:
+            return None
+
+        rt_page['section_detail'] = []
+        for section_ite in rt_page['section']:
+            section_result = section.get(_id=section_ite)[0]
+            rt_page['section_detail'].append(section_result)
+        return rt_page
+
 #Global Model Instance
 page = Page()
 

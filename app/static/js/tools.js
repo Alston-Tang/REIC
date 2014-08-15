@@ -80,5 +80,10 @@ var thmTools= {
             }
         }
         return 'No type';
+    },
+    domToString:function(dom){
+        var tmp=document.createElement('div');
+        tmp.appendChild(dom.cloneNode(true));
+        return $(tmp).html();
     }
 };

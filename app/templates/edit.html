@@ -1,18 +1,21 @@
 {% extends 'public/editor.html' %}
 {% block content %}
 <!-- Content Begin -->
+<form id="sectionInf">
+    <input class="create_time" type="hidden" value="{{ create_time }}">
+    <input class="id" type="hidden" value="{{ id }}">
+</form>
 <div id="index-board">
-
   <canvas class="background-board">
   </canvas>
-
-  <section id="1" height="1" background="static/resource/img/big/1.jpg">
-        <canvas class="section-board" color="black" opacity=0.7>
-        </canvas>
-        <div top="0.2" left="0.4" right="0.6" bot="0.4" type="text">
-            <p>Hello world</p>
-        </div>
+  {% if create == True %}
+  <section section-title="untitled" height="1" background="">
+    <canvas class="section-board" color="white" opacity="1" width="1920" height="992" style="width: 1920px; height: 992px;">
+    </canvas>
   </section>
+  {% else %}
+  {{ section|safe }}
+  {% endif %}
 </div>
 
 
