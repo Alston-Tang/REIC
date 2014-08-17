@@ -2,4 +2,4 @@ __author__ = 'Tang'
 
 from app import app
 if __name__ == '__main__':
-    app.run(debug=True, port=3000)
+    app.run(host="127.0.0.1", port=1357, debug=True)

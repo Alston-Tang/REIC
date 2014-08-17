@@ -35,5 +35,8 @@ ___
     def get_one(self, **require):
         return BaseModel.get_one(self, self.collection, require)
 
+    def modify(self, spec, document):
+        return BaseModel.modify(self, self.collection, spec, document)
+
 #Global Model Instance
 section = Section()

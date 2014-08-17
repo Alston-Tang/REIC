@@ -1,0 +1,9 @@
+<uwsgi>
+	<pythonpath>/home/tang/web/REIC</pythonpath>
+	<socket>/tmp/reic.sock</socket>
+	<module>run</module>
+	<callable>app</callable>
+	<master/>
+	<processes>1</processes>
+	<daemonize>/home/tang/uwsgi.log</daemonize>
+</uwsgi>

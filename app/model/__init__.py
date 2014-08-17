@@ -7,6 +7,7 @@ import pymongo
 client = pymongo.MongoClient()
 db = client.reic
 
+
 class BaseModel:
     """
     Base of all model classes. Include db connection inf
@@ -70,7 +71,7 @@ class BaseModel:
         """
         :param collection: collection to be inserted
         :param require: required document pattern in database, if empty all documents will be returned
-        :return: return a documents self
+        :return: return a documents it self
         """
         if not require:
             cursor = collection.find_one()
@@ -80,7 +81,20 @@ class BaseModel:
             cursor = collection.find_one(require)
         return cursor
 
+    def modify(self, collection, spec, document):
+        """
+        :param collection: collection to be modified
+        :param spec: query string to find a record witch needs to be modified
+        :param document: content to be added into record, if same key exists, overwrite it.
+        :return:
+        """
+        if '_id' in spec:
+            spec['_id'] = BaseModel.object_id_validation(spec['_id'])
+        rv = collection.update(spec, {"$set": document})
+        return rv
+
 from section import section
 from page import page
 from user import user
 
+#{'updatedExisting': True, u'nModified': 1, u'ok': 1, u'n': 1}

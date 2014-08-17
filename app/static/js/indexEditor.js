@@ -46,15 +46,20 @@ indexEditor.preProcess=function(){
         b.con[i].dom.indexEdit= b.con[i];
     }
     //Set nav bar button
-    $('.editor-nav').click(function(){
+    var $navBar=$('#editor-global-panel');
+    $navBar.find('.editor-nav').click(function(){
         indexEditor.content.add($(this).attr('add'));
     });
-    $('.setting-section').click(function(){
+    $navBar.find('.setting-section').click(function(){
         var sectionDom= b.con[0].dom;
         indexEditor.disModal('sectionSetting',sectionDom);
     });
-    $('#btn-save').click(function(){
+    $navBar.find('#btn-save').click(function(){
         indexEditor.save.request();
+    });
+    $($navBar).find('.setting-information').click(function(){
+        var sectionDom= b.con[0].dom;
+        indexEditor.disModal('sectionInformation',sectionDom)
     });
     //Test the width of editor paenl
     var $panel=$('#edit-modal');
@@ -294,6 +299,24 @@ indexEditor.modal.animation={
             cur.point.appendChild(animation);
         }
         this.point.indexEdit.resetAnimation();
+    }
+};
+
+indexEditor.modal.sectionInformation={
+    title:'Section information',
+    con:{
+        'id':'sectionInformation',
+        data:function(dom){
+            var rv={};
+            var $inf=$('#sectionInf');
+            rv.createTime=$inf.find('.create_time').val();
+            rv.creator=$inf.find('.creator').val();
+            rv.modifiedTime=$inf.find('.modified_time').val();
+            return rv;
+        }
+    },
+    callback:function(){
+        $('#edit-modal').modal('hide');
     }
 };
 

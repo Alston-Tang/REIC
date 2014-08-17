@@ -97,12 +97,7 @@ def signup():
             return render_template('signup.html', form=form)
 
 
-#Below is for test
-@app.route('/test')
-def test():
-    return render_template('upload.html')
-
-
+#Editor load and save handle
 @app.route('/editor', methods=['GET', 'POST'])
 def editor():
     if request.method == 'GET':
@@ -110,7 +105,7 @@ def editor():
         section = model.section.get_one(_id=section_id)
         if section:
             return render_template('edit.html', section=section['content'], create_time=section['create_time'],
-                                   id=section_id)
+                                   id=section_id, creator=section['creator'], modified_time=section['modified_time'])
         else:
             return render_template('edit.html', create=True, create_time=time(), id="")
     if request.method == 'POST':
@@ -134,8 +129,17 @@ def editor():
             else:
                 return json.dumps({'error': 'Insert failed at db'})
         else:
-            pass
+            rv = model.section.modify({'_id': section_id}, {'title': title, 'modified_time': modified_time,
+                                      'content': content})
+            if rv.get("n", False) != 1:
+                return json.dumps({'error': 'Unexpected update'})
+            else:
+                return json.dumps(({'success': True}))
 
+@app.route('/manage/sections')
+def manage_sections():
+    sections = model.section.get_all()
+    return render_template("test.html",sections=sections)
 
 #no rule matched, then treat it as a page
 @app.route('/<page_title>')

@@ -190,10 +190,10 @@ def fill_selection():
 
 
 def fill_demo_page():
-    docs = section.get_all()
+    to_be_insert = ['cover', 'Framework', 'Pages', 'Sections', 'Elements', 'end']
     s = []
-    for doc in docs:
-        s.append(doc['_id'])
+    for section_title in to_be_insert:
+        s.append(section.get_one(title=section_title)['_id'])
     page.insert(section=s, title='index')
 
 
@@ -209,4 +209,3 @@ def edit_section():
     '''
     section.insert(content=content, title='Section test 1')
 
-fake='53ec6e711d41c8593eb4cb01'

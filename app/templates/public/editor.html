@@ -34,7 +34,7 @@
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">Setting<b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a class="setting-nav setting-section" href="#">Section setting</a></li>
-            <li><a class="setting-nav setting-background" href="#">Background</a></li>
+            <li><a class="setting-nav setting-information" href="#">Section information</a></li>
           </ul>
         </li>
       </ul>
@@ -233,41 +233,12 @@
     </div>
     </script>
     <script type="text/blueimp-tmpl" id="imageSub">
-    {% var num=Math.floor(o.total/4); %}
-    {% for (var i=0; i<num; i++){ %}
-      <div class="row">
+    {% for (var i=0; i<o.total; i++){ %}
           <div class="col-md-3">
-              <a href='#' src-data={%#o.data[4*i][1]%} class='thumbnail'>
-                  <img src="{%#o.data[4*i][0]%}"></img>
+              <a href='#' src-data="{%#o.data[i][1]%}" class='thumbnail'>
+                  <img src="{%#o.data[i][0]%}"></img>
               </a>
           </div>
-          <div class="col-md-3">
-              <a href='#' src-data={%#o.data[4*i+1][1]%} class='thumbnail'>
-                  <img src="{%#o.data[4*i+1][0]%}"></img>
-              </a>
-          </div>
-          <div class="col-md-3">
-              <a href='#' src-data={%#o.data[4*i+2][1]%} class='thumbnail'>
-                  <img src="{%#o.data[4*i+2][0]%}"></img>
-              </a>
-          </div>
-          <div class="col-md-3">
-              <a href='#' src-data={%#o.data[4*i+3][1]%} class='thumbnail'>
-                  <img src="{%#o.data[4*i+3][0]%}"></img>
-              </a>
-          </div>
-      </div>
-    {% } %}
-    {% if (o.total%4>0) { %}
-      <div class="row">
-        {% for(var j=4*num; j<o.total; j++) { %}
-          <div class="col-md-3">
-              <a href="#" src-data={%#o.data[j][1]%} class='thumbnail'>
-                  <img src="{%#o.data[j][0]%}"></img>
-              </a>
-          </div>
-        {% } %}
-      </div>
     {% } %}
     </script>
 
@@ -482,7 +453,7 @@
     <div class="row">
         <div class="col-md-4">
             <label>Background
-            <img class="img-responsive background" src={%#o.boardBackground%}></img>
+            <img class="img-responsive background" src="{%#o.boardBackground%}"></img>
             </label>
         </div>
         <div class="col-md-4">
@@ -514,6 +485,28 @@
             <label>Opacity
                 <input value="{%#o.backgroundOpacity%}" class="form-control opacity" type="text"></input>
             </label>
+        </div>
+    </div>
+    </script>
+    <script type="text/blueimp-tmpl" id="sectionInformation">
+    <div class="row">
+        <div class="col-md-3 col-md-offset-1">
+            <h3>Creator:</h3>
+        </div>
+        <div class="col-md-8">
+            <h3>{%=o.creator%}</h3>
+        </div>
+        <div class="col-md-3 col-md-offset-1">
+            <h3>Create time:</h3>
+        </div>
+        <div class="col-md-8">
+            <h3>{%=(new Date(o.createTime*1000)).toString()%}</h3>
+        </div>
+        <div class="col-md-3 col-md-offset-1">
+            <h3>Modified time:</h3>
+        </div>
+        <div class="col-md-8">
+            <h3>{%=(new Date(o.modifiedTime*1000)).toString()%}</h3>
         </div>
     </div>
     </script>
