@@ -93,8 +93,21 @@ class BaseModel:
         rv = collection.update(spec, {"$set": document})
         return rv
 
+    def remove(self, collection, limit):
+        """
+
+        :param collection:
+        :param limit:
+        :return:
+        """
+        if '_id' in limit:
+            limit['_id'] = BaseModel.object_id_validation(limit['_id'])
+        rv = collection.remove(limit)
+        return rv
+
 from section import section
 from page import page
 from user import user
+from preview_img import preview_img
 
 #{'updatedExisting': True, u'nModified': 1, u'ok': 1, u'n': 1}

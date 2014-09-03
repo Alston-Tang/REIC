@@ -16,8 +16,9 @@
         {% set class_ = class_ + ' required' %}
     {% endif %}
     {% if field.type == 'SubmitField' %}
+        {% set button_label = kwargs.pop('text','submit') %}
         <button class='btn {{ class_ }}' type="submit">
-            Submit
+            {{ button_label }}
         </button>
     {% elif field.type == 'BooleanField' %}
         <div class="checkbox">

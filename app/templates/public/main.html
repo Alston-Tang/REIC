@@ -9,10 +9,6 @@
     <title>{{ title }}</title>
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/styles.css') }}">
-    <!-- Least.js CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/least.min.css') }}">
-    <!-- Custom styles  -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/my.css') }}">
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="{{ url_for('static', filename='js/html5shiv.min.js') }}"></script>
@@ -28,9 +24,7 @@
     {% endblock %}
     <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/sass-bootstrap.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/least.js') }}"></script>
     <script src="{{ url_for('static', filename='js/tools.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/indexBoard.js') }}"></script>
     {% block extra_js %}
     {% endblock %}
 {% endblock %}

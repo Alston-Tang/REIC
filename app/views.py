@@ -2,7 +2,7 @@ __author__ = 'Tang'
 
 from flask import render_template, url_for, request, redirect, session
 from app import app, file, model
-from time import time
+from time import time, localtime, strftime
 import json
 
 
@@ -113,33 +113,60 @@ def editor():
         section_id = request.form.get('id', "")
         title = request.form.get('title', "")
         create_time = request.form.get('create_time', time())
-        modified_time = request.form.get('modified_time', time())
+        modified_time = float(request.form.get('modified_time', time()))
         content = request.form.get('content', "")
+        preview_img = request.form.get('preview_img', False)
         #Check
         if content == "":
             return json.dumps({'error': 'Empty content'})
         if title == "":
             return json.dumps({'error': 'Empty title'})
         #Check end
+        #If it is a new section
         if section_id == "":
             new_id = model.section.insert(title=title, create_time=create_time, modified_time=modified_time,
-                                          content=content, creator='tang')
+                                          content=content, creator='tang', preview_img=preview_img)
             if new_id:
                 return json.dumps({'success': True, 'id': str(new_id)})
             else:
                 return json.dumps({'error': 'Insert failed at db'})
+        #else if it is a existing section
         else:
+            section = model.section.get_one(_id=section_id)
+            #Update Preview Image
+            #If an existing image do not have a preview image
+            if not 'preview_img' in section:
+                #Create an preview image
+                section['preview_img'] = model.preview_img.insert(preview_img)
+            else:
+                model.preview_img.modify(section['preview_img'], preview_img)
             rv = model.section.modify({'_id': section_id}, {'title': title, 'modified_time': modified_time,
-                                      'content': content})
+                                                            'content': content, 'preview_img': section['preview_img']})
             if rv.get("n", False) != 1:
                 return json.dumps({'error': 'Unexpected update'})
             else:
-                return json.dumps(({'success': True}))
+                return json.dumps(({'success': True, 'id': section_id}))
 
-@app.route('/manage/sections')
+
+@app.route('/manage/sections', methods=['GET', 'DELETE'])
 def manage_sections():
+    if request.method == 'GET':
+        sections = model.section.get_all_full()
+        #Convert time from Unix Stamp to Python time
+        for section in sections:
+            section['create_time'] = strftime("%Y/%m/%d %H:%M", localtime(section['create_time']))
+            section['modified_time'] = strftime("%Y/%m/%d %H:%M", localtime(section['modified_time']))
+        return render_template("manage/section.html", sections=sections)
+    if request.method == 'DELETE':
+        if model.section.remove_by_id(request.form['id']):
+            return json.dumps({'success': True})
+
+
+@app.route('/test')
+def test():
     sections = model.section.get_all()
-    return render_template("test.html",sections=sections)
+    return render_template("test.html", sections=sections)
+
 
 #no rule matched, then treat it as a page
 @app.route('/<page_title>')

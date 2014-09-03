@@ -69,6 +69,11 @@ indexEditor.preProcess=function(){
 };
 indexEditor.save={};
 indexEditor.save.request=function(){
+    html2canvas(document.body, {
+        onrendered: indexEditor.save.preDone
+    });
+};
+indexEditor.save.preDone=function(canvas){
     //Get section information
     var hiddenInf=document.getElementById('sectionInf');
     var createTime=$(hiddenInf).find('.create_time').val();
@@ -76,6 +81,7 @@ indexEditor.save.request=function(){
     var currentTime=new Date().getTime()/1000;
     var selection=thmTools.domToString(b.con[0].dom);
     var title= $(b.con[0].dom).attr('section-title');
+    var previewImg=canvas.toDataURL('image/jpeg');
     $.ajax('/editor',{
         type:'POST',
         success:indexEditor.save.success,
@@ -85,7 +91,8 @@ indexEditor.save.request=function(){
             id:id,
             modified_time:currentTime,
             title:title,
-            content:selection
+            content:selection,
+            preview_img:previewImg
         }
     });
 };
