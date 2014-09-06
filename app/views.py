@@ -154,8 +154,8 @@ def manage_sections():
         sections = model.section.get_all_full()
         #Convert time from Unix Stamp to Python time
         for section in sections:
-            section['create_time'] = strftime("%Y/%m/%d %H:%M", localtime(section['create_time']))
-            section['modified_time'] = strftime("%Y/%m/%d %H:%M", localtime(section['modified_time']))
+            section['create_time'] = strftime("%Y/%m/%d %H:%M", localtime(float(section['create_time'])))
+            section['modified_time'] = strftime("%Y/%m/%d %H:%M", localtime(float(section['modified_time'])))
         return render_template("manage/section.html", sections=sections)
     if request.method == 'DELETE':
         if model.section.remove_by_id(request.form['id']):
