@@ -27,8 +27,8 @@
                     {{ forms.render_field(form.tel, with_label='Telephone') }}
                     {{ forms.render_field(form.sid, with_label='SID') }}
                     {{ forms.render_field(form.dept, with_label='Department') }}
+                    {{ forms.render_field(form.college, with_label='College') }}
                     {{ forms.render_field(form.year, with_label='Year') }}
-
                     {% if error %}
                         <div class="alert alert-danger" role="alert">
                             <a href="#" class="alert-link">{{ error }}</a>

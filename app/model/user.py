@@ -15,14 +15,16 @@ class User(BaseModel):
                 opt[item] = opt['data_'][item]
 
         from app.helper.require import require, default
-        if not require(['username', 'password','email'], opt):
+
+        if not require(['username', 'password', 'email'], opt):
             return False
         default({'tel': False, 'dept': False, 'sid': False, 'year': False, 'extra': []}, opt)
         opt['activity'] = []
         opt['inf'] = []
-        opt['create_time']=time()
-        require = ['username', 'password', 'email', 'create_time', 'tel', 'dept', 'sid', 'year', 'extra', 'activity', 'inf']
-        return BaseModel.insert(self,self.collection, require, opt)
+        opt['create_time'] = time()
+        require = ['username', 'password', 'email', 'create_time', 'tel', 'dept', 'sid', 'year', 'extra', 'activity',
+                   'inf', 'member']
+        return BaseModel.insert(self, self.collection, require, opt)
 
     def get(self, **require):
         return BaseModel.get(self, self.collection, require)
@@ -32,7 +34,7 @@ class User(BaseModel):
         from app.helper.require import require
         from app.helper import sha256_pass
 
-        if not require(['email','password'], opt):
+        if not require(['email', 'password'], opt):
             return False
         opt['password'] = sha256_pass.encode(opt['password'])
         cur_user = BaseModel.get(self, self.collection, opt)
@@ -41,5 +43,5 @@ class User(BaseModel):
         else:
             return cur_user[0]
 
-#Global Model Instance
+# Global Model Instance
 user = User()

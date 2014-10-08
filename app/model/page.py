@@ -69,5 +69,3 @@ class Page(BaseModel):
 
 #Global Model Instance
 page = Page()
-
-

@@ -109,5 +109,6 @@ from section import section
 from page import page
 from user import user
 from preview_img import preview_img
+from member import member
 
 #{'updatedExisting': True, u'nModified': 1, u'ok': 1, u'n': 1}

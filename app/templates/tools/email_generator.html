@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<form id="filter">
+    <label>Year
+        <select id="yearOpt">
+            <option>equal to</option>
+            <option>larger than</option>
+            <option>smaller than</option>
+        </select>
+        <input id="year"/>
+    </label>
+    <label>
+        SID
+        <select id="sidOpt">
+            <option>equal to</option>
+            <option>larger than</option>
+            <option>smaller than</option>
+        </select>
+        <input id="sid"/>
+    </label>
+
+    <label>
+        College
+        <input id="college"/>
+    </label>
+    <button>Generate</button>
+    <br>
+    <label>Password
+        <input type="password" id="password">
+    </label>
+</form>
+<br>
+<div id="displayArea">
+</div>
+<script type="text/javascript">
+    var g=document.getElementById;
+    var send= function () {
+        var sid=document.getElementById('sid').value;
+        var year=document.getElementById('year').value;
+        var sidOpt=document.getElementById('sidOpt').value;
+        var yearOpt=document.getElementById('yearOpt').value;
+        var password=document.getElementById('password').value;
+        var form=new FormData();
+        form.append('sid',sid);
+        form.append('year',year);
+        form.append('sidOpt',sidOpt);
+        form.append('yearOpt',yearOpt);
+        form.append('password',password);
+        var http=new XMLHttpRequest();
+    };
+</script>
+</body>
+</html>

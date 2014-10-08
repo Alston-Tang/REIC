@@ -48,7 +48,7 @@ def main_delete(file_name):
 
 #log in handler
 @app.route('/signIn', methods=['GET','POST'])
-def sign_in():
+def signin():
     from app.helper.form import SignIn
     form = SignIn()
     if request.method == 'GET':
@@ -91,7 +91,14 @@ def signup():
         return render_template('signup.html', form=form)
     elif request.method == 'POST':
         if form.validate():
-            model.user.insert(data_=request.form)
+            #Copy form data to user information dictionary
+            user_inf = {}
+            for key, value in request.form.items():
+                user_inf[key] = value
+            #Validate whether this user is member of REIC according to SID
+            user_inf['member'] = model.member.valid(int(request.form['sid']))
+            print(user_inf)
+            model.user.insert(data_=user_inf)
             return redirect(url_for('index'))
         else:
             return render_template('signup.html', form=form)
@@ -162,10 +169,17 @@ def manage_sections():
             return json.dumps({'success': True})
 
 
+@app.route('/email/generator')
+def generator():
+    return render_template('tools/email_generator.html')
+
+
 @app.route('/test')
 def test():
-    sections = model.section.get_all()
-    return render_template("test.html", sections=sections)
+    if model.member.valid(1155014334):
+        return "Valid"
+    else:
+        return "Invalid"
 
 
 #no rule matched, then treat it as a page
@@ -180,4 +194,4 @@ def render_page(page_title):
 
 @app.errorhandler(404)
 def page_not_found(e):
-    return render_template('error/404.html'),404
+    return render_template('error/404.html'), 404

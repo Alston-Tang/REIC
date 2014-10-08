@@ -17,10 +17,11 @@ class SignUp(Form):
     password_confirm = PasswordField('Password confirm', [validators.Required(), validators.EqualTo('password')])
     username = TextField('Username', [validators.Required(), validators.Length(min=4, max=20)])
     tel = TextField('Telephone', [validators.Optional(), validators.Regexp(r'^\d{8,15}$')])
-    sid = TextField('SID', [validators.Optional(), validators.Regexp(r'^\d{10}$')])
+    sid = TextField('SID', [validators.Required(), validators.Regexp(r'^\d{10}$')])
     dept = TextField('Department', [validators.Optional(), validators.Length(max=20)])
     year = SelectField('Year', [validators.Optional()], choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6)],
                        coerce=int)
+    college = TextField('College', [validators.Optional()])
     submit = SubmitField('submit')
 
     def validate_email(form, field):
