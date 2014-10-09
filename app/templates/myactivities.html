@@ -1,0 +1,15 @@
+{% extends 'public/nav.html' %}
+{% import 'macro/form.html' as forms %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/noIndexBoard.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/design/purpleBody.css") }}">
+{% endblock %}
+{% block content %}
+    <div class="contentBelowNav">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-1">
+                <h1 class="title">My activities</h1>
+            </div>
+        </div>
+    </div>
+{% endblock %}

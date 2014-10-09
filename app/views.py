@@ -86,6 +86,7 @@ def setting():
 @app.route('/signUp', methods=['GET', 'POST'])
 def signup():
     from app.helper.form import SignUp
+    from app.helper.sha256_pass import encode
     form = SignUp(request.form)
     if request.method == 'GET':
         return render_template('signup.html', form=form)
@@ -97,6 +98,8 @@ def signup():
                 user_inf[key] = value
             #Validate whether this user is member of REIC according to SID
             user_inf['member'] = model.member.valid(int(request.form['sid']))
+            #SHA1 password
+            user_inf['password'] = encode(user_inf['password'])
             print(user_inf)
             model.user.insert(data_=user_inf)
             return redirect(url_for('index'))
@@ -181,6 +184,10 @@ def test():
     else:
         return "Invalid"
 
+
+@app.route('/myActivities')
+def my_activities():
+    return render_template('myactivities.html')
 
 #no rule matched, then treat it as a page
 @app.route('/<page_title>')
