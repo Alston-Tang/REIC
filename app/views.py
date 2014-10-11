@@ -3,7 +3,10 @@ __author__ = 'Tang'
 from flask import render_template, url_for, request, redirect, session
 from app import app, file, model
 from time import time, localtime, strftime
+from werkzeug import secure_filename
+import datetime
 import json
+import os
 
 
 @app.route('/')
@@ -46,10 +49,11 @@ def main_delete(file_name):
     return file.upload_test.delete(file_name)
 
 
-#log in handler
-@app.route('/signIn', methods=['GET','POST'])
+# log in handler
+@app.route('/signIn', methods=['GET', 'POST'])
 def signin():
     from app.helper.form import SignIn
+
     form = SignIn()
     if request.method == 'GET':
         return render_template("signin.html", title='Sign In', nav_bar=app.nav_bar, form=form)
@@ -60,7 +64,8 @@ def signin():
             session['user_id'] = str(cur_user['_id'])
             return redirect(url_for('index'))
         else:
-            return render_template("signin.html", title='Sign In', nav_bar=app.nav_bar, form=form, error="Invalid Username or Password")
+            return render_template("signin.html", title='Sign In', nav_bar=app.nav_bar, form=form,
+                                   error="Invalid Username or Password")
 
 
 #log out handler
@@ -74,12 +79,14 @@ def sign_out():
 @app.route('/setting')
 def setting():
     from bson.objectid import ObjectId
+
     if 'user_id' in session:
         uid = ObjectId(oid=session['user_id'])
         cur_user = model.user.get(_id=uid)[0]
         return render_template("setting.html", cur_user=cur_user)
     else:
-        return render_template("signin.html", title='Sign In', nav_bar=app.nav_bar, error="Invalid username of password")
+        return render_template("signin.html", title='Sign In', nav_bar=app.nav_bar,
+                               error="Invalid username of password")
 
 
 #signup handler
@@ -87,6 +94,7 @@ def setting():
 def signup():
     from app.helper.form import SignUp
     from app.helper.sha256_pass import encode
+
     form = SignUp(request.form)
     if request.method == 'GET':
         return render_template('signup.html', form=form)
@@ -101,7 +109,12 @@ def signup():
             #SHA1 password
             user_inf['password'] = encode(user_inf['password'])
             print(user_inf)
-            model.user.insert(data_=user_inf)
+            rv = model.user.insert(data_=user_inf)
+            if not rv:
+                #Come to here when insert is failed due to db error
+                return render_template('error/unexpected_error.html')
+            session['username'] = user_inf['username']
+            session['user_id'] = str(rv)
             return redirect(url_for('index'))
         else:
             return render_template('signup.html', form=form)
@@ -172,6 +185,14 @@ def manage_sections():
             return json.dumps({'success': True})
 
 
+@app.route('/manage/activities', methods=['GET', 'POST'])
+def manage_activities():
+    if request.method == 'GET':
+        return render_template('manage/activity.html')
+    if request.method == 'POST':
+        pass
+
+
 @app.route('/email/generator')
 def generator():
     return render_template('tools/email_generator.html')
@@ -179,15 +200,124 @@ def generator():
 
 @app.route('/test')
 def test():
-    if model.member.valid(1155014334):
-        return "Valid"
-    else:
-        return "Invalid"
+    from datetime import datetime
+    time_slot = [datetime(2014, 10, 13, 5, 0), datetime(2014, 10, 13, 5, 30), datetime(2014, 10, 13, 6, 0)]
+    model.activity.insert(name='Activity 1', time=datetime(2014, 10, 15, 18, 30), due_time=datetime(2014, 10, 14),
+                          start_time=datetime(2014, 10, 12), disappear_time=datetime(2014, 10, 15, 19, 30),
+                          venue='LSB LT1', despcription='Welcome to Activity 1!', time_slot=time_slot)
+    return 'test'
+
+
+@app.route('/activities/<activity_name>', methods=['GET', 'POST'])
+def render_activity(activity_name):
+    activity = model.activity.get_one(_id=activity_name)
+    if not activity:
+        page_not_found('Activity not exists')
+    #return activity['name']
+
+
+@app.route('/register/<activity_name>', methods=['GET', 'POST'])
+def reg_activity(activity_name):
+    from helper.form import reg_form_wrapper
+    activity = model.activity.get_one(_id=activity_name)
+
+    if not activity:
+        return render_template('error/404.html'), 404
+
+    form = reg_form_wrapper(activity['time_slot'])
+
+    if request.method == 'GET':
+        if not 'user_id' in session:
+            #User has not logged in
+            return redirect(url_for('signin'))
+        #Get current user
+        cur_user = model.user.get_one(_id=session['user_id'])
+        if not cur_user:
+            #Should not occur unless something is wrong with session
+            raise Exception('Unrecognized session user')
+        if activity_name in cur_user['activity']:
+            #User has already registered this activity
+            return render_template('register/already_registered.html')
+        else:
+            return render_template('register/register.html', activity=activity, form=form)
+
+    elif request.method == 'POST':
+        activity = model.activity.get_one(_id=activity_name)
+        if not form.validate():
+            #Some filed is incorrect
+            return render_template('register/register.html', activity=activity, form=form)
+        else:
+            #Get current user
+            cur_user = model.user.get_one(_id=session['user_id'])
+            work_dir = os.path.join(os.getcwd(), 'app/static/upload/user/'+activity_name)
+
+            #Create folder if necessary
+            upload_path = "static/upload/user/"+activity_name
+            if not os.path.exists(work_dir):
+                os.mkdir(work_dir)
+            work_dir = os.path.join(work_dir, session['user_id'])
+            upload_path = os.path.join(upload_path, session['user_id'])
+            if not os.path.exists(work_dir):
+                os.mkdir(work_dir)
+
+            #Check upload file
+            cv_file = request.files['cv']
+            st_file = request.files['st']
+            from helper.format import is_pdf, is_word
+            cv_valid = True
+            st_valid = True
+            if not is_pdf(cv_file.mimetype) and not is_word(cv_file.mimetype):
+                cv_valid = False
+            if not is_pdf(st_file.mimetype) and not is_word(st_file.mimetype):
+                st_valid = False
+
+            if not cv_valid or not st_valid:
+                #CV or ST is in wrong format
+                if not cv_valid:
+                    form.cv.errors.append('Only word or pdf is allowed')
+                if not st_valid:
+                    form.st.errors.append('Only word or pdf is allowed')
+                return render_template('register/register.html', activity=activity, form=form)
+            else:
+                #Check dangerous filename
+                cv_file_name = secure_filename(cv_file.filename)
+                st_file_name = secure_filename(st_file.filename)
+                cv_file_path = os.path.join(work_dir, cv_file_name)
+                st_file_path = os.path.join(work_dir, st_file_name)
+                cv_upload_path = os.path.join(upload_path, cv_file_name)
+                st_upload_path = os.path.join(upload_path, st_file_name)
+                #Save file to work_dir
+                cv_file.save(cv_file_path)
+                st_file.save(st_file_path)
+
+                #Insert participation to db
+                participation = {}
+                for item in request.form:
+                    participation[item] = request.form[item]
+                participation['cv'] = cv_upload_path
+                participation['st'] = st_upload_path
+                participation.pop('csrf_token')
+                model.user.add_activity(cur_user['_id'], activity_name, participation)
+                return render_template('register/register_success.html')
 
 
 @app.route('/myActivities')
 def my_activities():
-    return render_template('myactivities.html')
+    if not 'user_id' in session:
+        redirect(url_for('signin'))
+    else:
+        cur_user = model.user.get_one(_id=session['user_id'])
+        if not cur_user:
+            #Should not occur unless something is wrong with session
+            raise Exception('Unrecognized session user')
+        #Construct activities list
+        user_activities = []
+        for activity in cur_user['activity']:
+            activity_inf = model.activity.get_one(_id=activity)
+            activity_inf['user_inf'] = cur_user['activity'][activity]
+            user_activities.append(activity_inf)
+        return render_template('myactivities.html', activities=user_activities)
+
 
 #no rule matched, then treat it as a page
 @app.route('/<page_title>')

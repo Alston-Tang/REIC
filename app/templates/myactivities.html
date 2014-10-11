@@ -2,14 +2,75 @@
 {% import 'macro/form.html' as forms %}
 {% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/noIndexBoard.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/myActivities.css") }}">
     <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/design/purpleBody.css") }}">
 {% endblock %}
 {% block content %}
     <div class="contentBelowNav">
-        <div class="row">
-            <div class="col-lg-8 col-lg-offset-1">
-                <h1 class="title">My activities</h1>
+        {% for activity in activities %}
+            <div class="row">
+            <div class="col-lg-10 col-lg-offset-1">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h2>{{ activity['name'] }}</h2>
+                    </div>
+                    <div class="panel-body">
+                        <table class="desc-table">
+                            <tr>
+                                <td>Time:</td>
+                                <td>{{ activity['time'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Venue:</td>
+                                <td>{{ activity['venue'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Description:</td>
+                                <td>{{ activity['description'] }}</td>
+                            </tr>
+                            <tr>
+                                <td><br></td>
+                            </tr>
+                            <tr>
+                                <td>Your registration information:</td>
+                            </tr>
+                            <tr>
+                                <td>Email:</td>
+                                <td>{{ activity['user_inf']['email'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Tel:</td>
+                                <td>{{ activity['user_inf']['tel'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>College:</td>
+                                <td>{{ activity['user_inf']['college'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Department:</td>
+                                <td>{{ activity['user_inf']['dept'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Year:</td>
+                                <td>{{ activity['user_inf']['year'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>Student ID:</td>
+                                <td>{{ activity['user_inf']['sid'] }}</td>
+                            </tr>
+                            <tr>
+                                <td>CV</td>
+                                <td><a href="{{ activity['user_inf']['cv'] }}">Click to download</a></td>
+                            </tr>
+                            <tr>
+                                <td>ST</td>
+                                <td><a href="{{ activity['user_inf']['st'] }}">Click to download</a></td>
+                            </tr>
+                        </table>
+
+                    </div>
+                </div>
             </div>
+        {% endfor %}
         </div>
-    </div>
 {% endblock %}

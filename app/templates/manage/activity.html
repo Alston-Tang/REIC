@@ -1,0 +1,65 @@
+{% extends 'public/main.html' %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/noIndexBoard.css") }}">
+{% endblock %}
+{% block navbar %}
+    <nav id='nav-bar' class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="{{ url_for('index') }}">REIC</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                {% if 'username' in session %}
+                    <li>Welcome</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ session['username'] }} <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Action</a></li>
+                            <li><a href="#">Another action</a></li>
+                            <li><a href="#">Something else here</a></li>
+                            <li class="divider"></li>
+                            <li><a href="signOut">Sign out</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="signIn" >Sign in</a></li>
+                {% endif %}
+            </ul>
+        </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+{% endblock %}
+{% block content %}
+    <div class="contentBelowNav">
+        <br>
+        <div class="col-lg-10 col col-lg-offset-1">
+            <form>
+                <div class="form-group">
+                    <label>Name
+                        <input type="text" class="form-control" placeholder="Name of activity">
+                    </label>
+                    <label>Due time
+                        <input type="date" class="form-control" id="due-date">
+                    </label>
+                    <label>Disappear time
+                        <input type="date" class="form-control">
+                    </label>
+                </div>
+                <div class="form-group col-lg-8 col-lg-offset-1">
+                    <label>Description
+                        <textarea class="form-control"></textarea>
+                    </label>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+{% endblock %}

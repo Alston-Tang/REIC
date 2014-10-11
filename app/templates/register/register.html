@@ -1,0 +1,31 @@
+{% extends 'public/nav.html' %}
+{% import 'macro/form.html' as forms %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/noIndexBoard.css") }}">
+{% endblock %}
+{% block content %}
+    <div class="contentBelowNav">
+        <div class="row">
+            <div class="col-lg-6 col-lg-offset-3">
+                <form class="form-horizontal" role="form" enctype="multipart/form-data" action="{{ url_for('reg_activity', activity_name=activity['name']) }}" method="post">
+                    {{ form.csrf_token }}
+                    {{ forms.render_field(form.email,with_label='Email') }}
+                    {{ forms.render_field(form.tel,with_label='Tel') }}
+                    {{ forms.render_field(form.sid,with_label='Student ID') }}
+                    {{ forms.render_field(form.dept,with_label='Department') }}
+                    {{ forms.render_field(form.year,with_label='Year') }}
+                    {{ forms.render_field(form.college,with_label='College') }}
+                    {{ forms.render_field(form.cv,with_label='CV') }}
+                    {{ forms.render_field(form.st,with_label='Statement letter') }}
+                    {{ forms.render_field(form.time_slot,with_label='Interview time') }}
+                    {{ forms.render_field(form.submit, class_='btn-success', text='Register') }}
+                    {% if error %}
+                        <div class="alert alert-danger" role="alert">
+                            <a href="#" class="alert-link">{{ error }}</a>
+                        </div>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

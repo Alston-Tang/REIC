@@ -19,15 +19,24 @@ class User(BaseModel):
         if not require(['username', 'password', 'email'], opt):
             return False
         default({'tel': False, 'dept': False, 'sid': False, 'year': False, 'extra': []}, opt)
-        opt['activity'] = []
+        opt['activity'] = {}
         opt['inf'] = []
         opt['create_time'] = time()
         require = ['username', 'password', 'email', 'create_time', 'tel', 'dept', 'sid', 'year', 'extra', 'activity',
-                   'inf', 'member']
+                   'inf', 'member', 'college']
         return BaseModel.insert(self, self.collection, require, opt)
 
     def get(self, **require):
         return BaseModel.get(self, self.collection, require)
+
+    def get_one(self, **require):
+        return BaseModel.get_one(self, self.collection, require)
+
+    def add_activity(self, user_id, activity_name, activity):
+        cur_user = self.get_one(_id=user_id)
+        cur_user['activity'][activity_name] = activity
+        cur_user.pop('_id')
+        BaseModel.modify(self, self.collection, {'_id': user_id}, cur_user)
 
     def valid(self, **opt):
 

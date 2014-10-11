@@ -1,37 +1,40 @@
 __author__ = 'tang'
-from . import BaseModel
+
 from time import time
+from . import BaseModel
 
 
 class Activity(BaseModel):
-    def insert(self, **opt):
-        if opt['data_']:
-            for item in opt['data_']:
-                opt[item] = opt['data_'][item]
+    def __init__(self):
+        BaseModel.__init__(self)
+        self.collection = self.db.activities
 
-        from app.helper.require import require, default
-        if not require(['creator'], opt):
+    def insert(self, **opt):
+        from app.helper.require import require, default, is_datetime, map_time_slot
+        #Check whether field exists
+        if not require(['name', 'time', 'start_time', 'due_time', 'disappear_time'], opt):
             return False
-        default({'tel': False, 'dept': False, 'sid': False, 'year': False, 'extra': []}, opt)
-        opt['activity'] = []
-        opt['inf'] = []
-        opt['create_time']=time()
-        require = ['username', 'password', 'email', 'create_time', 'tel', 'dept', 'sid', 'year', 'extra', 'activity', 'inf']
-        return BaseModel.insert(self,self.collection, require, opt)
+        #Check whether field format is right
+        if not is_datetime(['time', 'start_time', 'due_time', 'disappear_time'], opt):
+            return False
+        #Set default value
+        default({'venue': 'TBA', 'description': 'No description yet'}, opt)
+        #Init time slot, if not exists, set to False, else set to time: number of registration pair
+        if 'time_slot' in opt:
+            opt['time_slot'] = map_time_slot(opt['time_slot'])
+        else:
+            opt['time_slot'] = False
+        #Set _id the same as name !!Duplicated name is not allowed
+        opt['_id'] = opt['name']
+        require = ['name', 'time', 'start_time', 'due_time', 'disappear_time', 'venue', 'description', '_id',
+                   'time_slot']
+        print opt
+        return BaseModel.insert(self, self.collection, require, opt)
 
     def get(self, **require):
         return BaseModel.get(self, self.collection, require)
 
-    def valid(self, **opt):
-
-        from app.helper.require import require
-        from app.helper import sha256_pass
-
-        if not require(['email','password'], opt):
-            return False
-        opt['password'] = sha256_pass.encode(opt['password'])
-        cur_user = BaseModel.get(self, self.collection, opt)
-        if not cur_user:
-            return False
-        else:
-            return cur_user[0]
+    def get_one(self, **require):
+        return BaseModel.get_one(self, self.collection, require)
+# Global Model Instance
+activity = Activity()

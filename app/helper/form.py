@@ -1,8 +1,9 @@
 __author__ = 'tang'
-from wtforms import TextField, PasswordField, SubmitField, SelectField
+from wtforms import TextField, PasswordField, SubmitField, SelectField, StringField, FileField
 from wtforms import validators, ValidationError
 from flask_wtf import Form
 from app import model
+from magic import Magic
 
 
 class SignIn(Form):
@@ -28,3 +29,47 @@ class SignUp(Form):
         user_exist = model.user.get(email=field.data)
         if user_exist:
             raise ValidationError("Email is already taken")
+
+
+def reg_form_wrapper(time_slot_inf):
+    choices = []
+    for time_num in time_slot_inf:
+        choices.append((str(time_num[0]), str(time_num[0])))
+
+    class RegForm(Form):
+        email = TextField('Email', [validators.Required(), validators.Email()])
+        tel = TextField('Telephone', [validators.Required(), validators.Regexp(r'^\d{8,15}$')])
+        sid = TextField('SID', [validators.Required(), validators.Regexp(r'^1155\d{6}$')])
+        dept = TextField('Department', [validators.Required(), validators.Length(max=20)])
+        year = SelectField('Year', [validators.Required()], choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6)],
+                           coerce=int)
+        college = TextField('College', [validators.Optional()])
+        cv = FileField('CV', [validators.Required()])
+        st = FileField('ST', [validators.Required()])
+        time_slot = SelectField('Time slot', [validators.Required()], choices=choices)
+        submit = SubmitField('submit')
+    return RegForm()
+
+
+class RegForm(Form):
+    def __init__(self, time_slot, *args, **kwargs):
+        choices = []
+        for time_num in time_slot:
+            choices.append((str(time_num[0]), str(time_num[0])))
+        self.time_slot = SelectField('Time slot', [validators.Required()], choices=choices)
+        super(RegForm, self).__init__(*args, **kwargs)
+
+    email = TextField('Email', [validators.Required(), validators.Email()])
+    tel = TextField('Telephone', [validators.Required(), validators.Regexp(r'^\d{8,15}$')])
+    sid = TextField('SID', [validators.Required(), validators.Regexp(r'^1155\d{6}$')])
+    dept = TextField('Department', [validators.Required(), validators.Length(max=20)])
+    year = SelectField('Year', [validators.Required()], choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6)],
+                       coerce=int)
+    college = TextField('College', [validators.Optional()])
+    cv = FileField('CV', [validators.Required()])
+    st = FileField('ST', [validators.Required()])
+    submit = SubmitField('submit')
+
+
+
+
