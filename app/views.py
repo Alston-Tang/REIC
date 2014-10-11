@@ -202,19 +202,19 @@ def generator():
 def test():
     from datetime import datetime
     time_slot = []
-    for hour in range(9, 11):
+    for hour in range(9, 12):
         time_slot.append(datetime(2014, 10, 18, hour, 0))
         time_slot.append(datetime(2014, 10, 18, hour, 30))
-    for hour in range(13, 16):
+    for hour in range(13, 17):
         time_slot.append(datetime(2014, 10, 18, hour, 0))
         time_slot.append(datetime(2014, 10, 18, hour, 30))
     time_slot.append(datetime(2014, 10, 18, 17))
-    for hour in range(9, 11):
-        time_slot.append(datetime(2014, 10, 18, hour, 0))
-        time_slot.append(datetime(2014, 10, 18, hour, 30))
-    for hour in range(13, 16):
-        time_slot.append(datetime(2014, 10, 18, hour, 0))
-        time_slot.append(datetime(2014, 10, 18, hour, 30))
+    for hour in range(9, 12):
+        time_slot.append(datetime(2014, 10, 19, hour, 0))
+        time_slot.append(datetime(2014, 10, 19, hour, 30))
+    for hour in range(13, 17):
+        time_slot.append(datetime(2014, 10, 19, hour, 0))
+        time_slot.append(datetime(2014, 10, 19, hour, 30))
     time_slot.append(datetime(2014, 10, 19, 17))
 
     model.activity.insert(name='2014 Research Project with KaiLong Investment',
@@ -242,7 +242,6 @@ def test():
                                           guideline, finish the research and deliver a presentation to management.''',
                           time_slot=time_slot)
     return 'test'
-"""
 @app.route('/activities/<activity_name>', methods=['GET', 'POST'])
 def render_activity(activity_name):
     activity = model.activity.get_one(_id=activity_name)
@@ -250,7 +249,7 @@ def render_activity(activity_name):
         page_not_found('Activity not exists')
     #return activity['name']
 
-
+"""
 @app.route('/register/<activity_name>', methods=['GET', 'POST'])
 def reg_activity(activity_name):
     from helper.form import reg_form_wrapper
