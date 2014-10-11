@@ -1,3 +1,4 @@
+# coding=utf-8
 __author__ = 'Tang'
 
 from flask import render_template, url_for, request, redirect, session
@@ -119,7 +120,7 @@ def signup():
         else:
             return render_template('signup.html', form=form)
 
-
+"""
 #Editor load and save handle
 @app.route('/editor', methods=['GET', 'POST'])
 def editor():
@@ -184,7 +185,6 @@ def manage_sections():
         if model.section.remove_by_id(request.form['id']):
             return json.dumps({'success': True})
 
-
 @app.route('/manage/activities', methods=['GET', 'POST'])
 def manage_activities():
     if request.method == 'GET':
@@ -201,13 +201,48 @@ def generator():
 @app.route('/test')
 def test():
     from datetime import datetime
-    time_slot = [datetime(2014, 10, 13, 5, 0), datetime(2014, 10, 13, 5, 30), datetime(2014, 10, 13, 6, 0)]
-    model.activity.insert(name='Activity 1', time=datetime(2014, 10, 15, 18, 30), due_time=datetime(2014, 10, 14),
-                          start_time=datetime(2014, 10, 12), disappear_time=datetime(2014, 10, 15, 19, 30),
-                          venue='LSB LT1', despcription='Welcome to Activity 1!', time_slot=time_slot)
+    time_slot = []
+    for hour in range(9, 11):
+        time_slot.append(datetime(2014, 10, 18, hour, 0))
+        time_slot.append(datetime(2014, 10, 18, hour, 30))
+    for hour in range(13, 16):
+        time_slot.append(datetime(2014, 10, 18, hour, 0))
+        time_slot.append(datetime(2014, 10, 18, hour, 30))
+    time_slot.append(datetime(2014, 10, 18, 17))
+    for hour in range(9, 11):
+        time_slot.append(datetime(2014, 10, 18, hour, 0))
+        time_slot.append(datetime(2014, 10, 18, hour, 30))
+    for hour in range(13, 16):
+        time_slot.append(datetime(2014, 10, 18, hour, 0))
+        time_slot.append(datetime(2014, 10, 18, hour, 30))
+    time_slot.append(datetime(2014, 10, 19, 17))
+
+    model.activity.insert(name='2014 Research Project with KaiLong Investment',
+                          time=datetime(2014, 10, 17, 18),
+                          due_time=datetime(2014, 10, 17, 18),
+                          start_time=datetime(2014, 10, 17, 18),
+                          disappear_time=datetime(2014, 12, 30),
+                          venue='N/A',
+                          description='''The Real Estate Investment Club (REIC) is honored to bring the research
+                                          project with KaiLong Investment and present you a unique opportunity.
+                                          The project is expected to help students gain hands-on experience about
+                                          professional real estate investment research. The topic for this year is
+                                          "Immigration by Real Estate Investments".''',
+                          time_slot=time_slot)
+
+    model.activity.insert(name='2014 Research Project with Champion REIT',
+                          time=datetime(2014, 10, 17, 18),
+                          due_time=datetime(2014, 10, 17, 18),
+                          start_time=datetime(2014, 10, 17, 18),
+                          disappear_time=datetime(2014, 12, 30),
+                          venue='N/A',
+                          description='''Real Estate Investment Club (REIC) is pleased to bring you this research
+                                          project which topic is “The Real Estate Acquisition Trend of the Asia-pacific
+                                          Region”. Working as a united team, you will narrow the topic, settle the
+                                          guideline, finish the research and deliver a presentation to management.''',
+                          time_slot=time_slot)
     return 'test'
-
-
+"""
 @app.route('/activities/<activity_name>', methods=['GET', 'POST'])
 def render_activity(activity_name):
     activity = model.activity.get_one(_id=activity_name)
@@ -262,40 +297,27 @@ def reg_activity(activity_name):
 
             #Check upload file
             cv_file = request.files['cv']
-            st_file = request.files['st']
             from helper.format import is_pdf, is_word
             cv_valid = True
-            st_valid = True
             if not is_pdf(cv_file.mimetype) and not is_word(cv_file.mimetype):
                 cv_valid = False
-            if not is_pdf(st_file.mimetype) and not is_word(st_file.mimetype):
-                st_valid = False
 
-            if not cv_valid or not st_valid:
+            if not cv_valid:
                 #CV or ST is in wrong format
-                if not cv_valid:
-                    form.cv.errors.append('Only word or pdf is allowed')
-                if not st_valid:
-                    form.st.errors.append('Only word or pdf is allowed')
-                return render_template('register/register.html', activity=activity, form=form)
+                form.cv.errors.append('Only word or pdf is allowed')
             else:
                 #Check dangerous filename
                 cv_file_name = secure_filename(cv_file.filename)
-                st_file_name = secure_filename(st_file.filename)
                 cv_file_path = os.path.join(work_dir, cv_file_name)
-                st_file_path = os.path.join(work_dir, st_file_name)
                 cv_upload_path = os.path.join(upload_path, cv_file_name)
-                st_upload_path = os.path.join(upload_path, st_file_name)
                 #Save file to work_dir
                 cv_file.save(cv_file_path)
-                st_file.save(st_file_path)
 
                 #Insert participation to db
                 participation = {}
                 for item in request.form:
                     participation[item] = request.form[item]
                 participation['cv'] = cv_upload_path
-                participation['st'] = st_upload_path
                 participation.pop('csrf_token')
                 model.user.add_activity(cur_user['_id'], activity_name, participation)
                 return render_template('register/register_success.html')

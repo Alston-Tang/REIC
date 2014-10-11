@@ -43,9 +43,8 @@ def reg_form_wrapper(time_slot_inf):
         dept = TextField('Department', [validators.Required(), validators.Length(max=20)])
         year = SelectField('Year', [validators.Required()], choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6)],
                            coerce=int)
-        college = TextField('College', [validators.Optional()])
+        college = TextField('College', [validators.Required()])
         cv = FileField('CV', [validators.Required()])
-        st = FileField('ST', [validators.Required()])
         time_slot = SelectField('Time slot', [validators.Required()], choices=choices)
         submit = SubmitField('submit')
     return RegForm()
