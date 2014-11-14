@@ -120,7 +120,7 @@ def signup():
         else:
             return render_template('signup.html', form=form)
 
-"""
+
 #Editor load and save handle
 @app.route('/editor', methods=['GET', 'POST'])
 def editor():
@@ -203,45 +203,32 @@ def test():
     from datetime import datetime
     time_slot = []
     for hour in range(9, 12):
-        time_slot.append(datetime(2014, 10, 18, hour, 0))
-        time_slot.append(datetime(2014, 10, 18, hour, 30))
+        time_slot.append(datetime(2014, 11, 29, hour, 0))
+        time_slot.append(datetime(2014, 11, 30, hour, 30))
     for hour in range(13, 17):
-        time_slot.append(datetime(2014, 10, 18, hour, 0))
-        time_slot.append(datetime(2014, 10, 18, hour, 30))
-    time_slot.append(datetime(2014, 10, 18, 17))
+        time_slot.append(datetime(2014, 11, 29, hour, 0))
+        time_slot.append(datetime(2014, 11, 30, hour, 30))
+    time_slot.append(datetime(2014, 11, 29, 17))
     for hour in range(9, 12):
-        time_slot.append(datetime(2014, 10, 19, hour, 0))
-        time_slot.append(datetime(2014, 10, 19, hour, 30))
+        time_slot.append(datetime(2014, 11, 29, hour, 0))
+        time_slot.append(datetime(2014, 11, 30, hour, 30))
     for hour in range(13, 17):
-        time_slot.append(datetime(2014, 10, 19, hour, 0))
-        time_slot.append(datetime(2014, 10, 19, hour, 30))
-    time_slot.append(datetime(2014, 10, 19, 17))
+        time_slot.append(datetime(2014, 11, 29, hour, 0))
+        time_slot.append(datetime(2014, 11, 30, hour, 30))
+    time_slot.append(datetime(2014, 11, 30, 17))
 
-    model.activity.insert(name='2014 Research Project with KaiLong Investment',
-                          time=datetime(2014, 10, 17, 18),
-                          due_time=datetime(2014, 10, 17, 18),
-                          start_time=datetime(2014, 10, 17, 18),
-                          disappear_time=datetime(2014, 12, 30),
+    model.activity.insert(name='2014 Research Project with CBRE',
+                          time=datetime(2014, 11, 20, 23, 59),
+                          due_time=datetime(2014, 11, 20, 23, 59),
+                          start_time=datetime(2014, 12, 1),
+                          disappear_time=datetime(2015, 3, 1),
                           venue='N/A',
-                          description='''The Real Estate Investment Club (REIC) is honored to bring the research
-                                          project with KaiLong Investment and present you a unique opportunity.
-                                          The project is expected to help students gain hands-on experience about
-                                          professional real estate investment research. The topic for this year is
-                                          "Immigration by Real Estate Investments".''',
+                          description='''The broad topic this year is “Investment behaviors of Chinese Investors in Spanish Real Estate Market”, focusing on initial drivers for different investment activities of Chinese investors. With the whole team, you are going to narrow the topic, settle the guideline, do the research and finish the report. Yes, it’s your tailor-made research project! There’ll be sub-groups focusing on different perspectives of the topic. Communicating and collaborating inside or among groups, you will definitely improve your leadership and interpersonal skills.''',
                           time_slot=time_slot)
 
-    model.activity.insert(name='2014 Research Project with Champion REIT',
-                          time=datetime(2014, 10, 17, 18),
-                          due_time=datetime(2014, 10, 17, 18),
-                          start_time=datetime(2014, 10, 17, 18),
-                          disappear_time=datetime(2014, 12, 30),
-                          venue='N/A',
-                          description='''Real Estate Investment Club (REIC) is pleased to bring you this research
-                                          project which topic is “The Real Estate Acquisition Trend of the Asia-pacific
-                                          Region”. Working as a united team, you will narrow the topic, settle the
-                                          guideline, finish the research and deliver a presentation to management.''',
-                          time_slot=time_slot)
     return 'test'
+
+
 @app.route('/activities/<activity_name>', methods=['GET', 'POST'])
 def render_activity(activity_name):
     activity = model.activity.get_one(_id=activity_name)
@@ -249,7 +236,6 @@ def render_activity(activity_name):
         page_not_found('Activity not exists')
     #return activity['name']
 
-"""
 @app.route('/register/<activity_name>', methods=['GET', 'POST'])
 def reg_activity(activity_name):
     from helper.form import reg_form_wrapper

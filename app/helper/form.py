@@ -45,7 +45,9 @@ def reg_form_wrapper(time_slot_inf):
                            coerce=int)
         college = TextField('College', [validators.Required()])
         cv = FileField('CV', [validators.Required()])
-        time_slot = SelectField('Time slot', [validators.Required()], choices=choices)
+        time_slot = SelectField('1st preference', [validators.Required()], choices=choices)
+        time_slot2 = SelectField('2nd preference', [validators.Required()], choices=choices)
+        time_slot3 = SelectField('3rd preference', [validators.Required()], choices=choices)
         submit = SubmitField('submit')
     return RegForm()
 
