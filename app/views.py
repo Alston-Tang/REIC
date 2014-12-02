@@ -202,21 +202,15 @@ def generator():
 def test():
     from datetime import datetime
     time_slot = []
-    for hour in range(9, 12):
-        time_slot.append(datetime(2014, 11, 29, hour, 0))
-        time_slot.append(datetime(2014, 11, 30, hour, 30))
-    for hour in range(13, 17):
-        time_slot.append(datetime(2014, 11, 29, hour, 0))
-        time_slot.append(datetime(2014, 11, 30, hour, 30))
-    time_slot.append(datetime(2014, 11, 29, 17))
-    for hour in range(9, 12):
-        time_slot.append(datetime(2014, 11, 29, hour, 0))
-        time_slot.append(datetime(2014, 11, 30, hour, 30))
-    for hour in range(13, 17):
-        time_slot.append(datetime(2014, 11, 29, hour, 0))
-        time_slot.append(datetime(2014, 11, 30, hour, 30))
-    time_slot.append(datetime(2014, 11, 30, 17))
-
+    for int_day in range(29, 31):
+        for hour in range(9, 12):
+            time_slot.append(datetime(2014, 11, int_day, hour, 0))
+            time_slot.append(datetime(2014, 11, int_day, hour, 30))
+        for hour in range(13, 17):
+            time_slot.append(datetime(2014, 11, int_day, hour, 0))
+        time_slot.append(datetime(2014, 11, int_day, hour, 30))
+        time_slot.append(datetime(2014, 11, int_day, 17))
+    print(time_slot)
     model.activity.insert(name='2014 Research Project with CBRE',
                           time=datetime(2014, 11, 20, 23, 59),
                           due_time=datetime(2014, 11, 20, 23, 59),
@@ -235,6 +229,42 @@ def render_activity(activity_name):
     if not activity:
         page_not_found('Activity not exists')
     #return activity['name']
+
+@app.route('/stat/<activity_name>')
+def stat_activity(activity_name):
+    from model import activity, user
+    activity_exist = activity.get_one(name=activity_name)
+    #If activity doesn't exist, display 404
+    if not activity_exist:
+        return render_template('error/404.html'), 404
+
+    #Else check role first
+    #If user haven't logged in, redirect to sign in page
+    if not "user_id" in session:
+        return redirect(url_for('signin'))
+    #Get user information
+    cur_user = user.get_one(_id=session['user_id'])
+    if not cur_user:
+        #Some thing wrong happen here
+        print ("Error when getting user's information")
+        return render_template('error/unexpected_error.html'), 404
+    #If user is not an administrator
+    role = cur_user.get("role", "")
+    if role != "admin":
+        return render_template('error/permission_denied.html')
+    #User's role is administrator, construct display page
+    render_content = []
+    users = user.get()
+    for each_user in users:
+        if activity_name in each_user['activity']:
+            temp = {}
+            for k, v in each_user['activity'][activity_name].iteritems():
+                temp[k] = v
+            temp['member'] = each_user['member']
+            render_content.append(temp)
+
+    return render_template('stat/showreg.html', participants=render_content)
+
 
 @app.route('/register/<activity_name>', methods=['GET', 'POST'])
 def reg_activity(activity_name):
