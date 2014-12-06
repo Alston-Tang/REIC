@@ -20,7 +20,7 @@ class BaseModel:
     collection = None
     db = pymongo.MongoClient().test
 
-    def __init__(self, obj_id=None, con=None):
+    def __init__(self, obj_id=None, **kwargs):
         for item in self.fields_list:
             self.attr[item] = None
         # Determine whether create a new empty object or fetch a existing object from DB
@@ -28,11 +28,20 @@ class BaseModel:
             self.attach = True
         else:
             attach = False
-            # Set attributes to default
+            # Set attributes to key-value pair from kwargs, if not found then set to default
             count = 0
             for item in self.fields_list:
-                self.attr[item] = _fun_var(self.field_default[count])
+                if item in kwargs:
+                    self.attr[item] = kwargs[item]
+                else:
+                    self.attr[item] = _fun_var(self.field_default[count])
                 count += 1
+
+    def __str__(self):
+        rv = ""
+        for item in self.attr:
+            rv += "{key}:{value}\n".format(key=str(item), value=str(self.attr[item]))
+        return rv
 
     def commit(self):
         if self.attach:
@@ -40,14 +49,17 @@ class BaseModel:
         else:
             self._insert()
 
-    def find(self, query=None):
+    @classmethod
+    def find(cls, query=None):
         if not query:
             query = {}
-        res = self.collection.find(query)
+        res = cls.collection.find(query)
+        rv = []
         if res:
-            rv = []
             for item in res:
-                pass
+                rv.append(cls(**item))
+
+        return rv
 
     def _fetch(self, user_id):
         rv = self.collection.find_one({"_id": user_id})
@@ -73,27 +85,15 @@ class BaseModel:
         return self.collection.update({"_id": obj_id}, self.attr)
 
 
-
-
 class User(BaseModel):
     fields_list = ['_id', 'college', 'create_time', 'dept', 'email', 'member', 'password', 'sid', 'tel', 'username',
                    'year']
     field_default = [None, None, datetime.today, None, None, False, None, None, None, None, None]
     collection = BaseModel.db.users
 
-    def __init__(self, user_id=None):
-        BaseModel.__init__(self, user_id)
+    def __init__(self, user_id=None, **kwargs):
+        BaseModel.__init__(self, user_id, **kwargs)
 
-    def test(self):
-        result = self.__init__
-        print(result)
-
-    def commit(self):
-        pass
-
-
-test = User(ObjectId("548214651d41c8f22bd38281"))
-test.test()
 
 
 
