@@ -4,7 +4,7 @@ import pymongo
 from pymongo import errors
 from datetime import datetime
 from bson.objectid import ObjectId
-from app import app
+# from app import app
 
 
 def _fun_var(a):
@@ -15,12 +15,11 @@ def _fun_var(a):
 
 
 class BaseModel:
-    attach = False
-    attr = {}
-    collection = None
     db = pymongo.MongoClient().test
 
     def __init__(self, obj_id=None, **kwargs):
+        self.attr = {}
+        self.attach = False
         for item in self.fields_list:
             self.attr[item] = None
         # Determine whether create a new empty object or fetch a existing object from DB
@@ -45,9 +44,9 @@ class BaseModel:
 
     def commit(self):
         if self.attach:
-            self._update()
+            return self._update()
         else:
-            self._insert()
+            return self._insert()
 
     @classmethod
     def find(cls, query=None):
@@ -58,8 +57,24 @@ class BaseModel:
         if res:
             for item in res:
                 rv.append(cls(**item))
-
         return rv
+
+    @classmethod
+    def remove(cls, query=None, del_all=False):
+        if not query:
+            if del_all:
+                # Only when del_all set to true will translate a none query to delete all
+                query = {}
+            else:
+                # TODO: Throw a exception
+                return False
+        return cls.collection.remove(query)
+
+    def destroy(self):
+        if not self.attach:
+            return False
+        else:
+            self.remove({"_id": self.attr["_id"]})
 
     def _fetch(self, user_id):
         rv = self.collection.find_one({"_id": user_id})
@@ -72,9 +87,12 @@ class BaseModel:
 
     def _insert(self):
         if "_id" in self.attr and self.attr["_id"] is None:
-            # Use None as _id is not allowed
-            del self.attr["_id"]
-        return self.collection.insert(self.attr)
+            # Use None as _id is not allowed, a generated ObjectId will be assigned
+            self.attr["_id"] = ObjectId()
+        rv = self.collection.insert(self.attr)
+        if rv:
+            self.attach = True
+        return rv
 
     def _update(self):
         obj_id = self.attr.pop("_id", None)
@@ -84,15 +102,6 @@ class BaseModel:
             return False
         return self.collection.update({"_id": obj_id}, self.attr)
 
-
-class User(BaseModel):
-    fields_list = ['_id', 'college', 'create_time', 'dept', 'email', 'member', 'password', 'sid', 'tel', 'username',
-                   'year']
-    field_default = [None, None, datetime.today, None, None, False, None, None, None, None, None]
-    collection = BaseModel.db.users
-
-    def __init__(self, user_id=None, **kwargs):
-        BaseModel.__init__(self, user_id, **kwargs)
 
 
 
