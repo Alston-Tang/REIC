@@ -15,7 +15,7 @@ def _fun_var(a):
 
 
 class BaseModel:
-    db = pymongo.MongoClient().test
+    db = pymongo.MongoClient().reic
 
     def __init__(self, obj_id=None, **kwargs):
         self.attr = {}
@@ -36,11 +36,14 @@ class BaseModel:
                     self.attr[item] = _fun_var(self.field_default[count])
                 count += 1
 
-    def __str__(self):
-        rv = ""
+    def __unicode__(self):
+        rv = u""
         for item in self.attr:
-            rv += "{key}:{value}\n".format(key=str(item), value=str(self.attr[item]))
+            rv += u"{key}:{value}\n".format(key=unicode(item), value=unicode(self.attr[item]))
         return rv
+
+    def __str__(self):
+        return unicode(self).encode(encoding='utf-8')
 
     def commit(self):
         if self.attach:
@@ -86,7 +89,8 @@ class BaseModel:
             return False
 
     def _insert(self):
-        if "_id" in self.attr and self.attr["_id"] is None:
+        insert_id = self.attr.pop("_id", None)
+        if "_id" is None:
             # Use None as _id is not allowed, a generated ObjectId will be assigned
             self.attr["_id"] = ObjectId()
         rv = self.collection.insert(self.attr)
