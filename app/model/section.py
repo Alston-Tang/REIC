@@ -7,5 +7,5 @@ class Section(BaseModel):
     field_default = [None, datetime.today, None, datetime.today(), None, "Untitled"]
     collection = BaseModel.db.sections
 
-    def __init__(self, user_id=None, **kwargs):
-        BaseModel.__init__(self, user_id, **kwargs)
+    def __init__(self, model_id=None, **kwargs):
+        BaseModel.__init__(self, model_id, **kwargs)

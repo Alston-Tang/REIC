@@ -1,28 +1,12 @@
-__author__ = 'tang'
-from . import BaseModel
+from base import BaseModel
+from section import Section
+from datetime import datetime
 
 
 class PreviewImg(BaseModel):
-    def __init__(self):
-        BaseModel.__init__(self)
-        self.collection = self.db.previewImage
+    fields_list = ['data']
+    field_default = [None]
+    collection = BaseModel.db.previewImage
 
-    def insert(self, data, **kwargs):
-        """
-        :param **kwargs: not use now
-        :param data: data of image in dataUri format
-        :return: true for success, false for error
-        """
-        if not data:
-            return
-        return BaseModel.insert(self, self.collection, ['data'], {'data': data})
-
-    def modify(self, img_id, data, **kwargs):
-        if not data:
-            return
-        return BaseModel.modify(self, self.collection, {'_id': img_id}, {'data': data})
-
-    def get_by_id(self, img_id):
-        return BaseModel.get_one(self, self.collection, {'_id': img_id})
-
-preview_img = PreviewImg()
+    def __init__(self, model_id=None, **kwargs):
+        BaseModel.__init__(self, model_id, **kwargs)

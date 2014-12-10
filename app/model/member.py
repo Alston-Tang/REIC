@@ -1,16 +1,11 @@
-__author__ = 'tang'
-
-from . import BaseModel
+from base import BaseModel
+from section import Section
 
 
 class Member(BaseModel):
-    def __init__(self):
-        BaseModel.__init__(self)
-        self.collection = self.db.regMembers
+    fields_list = ['major', 'college', 'firstname', 'sid', 'lastname', 'year', 'email', 'tel']
+    field_default = [None, None, None, None, None, None, None, None]
+    collection = BaseModel.db.regMembers
 
-    def valid(self, sid):
-        rv = BaseModel.get_one(self, self.collection, {'sid': sid})
-        return bool(rv)
-
-#Global Model Instance
-member = Member()
+    def __init__(self, model_id=None, **kwargs):
+        BaseModel.__init__(self, model_id, **kwargs)
