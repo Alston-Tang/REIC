@@ -44,20 +44,19 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
       <li><a id="btn-save" style="cursor: pointer">Save</a></li>
-      {% if 'username' in session %}
-        <li>Welcome</li>
+      {% if 'user' in session %}
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ session['username'] }} <b class="caret"></b></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ session['user']['username'] }} <b class="caret"></b></a>
           <ul class="dropdown-menu">
             <li><a href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li class="divider"></li>
-            <li><a href="signout">Sign out</a></li>
+            <li><a href="{{ url_for("sign_out") }}">Sign out</a></li>
           </ul>
         </li>
       {% else %}
-        <li><a href="signin" >Sign in</a></li>
+        <li><a href="{{ url_for("sign_in") }}" >Sign in</a></li>
       {% endif %}
        </ul>
     </div><!-- /.navbar-collapse -->

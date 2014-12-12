@@ -19,6 +19,7 @@ class BaseModel:
     fields_list = []
     field_default = []
     field_join = []
+    collection = None
     auto_join = False
 
     def __init__(self, obj_id=None, **kwargs):
@@ -59,7 +60,7 @@ class BaseModel:
         if not self.attach:
             return False
         else:
-            self.remove({"_id": self.attr["_id"]})
+            return self.remove({"_id": self.attr["_id"]})
 
     def join(self):
         if self.field_join:
@@ -77,7 +78,7 @@ class BaseModel:
                     self.attr[field] = self._join_value(self.attr[field], model_class)
 
     @classmethod
-    def find(cls, query=None):
+    def find(cls, query=None, join=False):
         if not query:
             query = {}
         res = cls.collection.find(query)
@@ -86,6 +87,8 @@ class BaseModel:
             for item in res:
                 temp_model = (cls(**item))
                 temp_model._post_attached()
+                if join:
+                    temp_model.join()
                 rv.append(temp_model)
         return rv
 

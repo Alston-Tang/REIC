@@ -3,11 +3,15 @@ __author__ = 'Tang'
 
 from flask import render_template, url_for, request, redirect, session
 from app import app, file, model
-from time import time, localtime, strftime
+from time import time
+from datetime import datetime
+from bson import ObjectId
 from werkzeug import secure_filename
-import datetime
+from helper.session import decompose_user
 import json
 import os
+
+from model import *
 
 
 @app.route('/')
@@ -52,31 +56,32 @@ def main_delete(file_name):
 
 # log in handler
 @app.route('/signIn', methods=['GET', 'POST'])
-def signin():
+def sign_in():
     from app.helper.form import SignIn
 
     form = SignIn()
     if request.method == 'GET':
         return render_template("signin.html", title='Sign In', nav_bar=app.nav_bar, form=form)
     if request.method == 'POST':
-        cur_user = model.user.valid(email=request.form['email'], password=request.form['password'])
+        cur_user = User(email=request.form['email'], password=request.form['password']).valid()
         if cur_user:
-            session['username'] = cur_user['username']
-            session['user_id'] = str(cur_user['_id'])
+            # Since ObjectId is not serializable
+            # TODO Any better solution?
+            session['user'] = decompose_user(cur_user)
             return redirect(url_for('index'))
         else:
             return render_template("signin.html", title='Sign In', nav_bar=app.nav_bar, form=form,
                                    error="Invalid Username or Password")
 
 
-#log out handler
+# log out handler
 @app.route('/signOut', methods=['GET', 'POST'])
 def sign_out():
-    session.pop('username', None)
-    session.pop('user_id', None)
+    session.pop('user', None)
     return redirect(url_for('index'))
 
 
+"""
 @app.route('/setting')
 def setting():
     from bson.objectid import ObjectId
@@ -88,103 +93,138 @@ def setting():
     else:
         return render_template("signin.html", title='Sign In', nav_bar=app.nav_bar,
                                error="Invalid username of password")
+"""
 
-
-#signup handler
+# signup handler
 @app.route('/signUp', methods=['GET', 'POST'])
-def signup():
+def sign_up():
     from app.helper.form import SignUp
-    from app.helper.sha256_pass import encode
 
     form = SignUp(request.form)
     if request.method == 'GET':
         return render_template('signup.html', form=form)
     elif request.method == 'POST':
         if form.validate():
-            #Copy form data to user information dictionary
-            user_inf = {}
+            # Copy form data to user information dictionary
+            new_user = User()
             for key, value in request.form.items():
-                user_inf[key] = value
-            #Validate whether this user is member of REIC according to SID
-            user_inf['member'] = model.member.valid(int(request.form['sid']))
-            #SHA1 password
-            user_inf['password'] = encode(user_inf['password'])
-            print(user_inf)
-            rv = model.user.insert(data_=user_inf)
+                if key in User.fields_list:
+                    new_user.attr[key] = value
+            # Validate whether this user is member of REIC according to SID
+            new_user.attr['member'] = Member(sid=int(request.form['sid'])).exist()
+            # SHA1 password
+            new_user.attr['password'] = User.pwd_hash(new_user.attr['password'])
+
+            # Save user to database
+            rv = new_user.commit()
             if not rv:
-                #Come to here when insert is failed due to db error
+                # Come to here when insert is failed due to db error
                 return render_template('error/unexpected_error.html')
-            session['username'] = user_inf['username']
-            session['user_id'] = str(rv)
+            session['user'] = decompose_user(new_user)
             return redirect(url_for('index'))
         else:
             return render_template('signup.html', form=form)
 
 
-#Editor load and save handle
+# Editor load and save handle
 @app.route('/editor', methods=['GET', 'POST'])
 def editor():
     if request.method == 'GET':
-        section_id = request.args.get('sec', '')
-        section = model.section.get_one(_id=section_id)
-        if section:
-            return render_template('edit.html', section=section['content'], create_time=section['create_time'],
-                                   id=section_id, creator=section['creator'], modified_time=section['modified_time'])
+        section_id = request.args.get('sec', None)
+        section = Section(ObjectId(section_id))
+        if section.attach:
+            return render_template('edit.html', section=section.attr['content'],
+                                   create_time=section.attr['create_time'],
+                                   id=section_id, creator=section.attr['creator'],
+                                   modified_time=section.attr['modified_time'])
         else:
-            return render_template('edit.html', create=True, create_time=time(), id="")
+            return render_template('edit.html', create=True, create_time=datetime.today(),
+                                   modified_time=datetime.today(), id="")
     if request.method == 'POST':
-        #Get upload information
+        # Get upload information
         section_id = request.form.get('id', "")
         title = request.form.get('title', "")
-        create_time = request.form.get('create_time', time())
-        modified_time = float(request.form.get('modified_time', time()))
+        create_time = datetime.strptime(request.form.get('create_time', datetime.today().strftime('%Y/%m/%d %H:%M')),
+                                        '%Y/%m/%d %H:%M')
+        modified_time = datetime.today()
         content = request.form.get('content', "")
         preview_img = request.form.get('preview_img', False)
-        #Check
+        # Check
         if content == "":
             return json.dumps({'error': 'Empty content'})
         if title == "":
             return json.dumps({'error': 'Empty title'})
-        #Check end
-        #If it is a new section
+        # Check end
+        # If it is a new section
         if section_id == "":
-            new_id = model.section.insert(title=title, create_time=create_time, modified_time=modified_time,
-                                          content=content, creator='tang', preview_img=preview_img)
+            # Update preview image
+            img_model = PreviewImg(data=preview_img)
+            img_id = img_model.commit()
+            if not img_id:
+                return json.dumps({'error': 'Insert preview image failed at db'})
+            new_id = Section(title=title, create_time=create_time, modified_time=modified_time,
+                             content=content, creator=session['user']['username'], preview_img=img_id).commit()
             if new_id:
                 return json.dumps({'success': True, 'id': str(new_id)})
             else:
-                return json.dumps({'error': 'Insert failed at db'})
-        #else if it is a existing section
+                return json.dumps({'error': 'Insert section failed at db'})
+        # else it is an existing section
         else:
-            section = model.section.get_one(_id=section_id)
-            #Update Preview Image
-            #If an existing image do not have a preview image
-            if not 'preview_img' in section:
-                #Create an preview image
-                section['preview_img'] = model.preview_img.insert(preview_img)
+            section = Section(ObjectId(section_id))
+            if not section.attach:
+                # Can not find that section
+                # TODO Write a error to log
+                return False
+            # Update Preview Image
+            # If an existing image do not have a preview image
+            if not section.attr['preview_img']:
+                # Create an preview image
+                new_img_id = PreviewImg(data=preview_img).commit()
+                if not new_img_id:
+                    # TODO Write a warning to log
+                    pass
+                else:
+                    section.attr['preview_img'] = new_img_id
             else:
-                model.preview_img.modify(section['preview_img'], preview_img)
-            rv = model.section.modify({'_id': section_id}, {'title': title, 'modified_time': modified_time,
-                                                            'content': content, 'preview_img': section['preview_img']})
-            if rv.get("n", False) != 1:
-                return json.dumps({'error': 'Unexpected update'})
-            else:
-                return json.dumps(({'success': True, 'id': section_id}))
+                exist_img = PreviewImg(section.attr['preview_img'])
+                if not exist_img:
+                    # TODO Write a error to log
+                    pass
+                else:
+                    exist_img.attr['data'] = preview_img
+                    rv = exist_img.commit()
+                    if rv.get("n", False) != 1:
+                        return json.dumps({'error': 'Unexpected update'})
+            # Update modified_time
+            section.attr['modified_time'] = modified_time
+            # Update title
+            section.attr['title'] = title
+            # Update content
+            section.attr['content'] = content
+            # Save to db
+            section.commit()
+            return json.dumps(({'success': True, 'id': section_id}))
 
 
 @app.route('/manage/sections', methods=['GET', 'DELETE'])
 def manage_sections():
     if request.method == 'GET':
-        sections = model.section.get_all_full()
-        #Convert time from Unix Stamp to Python time
+        section_overview = []
+        sections = Section.find(join=True)
+        # Reassemble sections container
         for section in sections:
-            section['create_time'] = strftime("%Y/%m/%d %H:%M", localtime(float(section['create_time'])))
-            section['modified_time'] = strftime("%Y/%m/%d %H:%M", localtime(float(section['modified_time'])))
-        return render_template("manage/section.html", sections=sections)
-    if request.method == 'DELETE':
-        if model.section.remove_by_id(request.form['id']):
-            return json.dumps({'success': True})
+            section_overview.append(section.attr)
 
+        return render_template("manage/section.html", sections=section_overview)
+    if request.method == 'DELETE':
+        section_to_delete = Section(ObjectId(request.form['id']))
+        if section_to_delete.destroy():
+            return json.dumps({'success': True})
+        else:
+            return json.dumps({'error': "DB_exception"})
+
+
+"""
 @app.route('/manage/activities', methods=['GET', 'POST'])
 def manage_activities():
     if request.method == 'GET':
@@ -201,6 +241,7 @@ def generator():
 @app.route('/test')
 def test():
     from datetime import datetime
+
     time_slot = []
     for int_day in range(29, 31):
         for hour in range(9, 12):
@@ -228,17 +269,19 @@ def render_activity(activity_name):
     activity = model.activity.get_one(_id=activity_name)
     if not activity:
         page_not_found('Activity not exists')
-    #return activity['name']
+        # return activity['name']
+
 
 @app.route('/stat/<activity_name>')
 def stat_activity(activity_name):
     from model import activity, user
+
     activity_exist = activity.get_one(name=activity_name)
-    #If activity doesn't exist, display 404
+    # If activity doesn't exist, display 404
     if not activity_exist:
         return render_template('error/404.html'), 404
 
-    #Else check role first
+    # Else check role first
     #If user haven't logged in, redirect to sign in page
     if not "user_id" in session:
         return redirect(url_for('signin'))
@@ -264,29 +307,32 @@ def stat_activity(activity_name):
             render_content.append(temp)
 
     return render_template('stat/showreg.html', participants=render_content)
+"""
 
 
 @app.route('/register/<activity_name>', methods=['GET', 'POST'])
 def reg_activity(activity_name):
     from helper.form import reg_form_wrapper
-    activity = model.activity.get_one(_id=activity_name)
 
-    if not activity:
+    activity = Activity(activity_name)
+
+    if not activity.attach:
         return render_template('error/404.html'), 404
 
-    form = reg_form_wrapper(activity['time_slot'])
+    form = reg_form_wrapper(activity.attr['time_slot'])
 
     if request.method == 'GET':
-        if not 'user_id' in session:
-            #User has not logged in
+        if 'user' not in session:
+            # User has not logged in
             return redirect(url_for('signin'))
-        #Get current user
-        cur_user = model.user.get_one(_id=session['user_id'])
-        if not cur_user:
-            #Should not occur unless something is wrong with session
+        # Get current user
+        cur_user = User(session['user']['_id'])
+        if not cur_user.attach:
+            # Should not occur unless something is wrong with session
+            # TODO Change exception
             raise Exception('Unrecognized session user')
-        if activity_name in cur_user['activity']:
-            #User has already registered this activity
+        if activity_name in cur_user.attr['activity']:
+            # User has already registered this activity
             return render_template('register/already_registered.html')
         else:
             return render_template('register/register.html', activity=activity, form=form)
@@ -294,15 +340,15 @@ def reg_activity(activity_name):
     elif request.method == 'POST':
         activity = model.activity.get_one(_id=activity_name)
         if not form.validate():
-            #Some filed is incorrect
+            # Some filed is incorrect
             return render_template('register/register.html', activity=activity, form=form)
         else:
-            #Get current user
+            # Get current user
             cur_user = model.user.get_one(_id=session['user_id'])
-            work_dir = os.path.join(os.getcwd(), 'app/static/upload/user/'+activity_name)
+            work_dir = os.path.join(os.getcwd(), 'app/static/upload/user/' + activity_name)
 
-            #Create folder if necessary
-            upload_path = "static/upload/user/"+activity_name
+            # Create folder if necessary
+            upload_path = "static/upload/user/" + activity_name
             if not os.path.exists(work_dir):
                 os.mkdir(work_dir)
             work_dir = os.path.join(work_dir, session['user_id'])
@@ -310,9 +356,10 @@ def reg_activity(activity_name):
             if not os.path.exists(work_dir):
                 os.mkdir(work_dir)
 
-            #Check upload file
+            # Check upload file
             cv_file = request.files['cv']
             from helper.format import is_pdf, is_word
+
             cv_valid = True
             if not is_pdf(cv_file.mimetype) and not is_word(cv_file.mimetype):
                 cv_valid = False
@@ -345,9 +392,9 @@ def my_activities():
     else:
         cur_user = model.user.get_one(_id=session['user_id'])
         if not cur_user:
-            #Should not occur unless something is wrong with session
+            # Should not occur unless something is wrong with session
             raise Exception('Unrecognized session user')
-        #Construct activities list
+        # Construct activities list
         user_activities = []
         for activity in cur_user['activity']:
             activity_inf = model.activity.get_one(_id=activity)
@@ -356,12 +403,12 @@ def my_activities():
         return render_template('myactivities.html', activities=user_activities)
 
 
-#no rule matched, then treat it as a page
+# no rule matched, then treat it as a page
 @app.route('/<page_title>')
 def render_page(page_title):
-    require_page = model.page.get_a_content(title=page_title)
+    require_page = Page.find({"title": page_title}, join=True)
     if require_page:
-        return render_template('index.html', title=page_title, content=require_page, nav_bar=app.nav_bar)
+        return render_template('index.html', title=page_title, page=require_page[0].attr, nav_bar=app.nav_bar)
     else:
         return page_not_found("")
 

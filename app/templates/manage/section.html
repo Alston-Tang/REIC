@@ -25,15 +25,14 @@
                             <li><a href="#">Another action</a></li>
                             <li><a href="#">Something else here</a></li>
                             <li class="divider"></li>
-                            <li><a href="signOut">Sign out</a></li>
+                            <li><a href="{{ url_for('sign_out') }}">Sign out</a></li>
                         </ul>
                     </li>
                 {% else %}
-                    <li><a href="signIn" >Sign in</a></li>
+                    <li><a href="{{ url_for('sign_in') }}" >Sign in</a></li>
                 {% endif %}
             </ul>
-        </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
+        </div>
     </nav>
 {% endblock %}
 {% block content %}
@@ -45,12 +44,12 @@
             {% endif %}
         <div class="col-md-3">
             <div class="thumbnail">
-                <img class="img-responsive" src="{{ section.preview_img }}">
+                <img class="img-responsive" src="{{ section.preview_img['data'] }}">
                 <div class="caption">
                     <h3>{{ section.title }}</h3>
                     <p>Creator:  {{ section.creator }}</p>
-                    <p>Create Time:  {{ section.create_time }}</p>
-                    <p>Modified Time:  {{ section.modified_time }}</p>
+                    <p>Create Time:  {{ section.create_time|pretty_date }}</p>
+                    <p>Modified Time:  {{ section.modified_time|pretty_date }}</p>
                     <p>
                         <a href="/editor?sec={{ section._id }}" class="btn btn-primary" role="button">Edit</a>
                         <a  class="btn btn-danger remove-section" section="{{ section._id }}" role="button">Remove</a>

@@ -25,7 +25,7 @@
 
             </div>
             <div class="col-lg-2 col-md-4  col-sm-6">
-                <form class="form-horizontal" role="form" action="{{ url_for('signin') }}" method="post">
+                <form class="form-horizontal" role="form" action="{{ url_for('sign_in') }}" method="post">
                     {{ form.csrf_token }}
                     {{ forms.render_field(form.email,with_label='Username') }}
                     {{ forms.render_field(form.password,with_label='Password') }}
@@ -40,7 +40,7 @@
         </div>
         <div class="row">
             <div class="col-lg-2 col-lg-offset-5 col-md-4 col-md-offset-4 col-sm-6 col-sm-offset-3">
-                <h4 style="text-align: center"><a href="{{ url_for('signup') }}">Create an account</a></h4>
+                <h4 style="text-align: center"><a href="{{ url_for('sign_up') }}">Create an account</a></h4>
             </div>
         </div>
     </div>

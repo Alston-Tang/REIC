@@ -1,6 +1,4 @@
 from base import BaseModel
-from section import Section
-from datetime import datetime
 
 
 class PreviewImg(BaseModel):
