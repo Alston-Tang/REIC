@@ -307,7 +307,7 @@ def stat_activity(activity_name):
             render_content.append(temp)
 
     return render_template('stat/showreg.html', participants=render_content)
-"""
+
 
 
 @app.route('/register/<activity_name>', methods=['GET', 'POST'])
@@ -384,7 +384,6 @@ def reg_activity(activity_name):
                 model.user.add_activity(cur_user['_id'], activity_name, participation)
                 return render_template('register/register_success.html')
 
-
 @app.route('/myActivities')
 def my_activities():
     if not 'user_id' in session:
@@ -401,14 +400,18 @@ def my_activities():
             activity_inf['user_inf'] = cur_user['activity'][activity]
             user_activities.append(activity_inf)
         return render_template('myactivities.html', activities=user_activities)
-
+"""
 
 # no rule matched, then treat it as a page
 @app.route('/<page_title>')
 def render_page(page_title):
-    require_page = Page.find({"title": page_title}, join=True)
-    if require_page:
-        return render_template('index.html', title=page_title, page=require_page[0].attr, nav_bar=app.nav_bar)
+    require_pages = Page.find({"title": page_title}, join=True)
+    if require_pages:
+        if len(require_pages) > 1:
+            # TODO Write a warning to log
+            pass
+        return render_template('index.html', title=page_title, page=require_pages[0].attr,
+                               nav_bar=app.nav_bar.get_structure())
     else:
         return page_not_found("")
 

@@ -18,8 +18,8 @@ app.config['UPLOAD_FOLDER'] = '/static/upload'
 app.config['DB'] = pymongo.MongoClient().reic
 # initialize nav_bar titles
 
-import nav_bar
-app.nav_bar = nav_bar.nav_bar_structure()
+from nav_bar import NavBar
+app.nav_bar = NavBar()
 # configure log
 if not app.debug:
     import logging
