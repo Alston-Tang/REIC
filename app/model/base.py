@@ -93,6 +93,22 @@ class BaseModel:
         return rv
 
     @classmethod
+    def find_brief(cls, query=None):
+        if not query:
+            query = {}
+        res = cls.collection.find(query)
+        rv = []
+        if res:
+            for item in res:
+                temp_model = cls(**item)
+                # Do not need to _post_attached
+                # Join is now allowed
+
+                # Insert only attr
+                rv.append(temp_model.attr)
+        return rv
+
+    @classmethod
     def remove(cls, query=None, del_all=False):
         if not query:
             if del_all:
