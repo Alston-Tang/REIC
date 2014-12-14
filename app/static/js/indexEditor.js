@@ -46,7 +46,7 @@ indexEditor.preProcess=function(){
         b.con[i].dom.indexEdit= b.con[i];
     }
     //Set nav bar button
-    var $navBar=$('#editor-global-panel');
+    var $navBar=$('#nav-bar');
     $navBar.find('.editor-nav').click(function(){
         indexEditor.content.add($(this).attr('add'));
     });
@@ -69,7 +69,7 @@ indexEditor.preProcess=function(){
 };
 indexEditor.save={};
 indexEditor.save.request=function(){
-    html2canvas(document.body, {
+    html2canvas(document.getElementById("index-board"), {
         onrendered: indexEditor.save.preDone
     });
 };

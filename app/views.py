@@ -136,10 +136,12 @@ def editor():
             return render_template('edit.html', section=section.attr['content'],
                                    create_time=section.attr['create_time'],
                                    id=section_id, creator=section.attr['creator'],
-                                   modified_time=section.attr['modified_time'])
+                                   modified_time=section.attr['modified_time'],
+                                   nav_right_dict=app.nav_bar.get_editor_extra())
         else:
             return render_template('edit.html', create=True, create_time=datetime.today(),
-                                   modified_time=datetime.today(), id="")
+                                   modified_time=datetime.today(), id="",
+                                   nav_right_dict=app.nav_bar.get_editor_extra())
     if request.method == 'POST':
         # Get upload information
         section_id = request.form.get('id', "")
@@ -215,7 +217,9 @@ def manage_sections():
         for section in sections:
             section_overview.append(section.attr)
 
-        return render_template("manage/section.html", sections=section_overview)
+        return render_template("manage/section.html",
+                               sections=section_overview,
+                               nav_right_dict=app.nav_bar.get_section_extra())
     if request.method == 'DELETE':
         section_to_delete = Section(ObjectId(request.form['id']))
         if section_to_delete.destroy():
@@ -224,6 +228,27 @@ def manage_sections():
             return json.dumps({'error': "DB_exception"})
 
 
+@app.route('/manage/pages', methods=['GET', 'DELETE'])
+def manage_pages():
+    if request.method == 'GET':
+        page_overview = []
+        pages = Page.find()
+        # Reassemble pages container
+        for page in pages:
+            page_overview.append(page.attr)
+        return render_template("manage/page.html",
+                               pages=page_overview)
+    elif request.method == 'DELETE':
+        pass
+
+
+@app.route('/manage/page_editor', methods=['GET', 'POST'])
+def page_editor():
+    sections = Section.find(join=True)
+    section_input = []
+    for section in sections:
+        section_input.append(section.attr)
+    return render_template('manage/page_editor.html', sections=section_input)
 """
 @app.route('/manage/activities', methods=['GET', 'POST'])
 def manage_activities():

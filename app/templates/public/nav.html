@@ -34,8 +34,14 @@
                     {% endfor %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
+                    {% if nav_right_dict %}
+                        {% for button in nav_right_dict %}
+                            <li>
+                                <a {% for attr in nav_right_dict[button] %} {{ attr|safe }}="{{ nav_right_dict[button][attr]|safe }}" {% endfor %}>{{ button }}</a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
                     {% if 'user' in session %}
-                        <li>Welcome</li>
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ session['user']["username"] }} <b class="caret"></b></a>
                             <ul class="dropdown-menu">

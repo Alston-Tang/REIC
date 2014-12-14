@@ -1,0 +1,38 @@
+{% extends 'public/nav.html' %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/noIndexBoard.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='stylesheets/page_editor.css') }}">
+{% endblock %}
+{% block content %}
+    <div class="contentBelowNav">
+            <div class="thm-left-col thm-col" id="page-preview">
+                Area A
+            </div>
+            <div class="thm-middle-col thm-col">
+                <div id="delete-area-base" class="alert alert-danger" role="alert">Drag to here to delete</div>
+                <div id="delete-area">
+
+                </div>
+                <div class="alert alert-info" role="alert">Sections belong to page</div>
+                <div id="assemble-area">
+                </div>
+            </div>
+            <div class="thm-right-col thm-col">
+                <div class="alert alert-success" role="alert">Sections</div>
+                {% for section in sections %}
+                <div class="section">
+                    <h3>{{ section.title }}</h3>
+                    <p>Creator:  {{ section.creator }}</p>
+                    <p>Create Time:  {{ section.create_time|pretty_date }}</p>
+                    <p>Modified Time:  {{ section.modified_time|pretty_date }}</p>
+                    <p class="section-id">{{ section._id }}</p>
+                    <p class="preview-img">{{ section.preview_img.data }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+{% endblock %}
+{% block extra_js %}
+    <script src="{{ url_for('static',filename='js/manage/jquery-ui.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/manage/page_editor.js') }}"></script>
+{% endblock %}

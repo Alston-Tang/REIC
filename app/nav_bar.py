@@ -1,6 +1,7 @@
 __author__ = 'tang'
 
 from model import Page, Section
+from flask import url_for
 
 
 class NavBar:
@@ -15,3 +16,11 @@ class NavBar:
 
     def get_structure(self):
         return self.structure
+
+    @staticmethod
+    def get_section_extra():
+        return {"Add": {"href": url_for('editor')}}
+
+    @staticmethod
+    def get_editor_extra():
+        return {"Save": {"id": "btn-save", "style": "cursor: pointer"}}

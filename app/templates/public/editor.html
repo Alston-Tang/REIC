@@ -1,4 +1,4 @@
-{% extends 'public/main.html' %}
+{% extends 'public/nav.html' %}
 {% block extra_css %}
     <!-- JQuery Context Menu-->
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/jquery.contextMenu.css') }}">
@@ -10,58 +10,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/least.min.css') }}">
     <!-- Custom styles for IndexBoard -->
     <link rel="stylesheet" href="{{ url_for('static', filename='stylesheets/my.css') }}">
-{% endblock %}
-
-{% block navbar %}
-<nav id='nav-bar' class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <a class="navbar-brand">Editor</a>
-    </div>
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="editor-global-panel">
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Add<b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a class="editor-nav add-text" add="text" href="#">Text</a></li>
-            <li><a class="editor-nav add-image" add="img" href="#">Image</a></li>
-            <li><a class="editor-nav add-picture-wall" add="picture-wall" href="#">Pictures wall</a></li>
-            <li><a class="editor-nav add-carousel" add="bootstrapCarousel" href="#">Carousel</a></li>
-            <li><a class="editor-nav add-jumbotron" add="bootstrapJumbotron" href="#">Jumbotron</a></li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav">
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Setting<b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a class="setting-nav setting-section" href="#">Section setting</a></li>
-            <li><a class="setting-nav setting-information" href="#">Section information</a></li>
-          </ul>
-        </li>
-      </ul>
-      <ul class="nav navbar-nav navbar-right">
-      <li><a id="btn-save" style="cursor: pointer">Save</a></li>
-      {% if 'user' in session %}
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ session['user']['username'] }} <b class="caret"></b></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li class="divider"></li>
-            <li><a href="{{ url_for("sign_out") }}">Sign out</a></li>
-          </ul>
-        </li>
-      {% else %}
-        <li><a href="{{ url_for("sign_in") }}" >Sign in</a></li>
-      {% endif %}
-       </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
-</nav>
 {% endblock %}
 {% block content %}
 {% endblock %}
