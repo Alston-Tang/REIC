@@ -174,7 +174,9 @@ class BaseModel:
         return rv
 
     def _update(self):
-        obj_id = self.attr.pop("_id", None)
+        obj_id = None
+        if "_id" in self.attr:
+            obj_id = self.attr['_id']
         if obj_id is None:
             # There should be a not None id for update, or a exception will be thrown
             # TODO: Throw a exception
