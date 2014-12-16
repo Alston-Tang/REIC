@@ -5,7 +5,7 @@ from flask import render_template, url_for, request, redirect, session
 from app import app, file, model
 from time import time
 from datetime import datetime
-from bson import ObjectId
+from bson import ObjectId, errors
 from werkzeug import secure_filename
 from helper.session import decompose_user
 import json
@@ -211,6 +211,7 @@ def editor():
 @app.route('/manage/sections', methods=['GET', 'DELETE'])
 def manage_sections():
     if request.method == 'GET':
+        page_id = request.args.get('page', None)
         section_overview = []
         sections = Section.find(join=True)
         # Reassemble sections container
@@ -244,11 +245,62 @@ def manage_pages():
 
 @app.route('/manage/page_editor', methods=['GET', 'POST'])
 def page_editor():
-    sections = Section.find(join=True)
-    section_input = []
-    for section in sections:
-        section_input.append(section.attr)
-    return render_template('manage/page_editor.html', sections=section_input)
+    if request.method == 'GET':
+        page_id = request.args.get('page', None)
+        required_page = Page(ObjectId(page_id))
+        sections = Section.find(join=True)
+        section_input = []
+        for section in sections:
+            section_input.append(section.attr)
+        if required_page.attach:
+            required_page.join()
+            return render_template('manage/page_editor.html', sections=section_input,
+                                   required_page=required_page.attr,
+                                   nav_right_dict=app.nav_bar.get_editor_extra())
+        else:
+            return render_template('manage/page_editor.html', sections=section_input,
+                                   required_page=None,
+                                   nav_right_dict=app.nav_bar.get_editor_extra())
+    elif request.method == 'POST':
+        data = request.form.get('data', "[]")
+        title = request.form.get('title', "untitled")
+        # Transfer data from json to list
+        data = json.loads(data)
+        # For each object id in list, transfer from unicode string to ObjectId
+        obj_data = []
+        for item in data:
+            obj_data.append(ObjectId(item))
+        data = obj_data
+        page_id = request.form.get('id', "")
+        if not data:
+            # No data error
+            return json.dumps({'error': "A page should at least contain one section"})
+        # Try to create object id, if error happens, create a new id
+        try:
+            page_id = ObjectId(page_id)
+        except errors.InvalidId:
+            page_id = ObjectId()
+        # Create model
+        relevant_page = Page(page_id)
+        if relevant_page.attach:
+            # The page exists
+            relevant_page.attr['section'] = data
+            relevant_page.attr['modified_time'] = datetime.today()
+            relevant_page.attr['title'] = title
+            relevant_page.commit()
+        else:
+            # Create a new page
+            relevant_page.attr['section'] = data
+            relevant_page.attr['modified_time'] = datetime.today()
+            relevant_page.attr['create_time'] = datetime.today()
+            relevant_page.attr['title'] = title
+            relevant_page.commit()
+
+        # Finally update navigation bar
+        from nav_bar import NavBar
+        app.nav_bar = NavBar()
+        # Return success json
+        return json.dumps({'success': True, "id": str(relevant_page.attr['_id'])})
 """
 @app.route('/manage/activities', methods=['GET', 'POST'])
 def manage_activities():

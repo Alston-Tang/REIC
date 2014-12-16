@@ -16,7 +16,6 @@ body{
     width: 100%;
   }
 }
-
 .thm-left-col{
   width: 40%-(2*$col-margin);
 }
@@ -32,29 +31,33 @@ body{
     -webkit-user-select: none;
     user-select: none;
   }
-  >#delete-area{
-    border-radius: 5px;
-    height: 200px;
-    background-color: rgba(255,255,255,0);
-    -ms-user-select: none;
-    -moz-user-select: -moz-none;
-    -khtml-user-select: none;
-    -webkit-user-select: none;
-    user-select: none;
+  >#delete-group{
+    margin: 20px 0;
+    position: relative;
+    >#delete-area {
+      border-radius: 5px;
+      height: 200px;
+      background-color: rgba(255, 255, 255, 0);
+      -ms-user-select: none;
+      -moz-user-select: -moz-none;
+      -khtml-user-select: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    >#delete-area-base{
+      background-color: $alert-background;
+      color: $alert-color;
+      font-size: 2em;
+      text-align: center;
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 200px;
+      width: 100%;
+      z-index: -1;
+    }
   }
 
-  >#delete-area-base{
-    background-color: $alert-background;
-    color: $alert-color;
-    font-size: 2em;
-    text-align: center;
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 200px;
-    width: 100%;
-    z-index: -1;
-  }
 }
 
 .thm-right-col{
