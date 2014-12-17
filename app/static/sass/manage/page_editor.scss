@@ -1,11 +1,9 @@
-$alert-background: #F2DEDE;
-$alert-border: #EBCCD1;
-$alert-color: #a94442;
-
+@import "../design/color";
+@import "../design/card";
 $col-margin: 2%;
 
 body{
-  background-color: #EEEEEE;
+  background-color: $grey-background;
 }
 
 .thm-col{

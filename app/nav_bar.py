@@ -24,3 +24,7 @@ class NavBar:
     @staticmethod
     def get_editor_extra():
         return {"Save": {"id": "btn-save", "style": "cursor: pointer"}}
+
+    @staticmethod
+    def get_page_extra():
+        return {"Add": {"href": url_for('page_editor')}}

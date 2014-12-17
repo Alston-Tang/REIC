@@ -238,9 +238,14 @@ def manage_pages():
         for page in pages:
             page_overview.append(page.attr)
         return render_template("manage/page.html",
-                               pages=page_overview)
+                               pages=page_overview,
+                               nav_right_dict=app.nav_bar.get_page_extra())
     elif request.method == 'DELETE':
-        pass
+        page_to_delete = Page(ObjectId(request.form['id']))
+        if page_to_delete.destroy():
+            return json.dumps({'success': True})
+        else:
+            return json.dumps({'error': "DB_exception"})
 
 
 @app.route('/manage/page_editor', methods=['GET', 'POST'])
