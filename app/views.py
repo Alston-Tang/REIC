@@ -127,7 +127,7 @@ def sign_up():
 
 
 # Editor load and save handle
-@app.route('/editor', methods=['GET', 'POST'])
+@app.route('/manage/editor', methods=['GET', 'POST'])
 def editor():
     if request.method == 'GET':
         section_id = request.args.get('sec', None)

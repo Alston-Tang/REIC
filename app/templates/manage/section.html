@@ -18,7 +18,7 @@
                     <p>Create Time:  {{ section.create_time|pretty_date }}</p>
                     <p>Modified Time:  {{ section.modified_time|pretty_date }}</p>
                     <p>
-                        <a href="/editor?sec={{ section._id }}" class="btn btn-primary" role="button">Edit</a>
+                        <a href="{{ url_for('editor') }}?sec={{ section._id }}" class="btn btn-primary" role="button">Edit</a>
                         <a  class="btn btn-danger remove-section" section="{{ section._id }}" role="button">Remove</a>
                     </p>
                 </div>

@@ -82,7 +82,7 @@ indexEditor.save.preDone=function(canvas){
     var selection=thmTools.domToString(b.con[0].dom);
     var title= $(b.con[0].dom).attr('section-title');
     var previewImg=canvas.toDataURL('image/jpeg');
-    $.ajax('/editor',{
+    $.ajax('/manage/editor',{
         type:'POST',
         success:indexEditor.save.success,
         error:indexEditor.save.error,
