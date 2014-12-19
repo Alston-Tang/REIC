@@ -134,12 +134,14 @@ def editor():
         section = Section(ObjectId(section_id))
         if section.attach:
             return render_template('edit.html', section=section.attr['content'],
+                                   nav_bar=app.nav_bar.get_editor(),
                                    create_time=section.attr['create_time'],
                                    id=section_id, creator=section.attr['creator'],
                                    modified_time=section.attr['modified_time'],
                                    nav_right_dict=app.nav_bar.get_editor_extra())
         else:
             return render_template('edit.html', create=True, create_time=datetime.today(),
+                                   nav_bar=app.nav_bar.get_editor(),
                                    modified_time=datetime.today(), id="",
                                    nav_right_dict=app.nav_bar.get_editor_extra())
     if request.method == 'POST':
@@ -220,7 +222,7 @@ def manage_sections():
 
         return render_template("manage/section.html",
                                sections=section_overview,
-                               nav_right_dict=app.nav_bar.get_section_extra())
+                               nav_bar_right=app.nav_bar.get_section_extra())
     if request.method == 'DELETE':
         section_to_delete = Section(ObjectId(request.form['id']))
         if section_to_delete.destroy():
@@ -239,7 +241,7 @@ def manage_pages():
             page_overview.append(page.attr)
         return render_template("manage/page.html",
                                pages=page_overview,
-                               nav_right_dict=app.nav_bar.get_page_extra())
+                               nav_bar_right=app.nav_bar.get_page_extra())
     elif request.method == 'DELETE':
         page_to_delete = Page(ObjectId(request.form['id']))
         if page_to_delete.destroy():
@@ -261,11 +263,11 @@ def page_editor():
             required_page.join()
             return render_template('manage/page_editor.html', sections=section_input,
                                    required_page=required_page.attr,
-                                   nav_right_dict=app.nav_bar.get_editor_extra())
+                                   nav_bar_right=app.nav_bar.get_editor_extra())
         else:
             return render_template('manage/page_editor.html', sections=section_input,
                                    required_page=None,
-                                   nav_right_dict=app.nav_bar.get_editor_extra())
+                                   nav_bar_right=app.nav_bar.get_editor_extra())
     elif request.method == 'POST':
         data = request.form.get('data', "[]")
         title = request.form.get('title', "untitled")

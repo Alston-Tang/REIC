@@ -1,4 +1,5 @@
 {% extends 'public/main.html' %}
+{% import "macro/navbar.html" as nav %}
 {% block extra_css %}
 {% endblock %}
 {% block navbar %}
@@ -20,27 +21,27 @@
                 <ul class="nav navbar-nav">
                     {% for item in nav_bar %}
                         {% if item == title %}
-                            <li class="active dropdown">
+                            {% set is_active=True %}
                                 {% else %}
-                            <li class="dropdown">
+                            {% set is_active=False %}
                         {% endif %}
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ item }}<b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        {% for sub_menu in nav_bar[item] %}
-                            <li><a href="#">{{ sub_menu }}</a></li>
-                        {% endfor %}
-                    </ul>
-                    </li>
+                        {% if nav_bar[item]._type == "drop_down" %}
+                            {{ nav.dropdown(item, nav_bar[item]['data'], is_active) }}
+                        {% else %}
+                        <li>
+                            {{ nav.button(item, nav_bar[item]['data']) }}
+                        </li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    {% if nav_right_dict %}
-                        {% for button in nav_right_dict %}
-                            <li>
-                                <a {% for attr in nav_right_dict[button] %} {{ attr|safe }}="{{ nav_right_dict[button][attr]|safe }}" {% endfor %}>{{ button }}</a>
-                            </li>
-                        {% endfor %}
-                    {% endif %}
+                    {% for item in nav_bar_right %}
+                        {% if nav_bar_right[item]._type == "drop_down" %}
+                            {{ nav.dropdown(item, nav_bar_right[item]['data']) }}
+                        {% else %}
+                            {{ nav.button(item, nav_bar_right[item]['data']) }}
+                        {% endif %}
+                    {% endfor %}
                     {% if 'user' in session %}
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ session['user']["username"] }} <b class="caret"></b></a>
