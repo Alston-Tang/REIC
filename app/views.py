@@ -125,6 +125,10 @@ def sign_up():
         else:
             return render_template('signup.html', form=form)
 
+# Management Portal
+@app.route('/manage/portal')
+def manage_portal():
+    return render_template('manage/portal.html', User=User, Member=Member, Activity=Activity, Section=Section, Page=Page)
 
 # Editor load and save handle
 @app.route('/manage/editor', methods=['GET', 'POST'])

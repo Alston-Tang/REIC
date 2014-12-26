@@ -20,7 +20,7 @@
             <div class="alert alert-info" role="alert">Sections belong to page</div>
             <div id="assemble-area">
                 {% for section in required_page['section'] %}
-                    <div class="section">
+                    <div class="section card">
                         <h3>{{ section.title }}</h3>
                         <p>Creator:  {{ section.creator }}</p>
                         <p>Create Time:  {{ section.create_time|pretty_date }}</p>
@@ -35,7 +35,7 @@
             <div class="alert alert-success" role="alert">Sections</div>
             <div id="sections-pool">
                 {% for section in sections %}
-                    <div class="section page">
+                    <div class="section card">
                         <h3>{{ section.title }}</h3>
                         <p>Creator:  {{ section.creator }}</p>
                         <p>Create Time:  {{ section.create_time|pretty_date }}</p>

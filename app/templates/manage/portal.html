@@ -1,0 +1,35 @@
+{% extends "public/nav.html" %}
+{% import 'macro/card.html' as card%}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/noIndexBoard.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/portal.css") }}">
+{% endblock %}
+{% block content %}
+    <div class="contentBelowNav">
+        <div class="block-header">
+            <h1>Informaton and Management</h1>
+        </div>
+        <div class="grid-slot" id="website-information">
+            {{ card.grid("management-grid", "user-count", "Registered Users", "icon-users", "number", User.count()) }}
+            {{ card.grid("management-grid", "member-count", "Members", "icon-user-check", "number", Member.count(), True) }}
+            {{ card.grid("management-grid", "activity-count", "Activities", "icon-clipboard", "number", Activity.count(), True) }}
+            {{ card.grid("management-grid", "section-count", "Sections", "icon-insert-template", "number", Section.count(), True)}}
+            {{ card.grid("management-grid", "page-count", "Pages", "icon-file-empty", "number", Page.count(), True)}}
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+<script type="text/javascript">
+    $(window).ready(function(){
+        hrefGenerator("section-count", '{{ url_for("manage_sections") }}');
+        hrefGenerator("page-count", '{{ url_for("manage_pages") }}');
+        hrefGenerator("activity-count", "#");
+        hrefGenerator("member-count", "#");
+    });
+    var hrefGenerator=function(id, link){
+        $("#"+id).click(function(){
+            window.location.href=link;
+        })
+    }
+</script>
+{% endblock %}

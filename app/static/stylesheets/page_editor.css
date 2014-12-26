@@ -1,10 +1,22 @@
-/* line 1, ../design/card.scss */
+/* line 8, ../design/card.scss */
 .card {
-  background-color: #ffffff;
+  background-color: white;
   border-radius: 5px;
   border: 3px solid #f0f0f0;
-  box-shadow: 5px 10px 5px #888888;
+  box-shadow: 1px 2px 1px #888888;
   padding: 20px; }
+
+/* line 16, ../design/card.scss */
+.grid-slot {
+  overflow: hidden; }
+
+/* line 70, ../design/card.scss */
+.block-header {
+  padding-left: 50px;
+  padding-top: 50px; }
+  /* line 73, ../design/card.scss */
+  .block-header > h1, .block-header h2, .block-header h3, .block-header h4, .block-header h5, .block-header h6 {
+    font-weight: bold; }
 
 /* line 5, page_editor.scss */
 body {
@@ -69,19 +81,15 @@ body {
 /* line 65, page_editor.scss */
 .section {
   width: 100%;
-  background-color: #ffffff;
-  border-radius: 5px;
-  border: 3px solid #f0f0f0;
-  box-shadow: 5px 10px 5px #888888;
   margin-bottom: 10px;
   padding: 20px; }
   /* line 66, page_editor.scss */
   .section h1, .section h2, .section h3, .section h4, .section h5, .section h6 {
     margin-top: 0;
     border-top: 0; }
-  /* line 78, page_editor.scss */
+  /* line 74, page_editor.scss */
   .section > .preview-img {
     display: none; }
-  /* line 82, page_editor.scss */
+  /* line 78, page_editor.scss */
   .section > .section-id {
     display: none; }

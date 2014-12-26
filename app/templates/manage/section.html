@@ -1,6 +1,7 @@
 {% extends 'public/nav.html' %}
 {% block extra_css %}
     <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/noIndexBoard.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/sections.css") }}">
 {% endblock %}
 {% block content %}
     <div class="contentBelowNav">
@@ -10,7 +11,7 @@
                 <div class="row">
             {% endif %}
         <div class="col-md-3">
-            <div class="thumbnail">
+            <div class="thumbnail card">
                 <img class="img-responsive" src="{{ section.preview_img['data'] }}">
                 <div class="caption">
                     <h3>{{ section.title }}</h3>
