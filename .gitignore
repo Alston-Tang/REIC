@@ -1,5 +1,8 @@
 db_backup/
 app/static/upload/
 *.pyc
+*~
 .idea/
 app/.sass-cache/
+app/static/stylesheets/icons/demo.html
+app/static/stylesheets/icons/demo-files/
