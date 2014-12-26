@@ -102,7 +102,7 @@ class BaseModel:
             for item in res:
                 temp_model = cls(**item)
                 # Do not need to _post_attached
-                # Join is now allowed
+                # Join is not allowed
 
                 # Insert only attr
                 rv.append(temp_model.attr)
@@ -118,6 +118,10 @@ class BaseModel:
                 # TODO: Throw a exception
                 return False
         return cls.collection.remove(query)
+
+    @classmethod
+    def count(cls):
+        return cls.collection.count();
 
     @staticmethod
     def _join_dict(attr_dict, model_class):
