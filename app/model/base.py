@@ -50,6 +50,11 @@ class BaseModel:
     def __str__(self):
         return unicode(self).encode(encoding='utf-8')
 
+    def set(self, data_dict):
+        for key in data_dict:
+            if key in self.fields_list:
+                self.attr[key]= data_dict[key]
+
     def commit(self):
         if self.attach:
             return self._update()
