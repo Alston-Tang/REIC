@@ -1,0 +1,103 @@
+{% extends 'public/nav.html' %}
+{% import 'macro/card.html' as card %}
+{% import 'macro/form.html' as forms %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/noIndexBoard.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/members.css") }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename="stylesheets/jquery.dataTables.css") }}">
+{% endblock %}
+{% block content %}
+    <div class="contentBelowNav">
+        <div id="member-inf" class="card">
+            <div id="member-count" class="icon-user-check"> {{ Member.count() }}</div>
+        </div>
+        <div class="block-header"><h1>Members List</h1></div>
+        <div id="member-list" class="card">
+            <table id="member-list-table" class="display">
+                <thead>
+                <tr>
+                    <th>Last Name</th>
+                    <th>First Name</th>
+                    <th>Year</th>
+                    <th>College</th>
+                    <th>SID</th>
+                    <th>Major</th>
+                    <th>Email</th>
+                    <th>Tel</th>
+                    <th>Operation</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for member in Member.find_brief() %}
+                    <tr id="{{ member._id }}">
+                        <td field="lastname">{{ member.lastname }}</td>
+                        <td field="firstname">{{ member.firstname }}</td>
+                        <td field="year">{{ member.year }}</td>
+                        <td field="college">{{ member.college }}</td>
+                        <td field="sid">{{ member.sid }}</td>
+                        <td field="major">{{ member.major }}</td>
+                        <td field="email">{{ member.email }}</td>
+                        <td field="tel">{{ member.tel|int }}</td>
+                        <td><button class="btn btn-warning edit-member">Edit</button><button class="btn btn-danger remove-member">Remove</button></td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#edit-modal">
+        Launch demo modal
+    </button>
+
+    <!-- Remove Confirm Modal -->
+    <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Remove This Member?</h4>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary cancel-button" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger confirm-button" data-dismiss="modal">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Modal -->
+    <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="myModalLabel">Member Information</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8 col-md-offset-2">
+                            <form class="form-horizontal" role="form" id="member-form">
+                                {{ form.csrf_token }}
+                                {{ forms.render_field(form.lastname, with_label='Last Name', class_='member-inf') }}
+                                {{ forms.render_field(form.firstname, with_label='First Name', class_='member-inf') }}
+                                {{ forms.render_field(form.year, with_label='Year', class_='member-inf') }}
+                                {{ forms.render_field(form.college, with_label='College', class_='member-inf') }}
+                                {{ forms.render_field(form.sid, with_label='SID', class_='member-inf') }}
+                                {{ forms.render_field(form.major, with_label='Major', class_='member-inf') }}
+                                {{ forms.render_field(form.email, with_label='Username', class_='member-inf') }}
+                                {{ forms.render_field(form.tel, with_label='Tel', class_='member-inf') }}
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary cancel-button" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success save-button">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block extra_js %}
+    <script type="text/javascript" src="{{ url_for("static", filename="js/manage/jquery.dataTables.min.js") }}"></script>
+    <script type="text/javascript" src="{{ url_for("static", filename="js/manage/member.js") }}"></script>
+{% endblock %}

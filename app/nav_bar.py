@@ -38,3 +38,7 @@ class NavBar:
     @staticmethod
     def get_page_extra():
         return {"Add": {"_type": "button", "data": {"href": url_for('page_editor')}}}
+
+    @staticmethod
+    def get_member_extra():
+        return {"Add": {"_type": "button", "data": {"id": "add-button"}}}

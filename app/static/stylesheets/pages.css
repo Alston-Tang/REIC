@@ -10,11 +10,11 @@
 .grid-slot {
   overflow: hidden; }
 
-/* line 70, ../design/card.scss */
+/* line 75, ../design/card.scss */
 .block-header {
   padding-left: 50px;
   padding-top: 50px; }
-  /* line 73, ../design/card.scss */
+  /* line 78, ../design/card.scss */
   .block-header > h1, .block-header h2, .block-header h3, .block-header h4, .block-header h5, .block-header h6 {
     font-weight: bold; }
 

@@ -3,7 +3,9 @@ from wtforms import TextField, PasswordField, SubmitField, SelectField, StringFi
 from wtforms import validators, ValidationError
 from flask_wtf import Form
 from app.model import User
-from magic import Magic
+import wtforms_json
+
+wtforms_json.init()
 
 
 class SignIn(Form):
@@ -30,6 +32,18 @@ class SignUp(Form):
         user_exist = User.exist(field.data)
         if user_exist:
             raise ValidationError("Email is already taken")
+
+
+class MemberInf(Form):
+    major = TextField('Major', [validators.Optional(), validators.Length(max=20)])
+    college = TextField('College', [validators.Optional(), validators.Length(max=10)])
+    firstname = TextField('First Name', [validators.Required(), validators.Length(max=50)])
+    lastname = TextField('Last Name', [validators.Required(), validators.Length(max=50)])
+    sid = TextField('SID', [validators.Optional(), validators.Regexp(r'^\d{10}$')])
+    year = SelectField('Year', [validators.Optional()], choices=[(1, 1), (2, 2), (3, 3), (4, 4), (5, 5), (6, 6)],
+                       coerce=int)
+    email = TextField('Email', [validators.Email(), validators.Required()])
+    tel = TextField('Telephone', [validators.Optional(), validators.Regexp(r'^\d{8,15}$')])
 
 
 def reg_form_wrapper(time_slot_inf):

@@ -53,7 +53,7 @@ class BaseModel:
     def set(self, data_dict):
         for key in data_dict:
             if key in self.fields_list:
-                self.attr[key]= data_dict[key]
+                self.attr[key] = data_dict[key]
 
     def commit(self):
         if self.attach:
@@ -126,7 +126,7 @@ class BaseModel:
 
     @classmethod
     def count(cls):
-        return cls.collection.count();
+        return cls.collection.count()
 
     @staticmethod
     def _join_dict(attr_dict, model_class):

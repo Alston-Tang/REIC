@@ -32,7 +32,12 @@ $grid_scale: 1 / 2;
       font-size: $width / 16;
     }
     > div.grid-icon {
-      font-size: $width / 4;
+      @if $height > $width{
+        font-size: $width / 2;
+      }
+      @else {
+        font-size: $height / 2;
+      }
       text-align: center;
     }
   }

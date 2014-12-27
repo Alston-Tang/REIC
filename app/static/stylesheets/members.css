@@ -18,6 +18,19 @@
   .block-header > h1, .block-header h2, .block-header h3, .block-header h4, .block-header h5, .block-header h6 {
     font-weight: bold; }
 
-/* line 4, sections.scss */
+/* line 4, members.scss */
 body {
   background-color: #eeeeee; }
+
+/* line 9, members.scss */
+#member-inf #member-count {
+  width: 60%;
+  font-size: 36px;
+  color: #4080c8; }
+
+/* line 16, members.scss */
+#member-list {
+  margin-top: 20px; }
+  /* line 18, members.scss */
+  #member-list .member-id {
+    display: none; }

@@ -125,10 +125,50 @@ def sign_up():
         else:
             return render_template('signup.html', form=form)
 
+
 # Management Portal
 @app.route('/manage/portal')
 def manage_portal():
-    return render_template('manage/portal.html', User=User, Member=Member, Activity=Activity, Section=Section, Page=Page)
+    return render_template('manage/portal.html', User=User, Member=Member, Activity=Activity, Section=Section,
+                           Page=Page)
+
+
+@app.route('/manage/members', methods=['GET', 'POST', 'DELETE', 'PUT'])
+def manage_members():
+    from helper.form import MemberInf
+
+    member_form = MemberInf(request.form)
+    if request.method == 'GET':
+        return render_template('manage/member.html', Member=Member, form=member_form,
+                               nav_bar_right=app.nav_bar.get_member_extra())
+    elif request.method == 'DELETE':
+        member_id = request.form['id']
+        member_to_remove = Member(ObjectId(member_id))
+        if not member_to_remove.attach:
+            return json.dumps({"error": "Member id can not be found"})
+        rv = member_to_remove.destroy()
+        if not rv:
+            return json.dumps({"error": "Failed: database error"})
+        return json.dumps({"success": True, "id": member_id, "count": Member.count()})
+    elif request.method == 'PUT':
+        print(request.form)
+        if member_form.validate():
+            member_id = request.form.get('id', "")
+            edit_member = None
+            if member_id:
+                edit_member = Member(ObjectId(member_id))
+                if not edit_member.attach:
+                    return json.dumps({"error": "Member id can not be found"})
+            else:
+                edit_member = Member()
+            edit_member.set(request.form)
+            rv = edit_member.commit()
+            if not rv or not edit_member.attach:
+                return json.dumps({"error": "Failed: database error"})
+            return json.dumps({"success": True, "member": edit_member.attr, "count": Member.count()}, default=str)
+        else:
+            return json.dumps({"error": "Invalid Input", "error_inf": member_form.errors})
+
 
 # Editor load and save handle
 @app.route('/manage/editor', methods=['GET', 'POST'])
@@ -142,12 +182,12 @@ def editor():
                                    create_time=section.attr['create_time'],
                                    id=section_id, creator=section.attr['creator'],
                                    modified_time=section.attr['modified_time'],
-                                   nav_right_dict=app.nav_bar.get_editor_extra())
+                                   nav_bar_right=app.nav_bar.get_editor_extra())
         else:
             return render_template('edit.html', create=True, create_time=datetime.today(),
                                    nav_bar=app.nav_bar.get_editor(),
                                    modified_time=datetime.today(), id="",
-                                   nav_right_dict=app.nav_bar.get_editor_extra())
+                                   nav_bar_right=app.nav_bar.get_editor_extra())
     if request.method == 'POST':
         # Get upload information
         section_id = request.form.get('id', "")
@@ -309,9 +349,12 @@ def page_editor():
 
         # Finally update navigation bar
         from nav_bar import NavBar
+
         app.nav_bar = NavBar()
         # Return success json
         return json.dumps({'success': True, "id": str(relevant_page.attr['_id'])})
+
+
 """
 @app.route('/manage/activities', methods=['GET', 'POST'])
 def manage_activities():

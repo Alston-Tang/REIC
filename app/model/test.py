@@ -22,4 +22,7 @@ for page in pages:
     page.commit()
 """
 
-print(Section.find_brief())
+a = User()
+print (a.attr)
+a.set({'email': "tanghaomo@126.com", "username": "tanghaomo"})
+print (a.attr)
