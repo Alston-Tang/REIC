@@ -3,10 +3,6 @@ from wtforms import TextField, PasswordField, SubmitField, SelectField, StringFi
 from wtforms import validators, ValidationError
 from flask_wtf import Form
 from app.model import User
-import wtforms_json
-
-wtforms_json.init()
-
 
 class SignIn(Form):
     email = TextField('Email')

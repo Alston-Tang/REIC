@@ -24,7 +24,7 @@
         hrefGenerator("section-count", '{{ url_for("manage_sections") }}');
         hrefGenerator("page-count", '{{ url_for("manage_pages") }}');
         hrefGenerator("activity-count", "#");
-        hrefGenerator("member-count", "#");
+        hrefGenerator("member-count", "{{ url_for('manage_members') }}");
     });
     var hrefGenerator=function(id, link){
         $("#"+id).click(function(){
