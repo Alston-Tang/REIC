@@ -7,7 +7,7 @@ from time import time
 from datetime import datetime
 from bson import ObjectId, errors
 from werkzeug import secure_filename
-from helper.session import decompose_user
+from helper.session import decompose_user, admin_session
 import json
 import os
 
@@ -129,12 +129,16 @@ def sign_up():
 # Management Portal
 @app.route('/manage/portal')
 def manage_portal():
+    if not admin_session(session):
+        return render_template('error/permission_denied.html')
     return render_template('manage/portal.html', User=User, Member=Member, Activity=Activity, Section=Section,
                            Page=Page)
 
 
 @app.route('/manage/members', methods=['GET', 'POST', 'DELETE', 'PUT'])
 def manage_members():
+    if not admin_session(session):
+        return render_template('error/permission_denied.html')
     from helper.form import MemberInf
 
     member_form = MemberInf(request.form)
@@ -173,6 +177,8 @@ def manage_members():
 # Editor load and save handle
 @app.route('/manage/editor', methods=['GET', 'POST'])
 def editor():
+    if not admin_session(session):
+        return render_template('error/permission_denied.html')
     if request.method == 'GET':
         section_id = request.args.get('sec', None)
         section = Section(ObjectId(section_id))
@@ -256,6 +262,8 @@ def editor():
 
 @app.route('/manage/sections', methods=['GET', 'DELETE'])
 def manage_sections():
+    if not admin_session(session):
+        return render_template('error/permission_denied.html')
     if request.method == 'GET':
         page_id = request.args.get('page', None)
         section_overview = []
@@ -277,6 +285,8 @@ def manage_sections():
 
 @app.route('/manage/pages', methods=['GET', 'DELETE'])
 def manage_pages():
+    if not admin_session(session):
+        return render_template('error/permission_denied.html')
     if request.method == 'GET':
         page_overview = []
         pages = Page.find()
@@ -296,6 +306,8 @@ def manage_pages():
 
 @app.route('/manage/page_editor', methods=['GET', 'POST'])
 def page_editor():
+    if not admin_session(session):
+        return render_template('error/permission_denied.html')
     if request.method == 'GET':
         page_id = request.args.get('page', None)
         required_page = Page(ObjectId(page_id))

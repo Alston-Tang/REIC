@@ -8,3 +8,12 @@ def decompose_user(user_model):
     :return: a {}
     """
     return {'_id': str(user_model.attr['_id']), "username": user_model.attr['username']}
+
+
+def admin_session(session):
+    from app.model import User
+    from bson import ObjectId
+    if 'user' in session:
+        user_id = session['user']['_id']
+        return User(ObjectId(user_id)).is_admin()
+    return False
